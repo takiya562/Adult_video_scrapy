@@ -1,0 +1,14 @@
+.history
+.idea
+.ipynb_checkpoints
+crawled.txt
+error.log
+*.code-workspace
+*.ipynb_checkpoints
+*.har
+*.ipynb
+fanza/db.py
+fanza/__pycache__
+fanza/.idea
+fanza/img
+fanza/*.bak
