@@ -12,3 +12,4 @@ fanza/__pycache__
 fanza/.idea
 fanza/img
 fanza/*.bak
+fanza/spiders/__pycache__
