@@ -5,20 +5,102 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
-from pymysql import connect
 from pymysql.err import OperationalError
-from fanza.items import FanzaImageItem, FanzaItem
-from urllib.request import urlretrieve
+from fanza.items import FanzaImageItem, FanzaItem, MgsItem
+from urllib.request import urlretrieve, ProxyHandler, install_opener, build_opener
 from os.path import isdir, isfile
 from os import makedirs
+from fanza.db import AvDB
+from scrapy.exceptions import DropItem
+from pymysql import ProgrammingError, IntegrityError
+from pymysql.err import DataError, OperationalError
+from fanza.db_error_msg_constatns import *
+from fanza.extract_helper import save_crawled_to_file
+from scrapy import Spider
 import logging
 
 class FanzaPipeline:
-    pass
+    def __init__(self):
+        logging.info('------------------------------------Item pipeline init------------------------------------')
+        self.db = None
+        self.committed = [str]
+        logging.info('--------------------------------Item pipeline init finish!--------------------------------')
+
+    def open_spider(self, spider: Spider):
+        host = spider.settings['MYSQL_HOST']
+        port = spider.settings['MYSQL_PORT']
+        databse = spider.settings['MYSQL_DATABASE']
+        user = spider.settings['MYSQL_USER']
+        passwd = spider.settings['MYSQL_PASSWD']
+        logging.info('------------------------------------Connecting to mysql------------------------------------')
+        try:
+            self.db = AvDB(host=host, user=user, passwd=passwd, database=databse, port=port)
+        except OperationalError as err:
+            logging.error('Fail to connect mysql ->\n\terr: %s', err)
+            self.close_spider()
+        logging.info('------------------------------------Connection success-------------------------------------')
+
+    def process_item(self, item, spider):
+        if isinstance(item, FanzaItem):
+            logging.info('--------------------------------------Sync fanza mysql start-------------------------------------')
+            try:
+                self.db.insert_fanza_movie(item)
+            except ProgrammingError as err:
+                self.db.rollback()
+                logging.error(PROGRAMMING_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_PROGRAMMING_ERROR_MSG.format(item))
+            except IntegrityError as err:
+                logging.debug(INTEGRITY_ERROR_MSG, item.censoredId, err)
+            except DataError as err:
+                self.db.rollback()
+                logging.error(DATA_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_DATA_ERROR_MSG.format(item))
+            except AttributeError as err:
+                self.db.rollback()
+                logging.error(ATTRIBUTE_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_ATTRIBUTE_ERROR_MSG.format(item))
+            # database sync succeeds, then add censored id to the list preparing to record crawled av
+            self.committed.append(item.censoredId)
+            logging.info('-------------------------------------Sync fanza mysql finished-----------------------------------')
+        elif isinstance(item, MgsItem):
+            logging.info('--------------------------------------Sync mgs mysql start-------------------------------------')
+            try:
+                self.db.insert_mgs_movie(item)
+            except ProgrammingError as err:
+                self.db.rollback()
+                logging.error(PROGRAMMING_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_PROGRAMMING_ERROR_MSG.format(item))
+            except IntegrityError as err:
+                logging.debug(INTEGRITY_ERROR_MSG, item.censoredId, err)
+            except DataError as err:
+                self.db.rollback()
+                logging.error(DATA_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_DATA_ERROR_MSG.format(item))
+            except AttributeError as err:
+                self.db.rollback()
+                logging.error(ATTRIBUTE_ERROR_MSG, item.censoredId, err)
+                raise DropItem(DROP_ITEM_ATTRIBUTE_ERROR_MSG.format(item))
+            # database sync succeeds, then add censored id to the list preparing to record crawled av
+            self.committed.append(item.censoredId)
+            logging.info('-------------------------------------Sync mgs mysql finished-----------------------------------')
+        return item
+
+    def close_spider(self, spider: Spider):
+        # write the crawled av into specified file (see CRAWLED_FILE in settings)
+        for committed in self.committed:
+            save_crawled_to_file(committed, spider.settings['CRAWLED_FILE'])
+        if self.db is not None:
+            self.db.close()
+
 
 class FanzaImagePipeline:
-    def process_item(self, item, spider):
+    def open_spider(self, spider):
+        logging.info('------------------------------------Image pipeline init------------------------------------')
+        proxy = ProxyHandler({'http': '127.0.0.1:8181'})
+        opener = build_opener(proxy)
+        install_opener(opener)
+
+    def process_item(self, item, spider: Spider):
         if not isinstance(item, FanzaImageItem):
             return item
         img_base_folder = spider.settings['IMG_BASE_FOLDER']

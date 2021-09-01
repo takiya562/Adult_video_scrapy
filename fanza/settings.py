@@ -7,9 +7,6 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from fanza.spiders.video_detail import FANZA_BLACK_GENRE_LIST
-
-
 BOT_NAME = 'fanza'
 
 SPIDER_MODULES = ['fanza.spiders']
@@ -18,9 +15,15 @@ SPLASH_URL = 'http://127.0.0.1:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 IMG_BASE_FOLDER = r'fanza/img'
 LOG_LEVEL = 'INFO'
+VIDEO_DIR = r'D:/JAV'
 CRAWLED_FILE = 'crawled.txt'
 EXT_WHITE_LIST = ['.mp4']
-HTTPERROR_ALLOWED_CODES  =[404]
+MYSQL_HOST = '172.20.122.232'
+MYSQL_PORT = 3306
+MYSQL_DATABSE = 'avbook'
+MYSQL_USER = 'root'
+MYSQL_PASSWD = '123456'
+HTTPERROR_ALLOWED_CODES  =[404, 302]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'fanza (+http://www.yourdomain.com)'
