@@ -1,43 +1,52 @@
 from scrapy import Spider, Request
 from re import search, match
 from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
-from fanza.items import FanzaItem, FanzaImageItem, MgsItem
-import logging
+from fanza.items import FanzaAmateurItem, FanzaItem, FanzaImageItem, MgsItem
 from fanza.constants import *
 from fanza.extract_helper import *
 from fanza.error_msg_constants import *
-from fanza.url_factroy import fanza_url_factory, mgs_url_factory
+from fanza.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory
 
 class VideoDetailSpider(Spider):
     name = 'video_detail'
-    allowed_domains = ['dmm.co.jp']
+    allowed_domains = ['dmm.co.jp', 'mgstage.com']
 
     def produce_fanza(self, censored_id: str):
         url = fanza_url_factory.get_url(censored_id)
-        logging.info('Formatted url: %s', url)
+        self.logger.info('Formatted url: %s', url)
         return Request(url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL}, meta={CENSORED_ID_META: censored_id}, callback=self.parse)
 
     def produce_mgstage(self, censored_id: str):
         url = mgs_url_factory.get_url(censored_id)
+        self.logger.info('Formatted url: %s', url)
         return Request(url, cookies={MGS_AGE_COOKIE: MGS_AGE_COOKIE_VAL}, callback=self.parse_mgstage, meta={CENSORED_ID_META: censored_id})
+
+    def produce_fanza_amateur(self, censored_id: str):
+        url = fanza_amateur_url_factory.get_url(censored_id)
+        self.logger.info('Formatted url: %s', url)
+        return Request(url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL}, meta={CENSORED_ID_META: censored_id}, callback=self.parse_fanza_amateur)
 
     def start_requests(self):
         video_dir = self.settings['VIDEO_DIR']
         ext_white_list = self.settings['EXT_WHITE_LIST']
         crawled = get_crawled(self.settings['CRAWLED_FILE'])
         for censored_id in scan_video_dir(video_dir, ext_white_list):
+            if search(CENSORED_ID_REGEX, censored_id) is None:
+                self.logger.info('%s is filtered!', censored_id)
+                continue
             if censored_id in crawled:
                 self.logger.debug('%s is already crawled' % censored_id)
                 continue
             yield self.produce_fanza(censored_id)
             yield self.produce_mgstage(censored_id)
+            yield self.produce_fanza_amateur(censored_id)
                                 
 
     # fanza parse
     def parse(self, response: HtmlResponse, **kwargs):
         censored_id = response.meta[CENSORED_ID_META]
         if response.status == 404 or response.status == 302:
-            logging.info(FANZA_RESPONSE_STATUS_ERROR_MSG, censored_id)
+            self.logger.error(FANZA_RESPONSE_STATUS_ERROR_MSG, censored_id)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
         self.logger.info("url: %s", response.url)
@@ -64,7 +73,7 @@ class VideoDetailSpider(Spider):
             series_id, series_name = fanza_extract_video_info(response, FANZA_SERIES_INFO)
             self.logger.info("Extract series info -> series_id: %s \t series_name: %s", series_id, series_name)
         except ExtractException as err:
-            logging.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
         # extract release date and video length
         try:
@@ -73,10 +82,10 @@ class VideoDetailSpider(Spider):
                 release_date = fanza_extract_meta_info(response, DELIVERY_DATE_TEXT)
             video_len = fanza_format_video_len(fanza_extract_meta_info(response, VIDEO_LEN_TEXT))
         except ExtractException as err:
-            logging.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
         except FormatException as err:
-            logging.error(FORMAT_GLOBAL_ERROR_MSG, err.message, response.url)
+            self.logger.exception(FORMAT_GLOBAL_ERROR_MSG, err.message, response.url)
             return
         self.logger.info("Extract video info -> release_date: %s \t video_len: %s", release_date, video_len)
         try:
@@ -97,9 +106,9 @@ class VideoDetailSpider(Spider):
         )
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information finish!>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
         try:
-            high_res_cover, low_res_cover = fanza_extract_cover_image(response, censored_id)
+            low_res_cover, high_res_cover = fanza_extract_cover_image(response, censored_id)
         except ExtractException as err:
-            logging.error(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
             return
         yield FanzaImageItem(high_res_cover, censored_id, censored_id + "pl", 1)
         yield FanzaImageItem(low_res_cover, censored_id, censored_id + "ps", 1)
@@ -115,16 +124,15 @@ class VideoDetailSpider(Spider):
                     yield FanzaImageItem(jp, censored_id, high_res_preview_name)
                     yield FanzaImageItem(url, censored_id, low_res_preview_name)
         except ExtractException as err:
-            logging.error(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
             return
-        save_crawled_to_file(censored_id, self.settings['CRAWLED_FILE'])
         self.logger.info('------------------------------------parse %s success------------------------------------', censored_id)
 
     # mgstage parse
     def parse_mgstage(self, response: HtmlResponse, **kwargs):
         censored_id = response.meta[CENSORED_ID_META]
-        if response.status == 404 or response.status == 302:
-            logging.error(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
+        if response.status == 404 or response.status == 302 or response.url == 'https://www.mgstage.com/':
+            self.logger.error(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
         self.logger.info("url: %s", response.url)
@@ -140,9 +148,9 @@ class VideoDetailSpider(Spider):
             if release_date is None or match(DATE_REGEX, release_date) is None:
                 release_date = mgs_extract_meta_info(response, DELIVERY_DATE_TEXT)
             self.logger.info("Extract video info -> release_data: %s \t video_len: %s", release_date, video_len)
-            actress = mgs_extract_video_info(response, MGS_ACTRESS_INFO)
-            actress = mgs_clean_text(actress)
-            self.logger.info("Extract actress info -> actress: %s", actress)
+            actress = mgs_extract_actress_info(response)
+            for a in actress:
+                self.logger.info("Extract actress info -> actress: %s", a)
             maker = mgs_extract_video_info(response, MGS_MAKER_INFO)
             maker = mgs_clean_text(maker)
             self.logger.info("Extract maker info -> maker: %s", maker)
@@ -156,14 +164,13 @@ class VideoDetailSpider(Spider):
             for g in genre:
                 self.logger.info("Extract genre info -> genre: %s", g)
         except FormatException as err:
-            logging.error(FORMAT_GLOBAL_ERROR_MSG, err.message, response.url)
+            self.logger.exception(FORMAT_GLOBAL_ERROR_MSG, err.message, response.url)
             return
         except ExtractException as err:
-            logging.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
         yield MgsItem(
-            censored_id, title, 
-            None, actress,
+            censored_id, title, actress,
             None, maker,
             None, label,
             None, series,
@@ -176,12 +183,12 @@ class VideoDetailSpider(Spider):
             yield FanzaImageItem(high_res_cover, censored_id, censored_id + 'pl', 1)
             yield FanzaImageItem(low_res_cover, censored_id, censored_id + 'ps', 1)
         except ExtractException as err:
-            logging.error(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
             return
         try:
             for url_tuple in mgs_extract_preview_image(response, censored_id):
-                high_res_preview_url = url_tuple['high_res_url']
-                low_res_preview_url = url_tuple['low_res_url']
+                high_res_preview_url = url_tuple[MSG_HIGH_RES_IMG_URL_KEY]
+                low_res_preview_url = url_tuple[MGS_LOW_RES_IMG_URL_KEY]
                 high_res_preview_num = mgs_extract_preview_num(high_res_preview_url, censored_id, 0)
                 low_res_preview_num = mgs_extract_preview_num(low_res_preview_url, censored_id, 1)
                 high_res_preview_name = HIGH_PREVIEW_IMAGE_FORMATTER.format(censored_id, high_res_preview_num)
@@ -189,6 +196,76 @@ class VideoDetailSpider(Spider):
                 yield FanzaImageItem(high_res_preview_url, censored_id, high_res_preview_name)
                 yield FanzaImageItem(low_res_preview_url, censored_id, low_res_preview_name)
         except ExtractException as err:
-            logging.error(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
+            self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
             return
         self.logger.info('------------------------------------parse %s success------------------------------------', censored_id)
+
+    def parse_fanza_amateur(self, response: HtmlResponse, **kwargs):
+        censored_id = response.meta[CENSORED_ID_META]
+        if response.status == 404 or response.status == 302:
+            self.logger.exception(FANZA_AMATEUR_RESPONSE_STATUS_ERROR_MSG, censored_id)
+            return
+        self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
+        self.logger.info("url: %s", response.url)
+        self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
+        title = response.xpath('//h1[@id="title"]/text()').get()
+        self.logger.info("Video id: %s", censored_id)
+        self.logger.info("Video title: %s", title)
+        try:
+            delivery_date = fanza_extract_meta_info(response, DELIVERY_DATE_TEXT)
+            video_len = fanza_format_video_len(fanza_extract_meta_info(response, VIDEO_LEN_TEXT))
+            amateur = fanza_extract_meta_info(response, AMATEUR_NAME_TEXT)
+            three_size = fanza_extract_meta_info(response, AMATEUR_THREE_SIZE_TEXT)
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            return
+        except FormatException as err:
+            self.logger.exception(FORMAT_GLOBAL_ERROR_MSG, err.message, response.url)
+            return
+        self.logger.info("Extract video info -> delivery_date: %s \t video_len: %s", delivery_date, video_len)
+        self.logger.info("Extract video info -> amateur: %s \t three_size: %s", amateur, three_size)
+        try:
+            # extract label info
+            label_id, label_name = fanza_extract_video_info(response, FANZA_LABEL_INFO)
+            self.logger.info("Extract label info -> label_id: %s \t label_name: %s", label_id, label_name)
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            return
+        try:
+            genre = fanza_extract_genre_info(response)
+        except EmptyGenreException as err:
+            self.logger.info("Attention please ->\n\tmsg: %s\n\turl: %s", err.message, err.url)
+            genre = {}
+        for genre_id, genre_name in genre.items():
+            self.logger.info("Extract genre info -> genre_id: %s \t genre_name: %s", genre_id, genre_name)
+        yield FanzaAmateurItem(
+            censored_id,
+            title,
+            amateur,
+            three_size,
+            label_id,
+            label_name,
+            delivery_date,
+            video_len,
+            genre
+        )
+        self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information finish!>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
+        try:
+            cover = fanza_amateur_extract_cover_image(response, censored_id)
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
+            return
+        yield FanzaImageItem(cover, censored_id, censored_id + 'pl', 1)
+        try:
+            for url in fanza_extract_preview_image(response, censored_id):
+                num_m = search(FANZA_AMATEUR_PREVIEW_NUM_REGEX, url)
+                if num_m:
+                    preview_num = num_m.group()
+                    jp = FANZA_AMATEUR_PREVIEW_SUB_REGEX.sub(FANZA_AMATEUR_PREVIEW_SUB_STR, url)
+                    high_res_preview_name = HIGH_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
+                    low_res_preview_name = LOW_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
+                    yield FanzaImageItem(jp, censored_id, high_res_preview_name)
+                    yield FanzaImageItem(url, censored_id, low_res_preview_name)
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
+            return

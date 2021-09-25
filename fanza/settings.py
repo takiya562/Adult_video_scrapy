@@ -11,16 +11,18 @@ BOT_NAME = 'fanza'
 
 SPIDER_MODULES = ['fanza.spiders']
 NEWSPIDER_MODULE = 'fanza.spiders'
-SPLASH_URL = 'http://127.0.0.1:8050'
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
-IMG_BASE_FOLDER = r'fanza/img'
+MOVIE_IMG_BASE_FOLDER = r'fanza/img/movie'
+ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
-VIDEO_DIR = r'D:/JAV'
+VIDEO_DIR = r'J:/JAV'
 CRAWLED_FILE = 'crawled.txt'
+S1_ACTRESS_COMMITTED = 's1_actress.txt'
+S1_ACTRESS_TARGET = 's1_actress_target.txt'
+S1_ACTRESS_MODE = 2
 EXT_WHITE_LIST = ['.mp4']
-MYSQL_HOST = '172.20.122.232'
+MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
-MYSQL_DATABSE = 'avbook'
+MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES  =[404, 302]
@@ -29,7 +31,7 @@ HTTPERROR_ALLOWED_CODES  =[404, 302]
 # USER_AGENT = 'fanza (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -65,9 +67,6 @@ SPIDER_MIDDLEWARES = {
 DOWNLOADER_MIDDLEWARES = {
     'fanza.middlewares.FanzaDownloaderMiddleware': 543,
     'fanza.middlewares.ProxyMiddleware': 350,
-    'scrapy_splash.SplashCookiesMiddleware': 723,
-    'scrapy_splash.SplashMiddleware': 725,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
 
 # Enable or disable extensions
@@ -81,6 +80,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'fanza.pipelines.FanzaPipeline': 300,
     'fanza.pipelines.FanzaImagePipeline': 301,
+    'fanza.pipelines.AvbookImagePipeline': 302
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -98,7 +98,7 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = False
+# HTTPCACHE_ENABLED = False
 # HTTPCACHE_EXPIRATION_SECS = 0
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []

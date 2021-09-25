@@ -1,16 +1,17 @@
-from logging import info
 from fanza.constants import *
 from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
 from os.path import splitext, isfile, join
 from os import listdir
 from re import search
 from scrapy.http.response.html import HtmlResponse
+from fanza.img_url_factory import mgs_low_res_cover_url_factory
+from re import search
 
-def save_crawled_to_file(censored_id: str, file: str):
+def save_crawled_to_file(record: str, file: str):
     if not isfile(file):
         raise FileNotFoundError
-    with open(file, 'a') as f:
-        f.write(censored_id + '\n')
+    with open(file, 'a', encoding='utf-8') as f:
+        f.write(record + '\n')
 
 def scan_video_dir(dir: str, ext_list: list):
     for item in listdir(dir):
@@ -124,11 +125,17 @@ def fanza_extract_preview_image(response: HtmlResponse, censored_id: str):
         yield url
 
 def fanza_extract_cover_image(response: HtmlResponse, censored_id: str):
-    low_res_img_href = response.xpath('//div[@class="center"]/a[@name="package-image"]/@href').get()
-    high_res_img_src = response.xpath('//a[@name="package-image"]/img/@src').get()
-    if low_res_img_href is None or high_res_img_src is None:
+    high_res_img_href = response.xpath('//div[@class="center"]/a[@name="package-image"]/@href').get()
+    low_res_img_src = response.xpath('//a[@name="package-image"]/img/@src').get()
+    if high_res_img_href is None or low_res_img_src is None:
         raise ExtractException('can not find cover image of %s!' % censored_id, response.url)
-    return high_res_img_src, low_res_img_href
+    return low_res_img_src, high_res_img_href
+
+def fanza_amateur_extract_cover_image(response: HtmlResponse, censored_id: str):
+    img_src = response.xpath('//div[@id="sample-video"]/img/@src').get()
+    if img_src is None:
+        raise ExtractException('can not find cover image of %s!' % censored_id, response.url)
+    return img_src
 
 def mgs_clean_text(text: str):
     if text is None:
@@ -137,6 +144,22 @@ def mgs_clean_text(text: str):
 
 def mgs_clean_title(title: str):
     return MGS_TITLE_SUB_REGEX.sub(MGS_SUB_STR, mgs_clean_text(title))
+
+def mgs_extract_actress_info(response: HtmlResponse):
+    tag_a = response.xpath('//tr/th[contains(., "{}")]/following-sibling::td/a/text()'.format(MGS_ACTRESS_INFO))
+    if len(tag_a) == 0:
+        return []
+    if len(tag_a) != 1:
+        raise ExtractException('encounter multiple %s or %s is null' % (MGS_ACTRESS_INFO, MGS_ACTRESS_INFO), response.url)
+    tag_a_textes = tag_a.getall()
+    actress = []
+    try:
+        for text in tag_a_textes:
+            text = mgs_clean_text(text)
+            actress.append(text)
+    except FormatException as err:
+        raise err
+    return actress
 
 def mgs_extract_video_info(response: HtmlResponse, th_text: str):
     tag_a = response.xpath('//tr/th[contains(., "{}")]/following-sibling::td/a/text()'.format(th_text))
@@ -186,14 +209,14 @@ def mgs_extract_preview_image(response: HtmlResponse, censored_id: str):
     if len(low_res_href) != len(high_res_href):
         raise ExtractException('low-res and hi-res preview image count of %s does not match!' % censored_id, response.url)
     for i in range(0, len(low_res_href)):
-        yield {'high_res_url': high_res_href[i], 'low_res_url': low_res_href[i]}
+        yield {MSG_HIGH_RES_IMG_URL_KEY: high_res_href[i], MGS_LOW_RES_IMG_URL_KEY: low_res_href[i]}
 
 def mgs_extract_cover_image(response: HtmlResponse, censored_id: str):
     low_res_src = response.xpath('//img[@class="enlarge_image"]/@src').get()
     if low_res_src is None:
         raise ExtractException('can not find cover image of %s' % censored_id, response.url)
     high_res_scr = MGS_COVER_URL_SUB_REGEX.sub(MGS_COVER_URL_SUB_STR, low_res_src)
-    return high_res_scr, low_res_src
+    return high_res_scr, mgs_low_res_cover_url_factory.get_url(low_res_src, censored_id)
 
 def mgs_extract_preview_num(url: str, censored_id: str, low_res: int):
     preview_name_m = search(r'(?<=\/)[^\/]*(?=\.jpg)', url)

@@ -4,7 +4,7 @@ from scrapy.crawler import CrawlerRunner
 from fanza.spiders.video_detail import VideoDetailSpider
 from scrapy.utils.project import get_project_settings
 
-logging.basicConfig(filename='error.log', filemode='w', level=logging.ERROR)
+logging.basicConfig(filename='error.log', filemode='w', level=logging.INFO)
 s = get_project_settings()
 runner = CrawlerRunner(s)
 d = runner.crawl(VideoDetailSpider)

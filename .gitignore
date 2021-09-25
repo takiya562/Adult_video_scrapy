@@ -1,7 +1,7 @@
 .history
 .idea
 .ipynb_checkpoints
-crawled.txt
+*.txt
 error.log
 *.code-workspace
 *.ipynb_checkpoints
