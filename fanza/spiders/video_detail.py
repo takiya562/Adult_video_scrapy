@@ -1,11 +1,13 @@
 from scrapy import Spider, Request
+from scrapy.http.response.html import HtmlResponse
 from re import search, match
 from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
-from fanza.items import FanzaAmateurItem, FanzaItem, FanzaImageItem, MgsItem
-from fanza.constants import *
-from fanza.extract_helper import *
+from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem
+from fanza.movie_constants import *
+from fanza.movie_extract_helper import *
 from fanza.error_msg_constants import *
 from fanza.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory
+from fanza.common import get_crawled
 
 class VideoDetailSpider(Spider):
     name = 'video_detail'
@@ -110,8 +112,8 @@ class VideoDetailSpider(Spider):
         except ExtractException as err:
             self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
             return
-        yield FanzaImageItem(high_res_cover, censored_id, censored_id + "pl", 1)
-        yield FanzaImageItem(low_res_cover, censored_id, censored_id + "ps", 1)
+        yield MovieImageItem(high_res_cover, censored_id, censored_id + "pl", 1)
+        yield MovieImageItem(low_res_cover, censored_id, censored_id + "ps", 1)
         try:
             for url in fanza_extract_preview_image(response, censored_id):
                 num_m = search(FANZA_PREVIEW_NUM_REGEX, url)
@@ -121,8 +123,8 @@ class VideoDetailSpider(Spider):
                     jp = FANZA_PREVIEW_SUB_REGEX.sub(FANZA_PREVIEW_SUB_STR, url)
                     high_res_preview_name = HIGH_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
                     low_res_preview_name = LOW_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
-                    yield FanzaImageItem(jp, censored_id, high_res_preview_name)
-                    yield FanzaImageItem(url, censored_id, low_res_preview_name)
+                    yield MovieImageItem(jp, censored_id, high_res_preview_name)
+                    yield MovieImageItem(url, censored_id, low_res_preview_name)
         except ExtractException as err:
             self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
             return
@@ -180,8 +182,8 @@ class VideoDetailSpider(Spider):
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information finish!>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
         try:
             high_res_cover, low_res_cover = mgs_extract_cover_image(response, censored_id)
-            yield FanzaImageItem(high_res_cover, censored_id, censored_id + 'pl', 1)
-            yield FanzaImageItem(low_res_cover, censored_id, censored_id + 'ps', 1)
+            yield MovieImageItem(high_res_cover, censored_id, censored_id + 'pl', 1)
+            yield MovieImageItem(low_res_cover, censored_id, censored_id + 'ps', 1)
         except ExtractException as err:
             self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
             return
@@ -193,8 +195,8 @@ class VideoDetailSpider(Spider):
                 low_res_preview_num = mgs_extract_preview_num(low_res_preview_url, censored_id, 1)
                 high_res_preview_name = HIGH_PREVIEW_IMAGE_FORMATTER.format(censored_id, high_res_preview_num)
                 low_res_preview_name = LOW_PREVIEW_IMAGE_FORMATTER.format(censored_id, low_res_preview_num)
-                yield FanzaImageItem(high_res_preview_url, censored_id, high_res_preview_name)
-                yield FanzaImageItem(low_res_preview_url, censored_id, low_res_preview_name)
+                yield MovieImageItem(high_res_preview_url, censored_id, high_res_preview_name)
+                yield MovieImageItem(low_res_preview_url, censored_id, low_res_preview_name)
         except ExtractException as err:
             self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
             return
@@ -255,7 +257,7 @@ class VideoDetailSpider(Spider):
         except ExtractException as err:
             self.logger.exception(EXTRACT_COVER_ERROR_MSG, err.message, err.url)
             return
-        yield FanzaImageItem(cover, censored_id, censored_id + 'pl', 1)
+        yield MovieImageItem(cover, censored_id, censored_id + 'pl', 1)
         try:
             for url in fanza_extract_preview_image(response, censored_id):
                 num_m = search(FANZA_AMATEUR_PREVIEW_NUM_REGEX, url)
@@ -264,8 +266,8 @@ class VideoDetailSpider(Spider):
                     jp = FANZA_AMATEUR_PREVIEW_SUB_REGEX.sub(FANZA_AMATEUR_PREVIEW_SUB_STR, url)
                     high_res_preview_name = HIGH_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
                     low_res_preview_name = LOW_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
-                    yield FanzaImageItem(jp, censored_id, high_res_preview_name)
-                    yield FanzaImageItem(url, censored_id, low_res_preview_name)
+                    yield MovieImageItem(jp, censored_id, high_res_preview_name)
+                    yield MovieImageItem(url, censored_id, low_res_preview_name)
         except ExtractException as err:
             self.logger.exception(EXTRACT_PREVIEW_ERROR_MSG, err.message, err.url)
             return

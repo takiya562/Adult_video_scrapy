@@ -38,12 +38,14 @@ class ImageItem(Item):
     url = Field()
     subDir = Field()
     imageName = Field()
+    isUpdate = Field()
 
 @dataclass
 class ImageItem:
     url: str = field(default=None)
     subDir: str = field(default=None)
     imageName: str = field(default=None)
+    isUpdate: int = field(default=0)
 
 class MovieImageItem(ImageItem):
     isCover = Field()
@@ -166,5 +168,28 @@ class S1ActressItem(AvbookActressBasicItem):
     bloodType: str = field(default=None)
     hobby: str = field(default=None)
     trick: str = field(default=None)
+    twitter: str = field(default=None)
+    ins: str = field(default=None)
+
+class PrestigeActressItem(AvbookActressBasicItem):
+    actressNameEn = Field()
+    birth = Field()
+    height = Field()
+    threeSize = Field()
+    birthPlace = Field()
+    bloodType = Field()
+    hobbyTrick = Field()
+    twitter = Field()
+    ins = Field()
+
+@dataclass
+class PrestigeActressItem(AvbookActressBasicItem):
+    actressNameEn: str = field(default=None)
+    birth: str = field(default=None)
+    height: str = field(default=None)
+    threeSize: str = field(default=None)
+    birthPlace: str = field(default=None)
+    bloodType: str = field(default=None)
+    hobbyTrick: str = field(default=None)
     twitter: str = field(default=None)
     ins: str = field(default=None)

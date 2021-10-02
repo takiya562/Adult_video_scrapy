@@ -1,10 +1,13 @@
-from fanza.extract_helper import get_crawled
+from fanza.common import get_crawled, get_target
 from fanza.items import ActressImageItem, S1ActressItem
 from fanza.s1_actress_constants import *
-from fanza.error_msg_constants import S1_ACTRESS_RESPONSE_STATUS_ERROR_MSG, EXTRACT_GLOBAL_ERROR_MSG
+from fanza.error_msg_constants import *
 from scrapy import Spider, Request
 from scrapy.http.response.html import HtmlResponse
 from fanza.s1_actress_extract_helper import *
+from fanza.fanza_exception import ExtractException
+from fanza.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
+from fanza.actress_constants import *
 
 class S1ActressSpider(Spider):
     name = 's1_actress'
@@ -12,43 +15,46 @@ class S1ActressSpider(Spider):
 
     def __init__(self, name=None, **kwargs):
         super().__init__(name=name, **kwargs)
-        self.crawled = None
+        self.crawled = []
+        self.flag = ACTRESS_AGGR_MODE
+        self.request_callback = self.parse_detail
 
     def start_requests(self):
         mode = self.settings['S1_ACTRESS_MODE']
         self.crawled = get_crawled(self.settings['S1_ACTRESS_COMMITTED'])
-        if mode == S1_ACTRESS_TOP_GROUND_MODE or mode == S1_ACTRESS_AGGR_MODE:
+        self.flag = build_flag(mode)
+        if isImage(self.flag):
+            self.request_callback = self.parse_image            
+        if isGround(self.flag):
             yield Request(S1_ACTRESS_TOP, callback=self.parse)
-        if mode == S1_ACTRESS_TARGET_MODE or mode == S1_ACTRESS_AGGR_MODE:
+        if isTarget(self.flag):
             s1_actress_target = self.settings['S1_ACTRESS_TARGET']
-            with open(s1_actress_target, 'r') as f:
-                for id in f.readlines():
-                    id = id.replace('\n', '')
-                    if id in self.crawled:
-                        self.logger.info('actress is already crawled -> id: %s', id)
-                        continue
-                    url = S1_ACTRESS_TARGET_FORMATTER.format(id)
-                    yield Request(url, callback=self.parse_detail, meta={S1_ACTRESSID_META_KEY: id})
+            for id in get_target(s1_actress_target):
+                if not isUpdate(self.flag) and id in self.crawled:
+                    self.logger.info('s1 actress is already crawled -> id: %s', id)
+                    continue
+                url = S1_ACTRESS_TARGET_FORMATTER.format(id)
+                yield Request(url, callback=self.request_callback, meta={S1_ACTRESSID_META_KEY: id})
 
     def parse(self, response: HtmlResponse):
         if response.status == 404 or response.status == 302:
-            self.logger.error(S1_ACTRESS_RESPONSE_STATUS_ERROR_MSG, response.url)
+            self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", response.url)
         try:
             for url in s1_actress_ground_extract(response):
                 id = s1_actress_detail_extract_id(url)
-                if id in self.crawled:
+                if not isUpdate(self.flag) and id in self.crawled:
                     self.logger.info('actress is already crawled -> id: %s', id)
                     continue
-                yield Request(url, callback=self.parse_detail, meta={S1_ACTRESSID_META_KEY: id})
+                yield Request(url, callback=self.request_callback, meta={S1_ACTRESSID_META_KEY: id})
         except ExtractException as err:
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
     def parse_detail(self, response: HtmlResponse):
         if response.status == 404 or response.status == 302:
-            self.logger.exception(S1_ACTRESS_RESPONSE_STATUS_ERROR_MSG, response.url)
+            self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
         id = response.meta[S1_ACTRESSID_META_KEY]
         try:
@@ -88,10 +94,37 @@ class S1ActressSpider(Spider):
         )
         try:
             img_url = s1_actress_extract_profile_img(response)
-            yield ActressImageItem(img_url, id, S1_ACTRESS_PROFILE_IMGNAME, name)
+            yield ActressImageItem(img_url, id, S1_ACTRESS_PROFILE_IMGNAME, name, isUpdate=isUpdate(self.flag))
             gallery_img_urls = s1_actress_extract_gallery(response)
             for i in range(0, len(gallery_img_urls)):
                 yield ActressImageItem(gallery_img_urls[i], id, S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), name, 1)   
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            return
+
+    def parse_image(self, response: HtmlResponse):
+        if response.status == 404 or response.status == 302:
+            self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
+            return
+        id = response.meta[S1_ACTRESSID_META_KEY]
+        try:
+            name, en_name = s1_actress_detail_extract_name(response)
+        except ExtractException as err:
+            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
+            return
+        self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
+        try:
+            img_url = s1_actress_extract_profile_img(response)
+            yield ActressImageItem(
+                url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
+                imageName=S1_ACTRESS_PROFILE_IMGNAME, actress=name, isUpdate=isUpdate(self.flag)
+            )
+            gallery_img_urls = s1_actress_extract_gallery(response)
+            for i in range(0, len(gallery_img_urls)):
+                yield ActressImageItem(
+                    url=gallery_img_urls[i], subDir=id,
+                    imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), actress=name, isGallery=1
+                )   
         except ExtractException as err:
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return

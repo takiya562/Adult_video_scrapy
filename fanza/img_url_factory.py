@@ -1,5 +1,5 @@
-from re import search, Pattern
-from fanza.constants import MGS_LOW_RES_COVER_URL_SUB_STR, MGS_LOW_RES_COVER_URL_SUB_REGEX
+from re import Pattern
+from fanza.movie_constants import MGS_LOW_RES_COVER_URL_SUB_STR, MGS_LOW_RES_COVER_URL_SUB_REGEX
 from fanza.url_factroy import search_pre, SIRO, GANA
 
 class ImageUrlResult:

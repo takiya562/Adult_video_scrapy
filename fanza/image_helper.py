@@ -10,12 +10,12 @@ def handle_image_item(item: ImageItem, spider: Spider):
 
 def handle_movie_image_item(item: MovieImageItem, spider: Spider):
     base_folder = spider.settings['MOVIE_IMG_BASE_FOLDER']
-    if item.isCover:
+    if item.isCover == 1:
         img_dir = MOVIE_COVER_IMG_DIR_FORMATTER.format(base_folder, item.subDir)
     else:
         img_dir = MOVIE_PREVIEW_IMG_DIR_FORMATTER.format(base_folder, item.subDir)
     img_des = IMG_DES_FORMATTER.format(img_dir, item.imageName)
-    return img_dir, img_des
+    return img_dir, img_des, 'Movie'
 
 def handle_actress_image_item(item: ActressImageItem, spider: Spider):
     base_folder = spider.settings['ACTRESS_IMG_BASE_FOLDER']
@@ -24,4 +24,4 @@ def handle_actress_image_item(item: ActressImageItem, spider: Spider):
     else:
         img_dir = ACTRESS_PROFILE_IMG_DIR_FORMATTER.format(base_folder, item.subDir)
     img_des = IMG_DES_FORMATTER.format(img_dir, item.imageName)
-    return img_dir, img_des
+    return img_dir, img_des, item.actress

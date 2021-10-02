@@ -9,16 +9,27 @@
 
 BOT_NAME = 'fanza'
 
+SPLASH_URL = 'http://127.0.0.1:8050'
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
 SPIDER_MODULES = ['fanza.spiders']
 NEWSPIDER_MODULE = 'fanza.spiders'
 MOVIE_IMG_BASE_FOLDER = r'fanza/img/movie'
 ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
-VIDEO_DIR = r'J:/JAV'
+LOG_FILE = 'logfile.log'
+VIDEO_DIR = r''
 CRAWLED_FILE = 'crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
-S1_ACTRESS_MODE = 2
+S1_ACTRESS_MODE = 'image-update-target'
+PRESTIGE_ACTRESS_COMMITTED = 'prestige_actress.txt'
+PRESIIGE_ACTRESS_TARGET = 'pretige_actress_target.txt'
+PRESTIGE_ACTRESS_MODE = 'ground'
+FALENO_ACTRESS_COMMITTED = 'faleno_actress.txt'
+FALENO_ACTRESS_TARGET = 'faleno_actress_target.txt'
+FALENO_ACTRESS_MODE = 'ground'
 EXT_WHITE_LIST = ['.mp4']
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
@@ -26,6 +37,11 @@ MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES  =[404, 302]
+
+SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
+    's1_actress': S1_ACTRESS_COMMITTED,
+    'prestige_actress': PRESTIGE_ACTRESS_COMMITTED
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'fanza (+http://www.yourdomain.com)'
@@ -60,6 +76,7 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
     'fanza.middlewares.FanzaSpiderMiddleware': 542,
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
 }
 
 # Enable or disable downloader middlewares
@@ -67,6 +84,9 @@ SPIDER_MIDDLEWARES = {
 DOWNLOADER_MIDDLEWARES = {
     'fanza.middlewares.FanzaDownloaderMiddleware': 543,
     'fanza.middlewares.ProxyMiddleware': 350,
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
 
 # Enable or disable extensions
@@ -78,8 +98,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'fanza.pipelines.FanzaPipeline': 300,
-    'fanza.pipelines.FanzaImagePipeline': 301,
+    # 'fanza.pipelines.FanzaPipeline': 300,
+    # 'fanza.pipelines.FanzaImagePipeline': 301,
     'fanza.pipelines.AvbookImagePipeline': 302
 }
 

@@ -1,4 +1,4 @@
-from fanza.constants import *
+from fanza.movie_constants import *
 from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
 from os.path import splitext, isfile, join
 from os import listdir
@@ -6,12 +6,6 @@ from re import search
 from scrapy.http.response.html import HtmlResponse
 from fanza.img_url_factory import mgs_low_res_cover_url_factory
 from re import search
-
-def save_crawled_to_file(record: str, file: str):
-    if not isfile(file):
-        raise FileNotFoundError
-    with open(file, 'a', encoding='utf-8') as f:
-        f.write(record + '\n')
 
 def scan_video_dir(dir: str, ext_list: list):
     for item in listdir(dir):
@@ -26,14 +20,6 @@ def black_list_filter(genre: str, black_list: list):
             return False
     return True
 
-def get_crawled(file: str):
-    l = []
-    if not isfile(file):
-        raise FileNotFoundError
-    with open(file, 'r') as f:
-        for line in f.readlines():
-            l.append(line.replace('\n', ''))
-    return l
 
 def format_censored_id(censored_id: str):
     if censored_id is None:

@@ -7,14 +7,14 @@
 # useful for handling different item types with a single interface
 from fanza.image_helper import handle_image_item
 from pymysql.err import OperationalError
-from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap
-from urllib.request import urlretrieve
+from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, PrestigeActressItem, S1ActressItem
+from urllib.request import urlretrieve, ProxyHandler, install_opener, build_opener
 from os.path import isdir, isfile
 from os import makedirs
 from fanza.db import AvDB
 from pymysql.err import OperationalError
 from fanza.db_error_msg_constatns import *
-from fanza.extract_helper import save_crawled_to_file
+from fanza.common import save_crawled_to_file
 from scrapy import Spider
 import logging
 
@@ -26,7 +26,8 @@ class FanzaPipeline:
         self.committedActress = []
         self.commitChain = [
             ItemMap('Avbook Movie', AvbookMovieBasicItem, self.commit_movie),
-            ItemMap('Avbook Actress', AvbookActressBasicItem, self.commit_actress)
+            ItemMap('Avbook S1 Actress', S1ActressItem, self.commit_actress),
+            ItemMap('Avbook Prestige Actress', PrestigeActressItem, self.commit_actress)
         ]
         self.logger = logging.getLogger('databasePipelineLogger')
         logging.info('--------------------------------Item pipeline init finish!--------------------------------')
@@ -55,10 +56,12 @@ class FanzaPipeline:
 
     def close_spider(self, spider: Spider):
         # write the crawled av into specified file (see CRAWLED_FILE in settings)
+        spdier_map_committed_file = spider.settings['SPIDER_ACTRESS_CRAWLED_FILE_MAP']
         for committed in self.committedMovie:
             save_crawled_to_file(committed, spider.settings['CRAWLED_FILE'])
         for committed in self.committedActress:
-            save_crawled_to_file(committed, spider.settings['S1_ACTRESS_COMMITTED'])
+            committed_file = spdier_map_committed_file.get(spider.name)
+            save_crawled_to_file(committed, committed_file)
         if self.db is not None:
             self.db.close()
 
@@ -98,18 +101,21 @@ class FanzaImagePipeline:
             self.logger.info('save preview %s', item.image)
 
 class AvbookImagePipeline:
+    proxy_handler = ProxyHandler({'http': '127.0.0.1:8181'})
+    install_opener(build_opener(proxy_handler))
+
     def __init__(self) -> None:
         self.logger = logging.getLogger('avbookImagePipelineLogger')
     
     def process_item(self, item, spider: Spider):
         if not isinstance(item, ImageItem):
             return item
-        img_dir, img_des = handle_image_item(item, spider)
+        img_dir, img_des, prefix = handle_image_item(item, spider)
         if not isdir(img_dir):
             makedirs(img_dir)
-        if isfile(img_des):
-            self.logger.info('already exist %s', item.imageName)
+        if not item.isUpdate and isfile(img_des):
+            self.logger.info('already exist:\t%s %s', prefix, item.imageName)
             return
         urlretrieve(item.url, img_des)
-        self.logger.info('save img %s', item.imageName)
+        self.logger.info('save img:\t%s %s', prefix, item.imageName)
         

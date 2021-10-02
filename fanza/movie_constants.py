@@ -1,6 +1,6 @@
 from re import compile, IGNORECASE
 
-CENSORED_ID_REGEX = r'^[A-Z]{2,5}-\d{3,4}$'
+CENSORED_ID_REGEX = r'^[A-Z]{2,5}-\d{3,4}'
 
 DATE_REGEX = r'\d{4}\/\d{2}\/\d{2}'
 
