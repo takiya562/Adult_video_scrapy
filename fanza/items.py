@@ -14,6 +14,15 @@ class ItemMap:
         self.type = type
         self.callback = callback
 
+class BadRequestItem(Item):
+    censored_id = Field()
+    flag = Field()
+
+@dataclass
+class BadRequestItem:
+    censored_id: str = field(default=None)
+    flag: int = field(default=0)
+
 class AvbookActressBasicItem(Item):
     id = Field()
     actressName = Field()
@@ -193,3 +202,22 @@ class PrestigeActressItem(AvbookActressBasicItem):
     hobbyTrick: str = field(default=None)
     twitter: str = field(default=None)
     ins: str = field(default=None)
+
+class FalenoActressItem(AvbookActressBasicItem):
+    actressNameEn = Field()
+    birth = Field()
+    height = Field()
+    threeSize = Field()
+    birthPlace = Field()
+    hobby = Field()
+    trick = Field()
+
+@dataclass
+class FalenoActressItem(AvbookActressBasicItem):
+    actressNameEn: str = field(default=None)
+    birth: str = field(default=None)
+    height: str = field(default=None)
+    threeSize: str = field(default=None)
+    birthPlace: str = field(default=None)
+    hobby: str = field(default=None)
+    trick: str = field(default=None)

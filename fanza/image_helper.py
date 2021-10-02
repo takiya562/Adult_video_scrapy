@@ -10,7 +10,7 @@ def handle_image_item(item: ImageItem, spider: Spider):
 
 def handle_movie_image_item(item: MovieImageItem, spider: Spider):
     base_folder = spider.settings['MOVIE_IMG_BASE_FOLDER']
-    if item.isCover == 1:
+    if item.isCover :
         img_dir = MOVIE_COVER_IMG_DIR_FORMATTER.format(base_folder, item.subDir)
     else:
         img_dir = MOVIE_PREVIEW_IMG_DIR_FORMATTER.format(base_folder, item.subDir)

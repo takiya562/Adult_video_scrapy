@@ -19,7 +19,8 @@ MOVIE_IMG_BASE_FOLDER = r'fanza/img/movie'
 ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
-VIDEO_DIR = r''
+FAIL_FILE = 'failed.txt'
+VIDEO_DIR = r'J:/JAV/finished'
 CRAWLED_FILE = 'crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
@@ -36,7 +37,10 @@ MYSQL_PORT = 3306
 MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
-HTTPERROR_ALLOWED_CODES  =[404, 302]
+HTTPERROR_ALLOWED_CODES = [404, 302, 301]
+IMAGE_DOWNLOAD_PROXY = 'http://127.0.0.1:8181'
+DOWNLOAD_TIMEOUT = 60
+REDIRECT_ENABLED = False
 
 SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
     's1_actress': S1_ACTRESS_COMMITTED,
@@ -98,9 +102,10 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # 'fanza.pipelines.FanzaPipeline': 300,
+    'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    'fanza.pipelines.AvbookImagePipeline': 302
+    'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.BadRequestPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

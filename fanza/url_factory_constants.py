@@ -4,7 +4,7 @@ FANZA_URL_REPLACEMENT = '00'
 
 FANZA_AMATEUR_URL_REPLACEMENT = ''
 
-FANZA_AMATEUR_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s'
+FANZA_AMATEUR_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/'
 
 MGS_URL_FORMATTER = 'https://www.mgstage.com/product/product_detail/%s/'
 
@@ -120,10 +120,136 @@ GANA_PRE = '200'
 
 FSDSS = 'FSDSS'
 
-FSDSS_PRE = '406'
+FSDSS_MGS_PRE = '406'
+
+FSDSS_FANZA_PRE = '1'
 
 DLDSS = 'DLDSS'
 
 DLDSS_PRE = '513'
 
 SIRO = 'SIRO'
+
+DANDAN = 'DANDAN'
+
+DANDAN_PRE = '1'
+
+DANDY = 'DANDY'
+
+DANDY_PRE = '1'
+
+DCV = 'DCV'
+
+DCV_PRE = '277'
+
+DFDM = 'DFDM'
+
+DFDM_PRE = '2'
+
+DFE = 'DFE'
+
+DFE_PRE = '2'
+
+DHT = 'DHT'
+
+DHT_PRE = '522'
+
+ECB = 'ECB'
+
+ECB_PRE = '2'
+
+FCDSS = 'FCDSS'
+
+FCDSS_PRE = '406'
+
+HAWA = 'HAWA'
+
+HAWA_PRE = '1'
+
+HDKA = 'HDKA'
+
+HDKA_PRE = 'h_237'
+
+HMGL = 'HMGL'
+
+HMGL_PRE = 'h_172'
+
+HZGD = 'HZGD'
+
+HZGD_PRE = 'h_1100'
+
+IMGN = 'IMGN'
+
+IMGN_PRE = '374'
+
+INST = 'INST'
+
+INST_PRE = '413'
+
+IQQQ = 'IQQQ'
+
+IQQQ_PRE = 'h_086'
+
+JNT = 'JNT'
+
+JNT_PRE = '390'
+
+KBI = 'KBI'
+
+KBI_PRE = '336'
+
+KNB = 'KNB'
+
+KNB_PRE = '336'
+
+KIR = 'KIR'
+
+KIR_PRE = 'h_254'
+
+MCSR = 'MCSR'
+
+MCSR_PRE = '57'
+
+MGFX = 'MGFX'
+
+MGFX_PRE = '521'
+
+NHDTB = 'NHDTB'
+
+NHDTB_PRE = '1n'
+
+OKS = 'OKS'
+
+OKS_PRE = '1'
+
+OREC = 'OREC'
+
+OREC_PRE = '230'
+
+SAN = 'SAN'
+
+SAN_PRE = 'h_796'
+
+SHH = 'SHH'
+
+SHH_PRE = '116'
+
+SKMJ = 'SKMJ'
+
+SKMJ_PRE = 'h_1324'
+
+SCPY = 'SCPY'
+
+SCPY_PRE = '460'
+
+SS = 'SS'
+
+SS_PRE = 'h_113'
+
+STCV = 'STCV'
+
+STCV_PRE = '529'
+
+ZEX = 'ZEX'
+
+ZEX_PRE = 'h_720'

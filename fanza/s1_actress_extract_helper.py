@@ -1,6 +1,6 @@
 from scrapy.http.response.html import HtmlResponse
 from fanza.fanza_exception import ExtractException
-from re import match, search
+from re import search
 from fanza.s1_actress_constants import *
 
 def s1_actress_ground_extract(response: HtmlResponse):

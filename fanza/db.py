@@ -19,7 +19,7 @@ class DB:
             ItemMap('S1 Actress', S1ActressItem, self.insert_s1_actress),
             ItemMap('Prestige Actress', PrestigeActressItem, self.insert_prestige_actress)
         ]
-        self.logger = logging.getLogger("databaseLogger")
+        self.logger = logging.getLogger("database-mysql")
 
     def trans_dispatch(self, item: Item) -> str:
         for map in self.chain:

@@ -98,13 +98,13 @@ def fanza_extract_genre_info(response: HtmlResponse):
     for i in range(0, len(a_textes)):
         a_href = a_hrefs[i]
         genre_name = a_textes[i]
-        m = search(r'(?<=id=)\d*', a_href)
-        if m and black_list_filter(genre_name, FANZA_BLACK_GENRE_LIST):
+        m = search(r'(?<=id=)\d+', a_href)
+        if m:
             genre[m.group()] = genre_name
     return genre
 
 def fanza_extract_preview_image(response: HtmlResponse, censored_id: str):
-    img_src = response.xpath('//a[@name="sample-image"]/img/@src').getall()
+    img_src = response.xpath('//div[@id="sample-image-block"]/a/img/@src').getall()
     if len(img_src) == 0:
        raise ExtractException('can not find any preview image of %s!' % censored_id, response.url)
     for url in img_src:

@@ -1,6 +1,14 @@
 from re import compile, IGNORECASE
 
-CENSORED_ID_REGEX = r'^[A-Z]{2,5}-\d{3,4}'
+FANZA_BAD_REQUEST_FLAG = 1
+
+FANZA_AMATEUR_BAD_REQUEST_FLAG = 1 << 1
+
+MGS_BAD_REQUEST_FLAG = 1 << 2
+
+FAIL_MOVIE_FLAG = (1 << 3) - 1
+
+CENSORED_ID_REGEX = r'^[A-Z]{2,6}-\d{3,4}'
 
 DATE_REGEX = r'\d{4}\/\d{2}\/\d{2}'
 
@@ -32,7 +40,10 @@ FANZA_LABEL_INFO = 'info_label'
 
 FANZA_SERIES_INFO = 'info_series'
 
-FANZA_BLACK_GENRE_LIST = [r'セール', r'ギリモザ', r'ハイビジョン', r'独占配信', r'単体作品', r'ブランドストア30％OFF！']
+FANZA_BLACK_GENRE_LIST = [
+    r'セール', r'ギリモザ', r'ハイビジョン', r'独占配信', r'単体作品', r'ブランドストア30％OFF！',
+    r'ドグマ他30％OFF'
+]
 
 FANZA_COVER_SUB_REGEX = compile(r'ps(?=(\.jpg)*$)', IGNORECASE)
 

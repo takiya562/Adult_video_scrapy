@@ -94,10 +94,20 @@ class S1ActressSpider(Spider):
         )
         try:
             img_url = s1_actress_extract_profile_img(response)
-            yield ActressImageItem(img_url, id, S1_ACTRESS_PROFILE_IMGNAME, name, isUpdate=isUpdate(self.flag))
+            yield ActressImageItem(
+                url=img_url, subDir=id,
+                imageName=S1_ACTRESS_PROFILE_IMGNAME,
+                actress=name,
+                isUpdate=isUpdate(self.flag)
+            )
             gallery_img_urls = s1_actress_extract_gallery(response)
             for i in range(0, len(gallery_img_urls)):
-                yield ActressImageItem(gallery_img_urls[i], id, S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), name, 1)   
+                yield ActressImageItem(
+                    url=gallery_img_urls[i], subDir=id,
+                    imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1),
+                    actress=name,
+                    isGallery=1
+                )
         except ExtractException as err:
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
