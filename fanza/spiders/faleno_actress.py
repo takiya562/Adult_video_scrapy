@@ -49,7 +49,7 @@ class FalenoActressSpider(Spider):
                 if not isUpdate(self.flag) and en_name in self.crawled:
                     self.logger.info('actress is already crawled -> en_name: %s', en_name)
                     continue
-                yield Request(url, callback=self.request_callback)
+                yield Request(url, callback=self.request_callback, meta={FALENO_ACTRESS_NAME_ID_META_KEY: en_name})
         except ExtractException as err:
             self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
@@ -87,7 +87,7 @@ class FalenoActressSpider(Spider):
         try:
             img_url = faleno_actress_extract_profile_img(response)
             yield ActressImageItem(
-                url=img_url, subDir=name_id,
+                url=img_url, subDir=FALENO_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(name_id),
                 imageName=FALENO_ACTRESS_PROFILE_IMGNAME, actress=name,
                 isUpdate=isUpdate(self.flag)
             )
@@ -109,7 +109,7 @@ class FalenoActressSpider(Spider):
         try:
             img_url = faleno_actress_extract_profile_img(response)
             yield ActressImageItem(
-                url=img_url, subDir=name_id,
+                url=img_url, subDir=FALENO_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(name_id),
                 imageName=FALENO_ACTRESS_PROFILE_IMGNAME, actress=name,
                 isUpdate=isUpdate(self.flag)
             )

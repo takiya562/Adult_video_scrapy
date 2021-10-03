@@ -13,13 +13,13 @@ class ItemMap:
         self.itemName = item_name
         self.type = type
         self.callback = callback
-
-class BadRequestItem(Item):
+    
+class RequestStatusItem(Item):
     censored_id = Field()
     flag = Field()
 
 @dataclass
-class BadRequestItem:
+class RequestStatusItem:
     censored_id: str = field(default=None)
     flag: int = field(default=0)
 

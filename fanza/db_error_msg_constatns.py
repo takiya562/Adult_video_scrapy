@@ -11,3 +11,5 @@ DROP_ITEM_ATTRIBUTE_ERROR_MSG = 'attribute error happend\titem: {}'
 DROP_ITEM_PROGRAMMING_ERROR_MSG = 'programming error happend\titem: {}'
 
 DROP_ITEM_DATA_ERROR_MSG = 'data error happend\titem: {}'
+
+DROP_ITEM_DOWNLOAD_ERROR_MSG = 'download error happend\titem: {}'

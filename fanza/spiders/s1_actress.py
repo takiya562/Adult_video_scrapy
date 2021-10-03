@@ -95,7 +95,7 @@ class S1ActressSpider(Spider):
         try:
             img_url = s1_actress_extract_profile_img(response)
             yield ActressImageItem(
-                url=img_url, subDir=id,
+                url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
                 imageName=S1_ACTRESS_PROFILE_IMGNAME,
                 actress=name,
                 isUpdate=isUpdate(self.flag)
@@ -103,7 +103,7 @@ class S1ActressSpider(Spider):
             gallery_img_urls = s1_actress_extract_gallery(response)
             for i in range(0, len(gallery_img_urls)):
                 yield ActressImageItem(
-                    url=gallery_img_urls[i], subDir=id,
+                    url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
                     imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1),
                     actress=name,
                     isGallery=1
@@ -132,7 +132,7 @@ class S1ActressSpider(Spider):
             gallery_img_urls = s1_actress_extract_gallery(response)
             for i in range(0, len(gallery_img_urls)):
                 yield ActressImageItem(
-                    url=gallery_img_urls[i], subDir=id,
+                    url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
                     imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), actress=name, isGallery=1
                 )   
         except ExtractException as err:

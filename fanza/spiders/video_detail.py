@@ -2,7 +2,7 @@ from scrapy import Spider, Request
 from scrapy.http.response.html import HtmlResponse
 from re import search, match
 from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
-from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem, BadRequestItem
+from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem, RequestStatusItem
 from fanza.movie_constants import *
 from fanza.movie_extract_helper import *
 from fanza.error_msg_constants import *
@@ -13,8 +13,7 @@ class VideoDetailSpider(Spider):
     name = 'video_detail'
     allowed_domains = ['dmm.co.jp', 'mgstage.com']
         
-    def produce_fanza(self, censored_id: str):
-        url = fanza_url_factory.get_url(censored_id)
+    def produce_fanza(self, censored_id: str, url: str):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
@@ -22,8 +21,7 @@ class VideoDetailSpider(Spider):
             callback=self.parse
         )
 
-    def produce_mgstage(self, censored_id: str):
-        url = mgs_url_factory.get_url(censored_id)
+    def produce_mgstage(self, censored_id: str, url: str):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={MGS_AGE_COOKIE: MGS_AGE_COOKIE_VAL},
@@ -31,8 +29,7 @@ class VideoDetailSpider(Spider):
             meta={CENSORED_ID_META: censored_id}
         )
 
-    def produce_fanza_amateur(self, censored_id: str):
-        url = fanza_amateur_url_factory.get_url(censored_id)
+    def produce_fanza_amateur(self, censored_id: str, url: str):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
@@ -53,9 +50,12 @@ class VideoDetailSpider(Spider):
             if censored_id in crawled:
                 self.logger.debug('%s is already crawled' % censored_id)
                 continue
-            yield self.produce_fanza(censored_id)
-            yield self.produce_mgstage(censored_id)
-            yield self.produce_fanza_amateur(censored_id)
+            for url in fanza_url_factory.get_url(censored_id):
+                yield self.produce_fanza(censored_id, url)
+            for url in mgs_url_factory.get_url(censored_id):
+                yield self.produce_mgstage(censored_id, url)
+            for url in fanza_amateur_url_factory.get_url(censored_id):
+                yield self.produce_fanza_amateur(censored_id, url)
                                 
 
     # fanza parse
@@ -63,8 +63,9 @@ class VideoDetailSpider(Spider):
         censored_id = response.meta[CENSORED_ID_META]
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_RESPONSE_STATUS_ERROR_MSG, censored_id)
-            yield BadRequestItem(censored_id, FANZA_BAD_REQUEST_FLAG)
+            yield RequestStatusItem(censored_id, FANZA_BAD_REQUEST_FLAG)
             return
+        yield RequestStatusItem(censored_id, SUCCESS_REQUEST_FLAG)
         self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
         self.logger.info("url: %s", response.url)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
@@ -150,8 +151,9 @@ class VideoDetailSpider(Spider):
         censored_id = response.meta[CENSORED_ID_META]
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
-            yield BadRequestItem(censored_id, MGS_BAD_REQUEST_FLAG)
+            yield RequestStatusItem(censored_id, MGS_BAD_REQUEST_FLAG)
             return
+        yield RequestStatusItem(censored_id, SUCCESS_REQUEST_FLAG)
         self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
         self.logger.info("url: %s", response.url)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
@@ -222,8 +224,9 @@ class VideoDetailSpider(Spider):
         censored_id = response.meta[CENSORED_ID_META]
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_AMATEUR_RESPONSE_STATUS_ERROR_MSG, censored_id)
-            yield BadRequestItem(censored_id, FANZA_AMATEUR_BAD_REQUEST_FLAG)
+            yield RequestStatusItem(censored_id, FANZA_AMATEUR_BAD_REQUEST_FLAG)
             return
+        yield RequestStatusItem(censored_id, SUCCESS_REQUEST_FLAG)
         self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
         self.logger.info("url: %s", response.url)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
