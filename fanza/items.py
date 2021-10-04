@@ -3,9 +3,10 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
+from scrapy.item import Field, Item
+
 from logging import debug
 from typing import Any, Callable
-from scrapy.item import Field, Item
 from dataclasses import dataclass, field
 
 class ItemMap:

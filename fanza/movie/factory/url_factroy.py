@@ -1,5 +1,6 @@
-from re import search
 from fanza.movie.factory.url_factory_constants import *
+
+from re import search
 
 def search_pre(censored_id: str):
     m = search(CENSORED_ID_PRE_REGEX, censored_id)

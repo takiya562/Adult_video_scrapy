@@ -1,19 +1,24 @@
-from scrapy.http.response.html import HtmlResponse
 from fanza.exceptions.fanza_exception import ExtractException
-from re import search
 from fanza.actress.s1_actress_constants import *
+from fanza.actress.actress_error_msg_constants import *
+
+from scrapy.http import HtmlResponse
+
+from re import search
+
+MAKER = 's1'
 
 def s1_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//p[text()="{}"]/following::div[@class="c-card main"]/descendant::a/@href'.format(S1_ACTRESS_TITLE)).getall()
     if len(hrefs) == 0:
-        raise ExtractException("s1 actress page ground extract error", response.url)
+        raise ExtractException(GROUND_EXTRACT_ERROR.format(maker=MAKER), response.url)
     return hrefs
 
 def s1_actress_detail_extract_name(response: HtmlResponse):
     name = response.xpath('//h2[@class="top anime__show__item -bottom c-main-font c-main-bg-after"]/text()').get()
     en_name = response.xpath('//p[@class="bottom anime__show__item -bottom delay"]/text()').get()
     if name is None or en_name is None:
-        raise ExtractException("extract s1 actress name error", response.url)
+        raise ExtractException(EXTRACT_ACTRESS_NAME_ERROR.format(maker=MAKER), response.url)
     return name, en_name
 
 def s1_actress_detail_extract_profile(response: HtmlResponse, info: str):
@@ -29,13 +34,13 @@ def s1_actress_detail_extract_sns(response: HtmlResponse, sns_index: int):
 def s1_actress_detail_extract_id(url: str):
     id_m = search(S1_ACTRESS_ID_REGEX, url)
     if id_m is None:
-        raise ExtractException('illegal s1 actress detail page url', url)
+        raise ExtractException(ILLEGAL_ACTRESS_DETAIL_PAGE_URL.format(maker=MAKER), url)
     return id_m.group()
 
 def s1_actress_extract_profile_img(response: HtmlResponse):
     img_url = response.xpath('//img[@class="u-hidden--sp lazyload"]/@data-src').get()
     if img_url is None:
-        raise ExtractException("extract s1 actress profile img error", response.url)
+        raise ExtractException(EXTRACT_ACTRESS_PROFILE_IMG_ERROR.format(maker=MAKER), response.url)
     return img_url
 
 def s1_actress_extract_gallery(response: HtmlResponse):

@@ -47,7 +47,7 @@ class FalenoActressSpider(Spider):
             for url in faleno_actress_ground_extract(response):
                 en_name = faleno_actress_detail_extract_en_name(url)
                 if not isUpdate(self.flag) and en_name in self.crawled:
-                    self.logger.info('actress is already crawled -> en_name: %s', en_name)
+                    self.logger.info('faleno actress is already crawled -> en_name: %s', en_name)
                     continue
                 yield Request(url, callback=self.request_callback, meta={FALENO_ACTRESS_NAME_ID_META_KEY: en_name})
         except ExtractException as err:
