@@ -7,8 +7,7 @@ def s1_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//p[text()="{}"]/following::div[@class="c-card main"]/descendant::a/@href'.format(S1_ACTRESS_TITLE)).getall()
     if len(hrefs) == 0:
         raise ExtractException("s1 actress page ground extract error", response.url)
-    for url in hrefs:
-        yield url
+    return hrefs
 
 def s1_actress_detail_extract_name(response: HtmlResponse):
     name = response.xpath('//h2[@class="top anime__show__item -bottom c-main-font c-main-bg-after"]/text()').get()

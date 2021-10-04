@@ -1,5 +1,5 @@
 from pymysql import connect
-from fanza.items import FalenoActressItem, FanzaAmateurItem, FanzaItem, MgsItem, PrestigeActressItem, S1ActressItem, ItemMap, Item
+from fanza.items import FalenoActressItem, FanzaAmateurItem, FanzaItem, KawaiiActressItem, MgsItem, PrestigeActressItem, S1ActressItem, ItemMap, Item
 from pymysql import IntegrityError
 from fanza.database.db_constants import *
 import logging
@@ -18,6 +18,7 @@ class DB:
             ItemMap('S1 Actress', S1ActressItem, self.insert_s1_actress),
             ItemMap('Prestige Actress', PrestigeActressItem, self.insert_prestige_actress),
             ItemMap('Faleno Actress', FalenoActressItem, self.insert_faleno_actress),
+            ItemMap('Kawaii Actress', KawaiiActressItem, self.insert_kawaii_actress),
         ]
         self.logger = logging.getLogger("database-mysql")
 
@@ -56,6 +57,9 @@ class DB:
         pass
 
     def insert_faleno_actress(self, faleno_actress_item: FalenoActressItem) -> str:
+        pass
+
+    def insert_kawaii_actress(self, kawaii_actress_item: KawaiiActressItem) -> str:
         pass
 
 class AvDB(DB):
@@ -107,6 +111,10 @@ class AvDB(DB):
     def insert_faleno_actress(self, faleno_actress_item: FalenoActressItem) -> str:
         self.insert_avbook_faleno_actress(faleno_actress_item)
         return faleno_actress_item.actressName
+
+    def insert_kawaii_actress(self, kawaii_actress_item: KawaiiActressItem) -> str:
+        self.insert_avbook_kawaii_actress(kawaii_actress_item)
+        return kawaii_actress_item.actressName
 
     def rollback(self):
         self.db.rollback()
@@ -294,8 +302,41 @@ class AvDB(DB):
             except IntegrityError as err:
                 self.db.rollback()
                 self.logger.debug(INTEGRITY_ERROR_MSG, faleno_actress_item.actressName, err)
-            
 
+    def insert_avbook_kawaii_actress(self, kawaii_actress_item: KawaiiActressItem):
+        if kawaii_actress_item is None:
+            return
+        with self.db.cursor() as cursor:
+            sql_actress = "INSERT INTO `avbook_kawaii_actress` (`id`," \
+                "`actress_name`," \
+                "`actress_en_name`," \
+                "`birth`," \
+                "`height`," \
+                "`three_size`," \
+                "`hobby`," \
+                "`trick`," \
+                "`twitter`," \
+                "`ins`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            try:
+                cursor.execute(
+                    sql_actress, (
+                        kawaii_actress_item.id,
+                        kawaii_actress_item.actressName,
+                        kawaii_actress_item.actressNameEn,
+                        kawaii_actress_item.birth,
+                        kawaii_actress_item.height,
+                        kawaii_actress_item.threeSize,
+                        kawaii_actress_item.hobby,
+                        kawaii_actress_item.trick,
+                        kawaii_actress_item.twitter,
+                        kawaii_actress_item.ins
+                    )
+                )
+                self.db.commit()
+            except IntegrityError as err:
+                self.db.rollback()
+                self.logger.debug(INTEGRITY_ERROR_MSG, kawaii_actress_item.actressName, err)
+            
     def insert_avbook_fanza(self, fanza_item: FanzaItem, attr: str):
         with self.db.cursor() as cursor:
             sql_insert = "INSERT INTO `avbook_fanza_{0}` (`{0}_id`, `{0}_name`) VALUES (%s, %s)".format(attr)

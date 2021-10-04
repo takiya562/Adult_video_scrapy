@@ -11,6 +11,6 @@ fanza/__pycache__
 fanza/.idea
 fanza/img
 fanza/*.bak
-fanza/spiders/__pycache__
 *.log
 backup
+fanza/**/__pycache__
