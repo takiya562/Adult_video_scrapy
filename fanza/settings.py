@@ -20,7 +20,7 @@ ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
 FAIL_FILE = 'failed.txt'
-VIDEO_DIR = r'J:/JAV/finished'
+VIDEO_DIR = r'D:/JAV/test/'
 CRAWLED_FILE = 'crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
@@ -32,19 +32,21 @@ FALENO_ACTRESS_COMMITTED = 'faleno_actress.txt'
 FALENO_ACTRESS_TARGET = 'faleno_actress_target.txt'
 FALENO_ACTRESS_MODE = 'ground'
 EXT_WHITE_LIST = ['.mp4']
-MYSQL_HOST = '127.0.0.1'
+MYSQL_HOST = '172.22.207.146'
 MYSQL_PORT = 3306
 MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
-IMAGE_DOWNLOAD_PROXY = 'http://127.0.0.1:8181'
+IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
 REDIRECT_ENABLED = False
+RETRY_LIMIT = 3
 
 SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
     's1_actress': S1_ACTRESS_COMMITTED,
-    'prestige_actress': PRESTIGE_ACTRESS_COMMITTED
+    'prestige_actress': PRESTIGE_ACTRESS_COMMITTED,
+    'faleno_actress': FALENO_ACTRESS_COMMITTED
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -104,8 +106,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    'fanza.pipelines.AvbookImagePipeline': 302,
-    'fanza.pipelines.BadRequestPipline': 303,
+    # 'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.RequestStatusPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -216,7 +216,7 @@ MGFX_PRE = '521'
 
 NHDTB = 'NHDTB'
 
-NHDTB_PRE = '1n'
+NHDTB_PRE = '1'
 
 OKS = 'OKS'
 
@@ -253,3 +253,7 @@ STCV_PRE = '529'
 ZEX = 'ZEX'
 
 ZEX_PRE = 'h_720'
+
+SSIS = 'SSIS'
+
+SSIS_SUF = 're01'

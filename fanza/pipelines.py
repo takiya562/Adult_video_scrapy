@@ -7,8 +7,9 @@
 # useful for handling different item types with a single interface
 from fanza.image_helper import handle_image_item
 from pymysql.err import OperationalError
-from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, PrestigeActressItem, S1ActressItem, BadRequestItem
-from urllib.request import urlretrieve, ProxyHandler, install_opener, build_opener
+from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, RequestStatusItem
+from urllib.request import urlretrieve, ProxyHandler, build_opener
+from urllib.error import URLError
 from os.path import isdir, isfile
 from os import makedirs
 from fanza.db import AvDB
@@ -18,6 +19,9 @@ from fanza.common import download_image, save_crawled_to_file, save_to_file
 from scrapy import Spider
 import logging
 from fanza.movie_constants import FAIL_MOVIE_FLAG
+from scrapy.exceptions import DropItem
+from time import sleep
+from socket import timeout
 
 class FanzaPipeline:
     def __init__(self):
@@ -27,8 +31,7 @@ class FanzaPipeline:
         self.committedActress = set()
         self.commitChain = [
             ItemMap('Avbook Movie', AvbookMovieBasicItem, self.commit_movie),
-            ItemMap('Avbook S1 Actress', S1ActressItem, self.commit_actress),
-            ItemMap('Avbook Prestige Actress', PrestigeActressItem, self.commit_actress)
+            ItemMap('Avbook Actress', AvbookActressBasicItem, self.commit_actress),
         ]
         self.logger = logging.getLogger('pipeline-database')
         logging.info('--------------------------------Item pipeline init finish!--------------------------------')
@@ -108,7 +111,7 @@ class AvbookImagePipeline:
 
     def open_spider(self, spider: Spider):
         img_download_proxy = spider.settings['IMAGE_DOWNLOAD_PROXY']
-        self.opener = build_opener(ProxyHandler({'http': img_download_proxy}))
+        self.opener = build_opener(ProxyHandler({'https': img_download_proxy, 'http': img_download_proxy}))
     
     async def process_item(self, item, spider: Spider):
         if not isinstance(item, ImageItem):
@@ -119,27 +122,41 @@ class AvbookImagePipeline:
         if not item.isUpdate and isfile(img_des):
             self.logger.debug('already exist:\t%s %s', prefix, item.imageName)
             return
-        download_image(self.opener, item.url, img_des)
+        retry = 0
+        delay = 1
+        retry_limit = spider.settings['RETRY_LIMIT']
+        while True:
+            try:
+                download_image(self.opener, item.url, img_des)
+                break
+            except (URLError, timeout) as err:
+                if retry > retry_limit:
+                    self.logger.exception("download image error %s", err)
+                    raise DropItem(DROP_ITEM_DOWNLOAD_ERROR_MSG.format(item))
+                sleep(delay)
+                retry += 1
+                delay *= 2
+                self.logger.debug('retry download image: retry\t%s url\t%s', retry, item.url)
         self.logger.info('save img:\t%s %s', prefix, item.imageName)
         
-class BadRequestPipline:
+class RequestStatusPipline:
     def __init__(self) -> None:
         self.logger = logging.getLogger('pipline-bad-request')
-        self.badMap = dict()
+        self.reqDict = dict()
         self.badCommitted = 'failed.txt'
 
     def process_item(self, item, spider: Spider):
-        if not isinstance(item, BadRequestItem):
+        if not isinstance(item, RequestStatusItem):
             return item
-        flag = self.badMap.get(item.censored_id, 0)
+        flag = self.reqDict.get(item.censored_id, 0)
         flag |= item.flag
-        self.badMap[item.censored_id] = flag
+        self.reqDict[item.censored_id] = flag
 
     def close_spider(self, spider: Spider):
         fail_file = spider.settings['FAIL_FILE']
         if fail_file != '':
             self.badCommitted = fail_file
         with open(self.badCommitted, 'w', encoding='utf-8') as f:
-            for censored_id, flag in self.badMap.items():
+            for censored_id, flag in self.reqDict.items():
                 if flag == FAIL_MOVIE_FLAG:
                     f.write(censored_id + '\n')
