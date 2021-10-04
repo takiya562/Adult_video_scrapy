@@ -14,3 +14,4 @@ fanza/*.bak
 fanza/spiders/__pycache__
 *.log
 backup
+fanza/**/__pycache__
