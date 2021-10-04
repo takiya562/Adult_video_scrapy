@@ -35,7 +35,11 @@ class S1ActressSpider(Spider):
                     self.logger.info('s1 actress is already crawled -> id: %s', id)
                     continue
                 url = S1_ACTRESS_TARGET_FORMATTER.format(id)
-                yield Request(url, callback=self.request_callback, meta={S1_ACTRESSID_META_KEY: id})
+                yield Request(
+                    url,
+                    callback=self.request_callback,
+                    meta={S1_ACTRESSID_META_KEY: id}
+                )
 
     def parse(self, response: HtmlResponse):
         if response.status == 404 or response.status == 302:
@@ -46,7 +50,7 @@ class S1ActressSpider(Spider):
             for url in s1_actress_ground_extract(response):
                 id = s1_actress_detail_extract_id(url)
                 if not isUpdate(self.flag) and id in self.crawled:
-                    self.logger.info('actress is already crawled -> id: %s', id)
+                    self.logger.info('s1 actress is already crawled -> id: %s', id)
                     continue
                 yield Request(url, callback=self.request_callback, meta={S1_ACTRESSID_META_KEY: id})
         except ExtractException as err:

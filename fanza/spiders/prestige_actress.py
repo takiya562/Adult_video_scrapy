@@ -70,7 +70,7 @@ class PrestigeActressSpider(Spider):
             for url in prestige_actress_ground_extract(response):
                 id = prestige_actress_detail_extract_id(url)
                 if not isUpdate(self.flag) and id in self.crawled:
-                    self.logger.info('actress is already crawled -> id: %s', id)
+                    self.logger.info('prestige actress is already crawled -> id: %s', id)
                     continue
                 yield SplashRequest(
                     url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),

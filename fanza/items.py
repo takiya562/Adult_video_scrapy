@@ -221,3 +221,25 @@ class FalenoActressItem(AvbookActressBasicItem):
     birthPlace: str = field(default=None)
     hobby: str = field(default=None)
     trick: str = field(default=None)
+
+class KawaiiActressItem(AvbookActressBasicItem):
+    actressNameEn = Field()
+    birth = Field()
+    height = Field()
+    threeSize = Field()
+    hobby = Field()
+    trick = Field()
+    twitter = Field()
+    ins = Field()
+
+@dataclass
+class KawaiiActressItem(AvbookActressBasicItem):
+    actressNameEn: str = field(default=None)
+    birth: str = field(default=None)
+    height: str = field(default=None)
+    threeSize: str = field(default=None)
+    hobby: str = field(default=None)
+    trick: str = field(default=None)
+    twitter: str = field(default=None)
+    ins: str = field(default=None)
+    

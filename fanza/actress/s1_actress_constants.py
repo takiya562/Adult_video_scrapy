@@ -26,7 +26,7 @@ S1_ACTRESS_PROFILE_CLEAN_REGEX = compile(r'\s*\n\s*')
 
 S1_ACTRESS_PROFILE_CLEAN_STR = ''
 
-S1_ACTRESS_ID_REGEX = r'(?<=\/)\d+$'
+S1_ACTRESS_ID_REGEX = r'(?<=\/)\d+'
 
 S1_ACTRESS_TOP = 'https://s1s1s1.com/actress'
 

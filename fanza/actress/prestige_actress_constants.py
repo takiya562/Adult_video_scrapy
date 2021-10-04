@@ -2,7 +2,7 @@ PRESTIGE_ACTRESS_TOP = 'https://www.prestige-av.com/actress/actress_top.php'
 
 PRESTIGE_ACTRESS_TARGET_FORMATTER = 'https://www.prestige-av.com/actress/actress_detail.php?actress_id={}'
 
-PRESTIGE_DOMAIN = 'https://www.prestige-av.com'
+PRESTIGE_BASE_URL = 'https://www.prestige-av.com'
 
 PRESTIGE_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER = 'prestige/{}'
 

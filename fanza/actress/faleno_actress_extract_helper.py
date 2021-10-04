@@ -7,8 +7,7 @@ def faleno_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//ul[@class="clearfix"]/li/div/a/@href').getall()
     if len(hrefs) == 0:
         raise ExtractException("faleno actress page ground extract error", response.url)
-    for url in hrefs:
-        yield url
+    return hrefs
 
 def faleno_actress_detail_extract_en_name(url: str):
     en_name_m = search(FALENO_ACTRESS_EN_NAME_REGEX, url)

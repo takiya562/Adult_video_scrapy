@@ -8,7 +8,7 @@ def prestige_actress_ground_extract(response: HtmlResponse):
     if len(hrefs) == 0:
         raise ExtractException('prestige actress page ground extract error', response.url)
     for path in hrefs:
-        yield PRESTIGE_DOMAIN + path
+        yield PRESTIGE_BASE_URL + path
 
 def prestige_actress_detail_extract_id(url: str):
     id_m = search(PRESTIGE_ACTRESS_ID_REGEX, url)
@@ -35,5 +35,5 @@ def prestige_actress_detail_extract_profile_image(response: HtmlResponse):
     img_url_path = response.xpath('//div[@id="actress_img"]/img/@src').get()
     if img_url_path is None:
         raise ExtractException('extract prestige actress profile img error', response.url)
-    return PRESTIGE_DOMAIN + img_url_path
+    return PRESTIGE_BASE_URL + img_url_path
     

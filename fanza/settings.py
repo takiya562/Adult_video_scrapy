@@ -31,6 +31,9 @@ PRESTIGE_ACTRESS_MODE = 'ground'
 FALENO_ACTRESS_COMMITTED = 'faleno_actress.txt'
 FALENO_ACTRESS_TARGET = 'faleno_actress_target.txt'
 FALENO_ACTRESS_MODE = 'ground'
+KAWAII_ACTRESS_COMMITTED = 'kawaii_actress.txt'
+KAWAII_ACTRESS_TARGET = 'kawaii_actress_target.txt'
+KAWAII_ACTRESS_MODE = 'update-ground'
 EXT_WHITE_LIST = ['.mp4']
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
@@ -46,7 +49,8 @@ RETRY_LIMIT = 3
 SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
     's1_actress': S1_ACTRESS_COMMITTED,
     'prestige_actress': PRESTIGE_ACTRESS_COMMITTED,
-    'faleno_actress': FALENO_ACTRESS_COMMITTED
+    'faleno_actress': FALENO_ACTRESS_COMMITTED,
+    'kawaii_actress': KAWAII_ACTRESS_COMMITTED,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
