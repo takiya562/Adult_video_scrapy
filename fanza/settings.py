@@ -34,6 +34,9 @@ FALENO_ACTRESS_MODE = 'ground'
 KAWAII_ACTRESS_COMMITTED = 'kawaii_actress.txt'
 KAWAII_ACTRESS_TARGET = 'kawaii_actress_target.txt'
 KAWAII_ACTRESS_MODE = 'ground'
+KAWAII_ACTRESS_COMMITTED = 'moodyz_actress.txt'
+KAWAII_ACTRESS_TARGET = 'moodyz_actress_target.txt'
+KAWAII_ACTRESS_MODE = 'ground'
 EXT_WHITE_LIST = ['.mp4']
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
@@ -45,12 +48,18 @@ IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
 REDIRECT_ENABLED = False
 RETRY_LIMIT = 3
+AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_START_DELAY = 0.5
+AUTOTHROTTLE_MAX_DELAY = 5.0
+AUTOTHROTTLE_TARGET_CONCURRENCY = 3.0
+DOWNLOAD_DELAY = 0.25
 
 SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
     's1_actress': S1_ACTRESS_COMMITTED,
     'prestige_actress': PRESTIGE_ACTRESS_COMMITTED,
     'faleno_actress': FALENO_ACTRESS_COMMITTED,
     'kawaii_actress': KAWAII_ACTRESS_COMMITTED,
+    'moodyz_actress': KAWAII_ACTRESS_COMMITTED,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -93,7 +102,7 @@ SPIDER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'fanza.middlewares.FanzaDownloaderMiddleware': 543,
-    'fanza.middlewares.ProxyMiddleware': 350,
+    'fanza.middlewares.ProxyMiddleware': 351,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,

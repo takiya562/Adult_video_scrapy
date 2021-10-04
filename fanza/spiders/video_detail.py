@@ -20,6 +20,7 @@ class VideoDetailSpider(Spider):
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
             meta={CENSORED_ID_META: censored_id},
+            cb_kwargs=dict(censored_id=censored_id),
             callback=self.parse
         )
 
@@ -28,7 +29,8 @@ class VideoDetailSpider(Spider):
         return Request(
             url, cookies={MGS_AGE_COOKIE: MGS_AGE_COOKIE_VAL},
             callback=self.parse_mgstage,
-            meta={CENSORED_ID_META: censored_id}
+            meta={CENSORED_ID_META: censored_id},
+            cb_kwargs=dict(censored_id=censored_id)
         )
 
     def produce_fanza_amateur(self, censored_id: str, url: str):
@@ -36,7 +38,8 @@ class VideoDetailSpider(Spider):
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
             meta={CENSORED_ID_META: censored_id},
-            callback=self.parse_fanza_amateur
+            callback=self.parse_fanza_amateur,
+            cb_kwargs=dict(censored_id=censored_id)
         )
 
     def start_requests(self):
@@ -61,8 +64,7 @@ class VideoDetailSpider(Spider):
                                 
 
     # fanza parse
-    def parse(self, response: HtmlResponse, **kwargs):
-        censored_id = response.meta[CENSORED_ID_META]
+    def parse(self, response: HtmlResponse, censored_id):
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, FANZA_BAD_REQUEST_FLAG)
@@ -149,8 +151,7 @@ class VideoDetailSpider(Spider):
         self.logger.info('------------------------------------parse %s success------------------------------------', censored_id)
 
     # mgstage parse
-    def parse_mgstage(self, response: HtmlResponse, **kwargs):
-        censored_id = response.meta[CENSORED_ID_META]
+    def parse_mgstage(self, response: HtmlResponse, censored_id):
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, MGS_BAD_REQUEST_FLAG)
@@ -222,8 +223,7 @@ class VideoDetailSpider(Spider):
             return
         self.logger.info('------------------------------------parse %s success------------------------------------', censored_id)
 
-    def parse_fanza_amateur(self, response: HtmlResponse, **kwargs):
-        censored_id = response.meta[CENSORED_ID_META]
+    def parse_fanza_amateur(self, response: HtmlResponse, censored_id):
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_AMATEUR_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, FANZA_AMATEUR_BAD_REQUEST_FLAG)

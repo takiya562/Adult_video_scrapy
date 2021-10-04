@@ -243,4 +243,11 @@ class KawaiiActressItem(AvbookActressBasicItem):
     trick: str = field(default=None)
     twitter: str = field(default=None)
     ins: str = field(default=None)
+
+class MoodyzActressItem(AvbookActressBasicItem):
+    actressNameEn = Field()
+
+@dataclass
+class MoodyzActressItem(AvbookActressBasicItem):
+    actressNameEn: str = field(default=None)
     
