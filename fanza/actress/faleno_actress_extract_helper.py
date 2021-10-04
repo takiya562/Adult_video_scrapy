@@ -1,6 +1,6 @@
 from scrapy.http import HtmlResponse
-from fanza.fanza_exception import ExtractException
-from fanza.faleno_actress_constants import FALENO_ACTRESS_EN_NAME_REGEX
+from fanza.exceptions.fanza_exception import ExtractException
+from fanza.actress.faleno_actress_constants import FALENO_ACTRESS_EN_NAME_REGEX
 from re import search
 
 def faleno_actress_ground_extract(response: HtmlResponse):

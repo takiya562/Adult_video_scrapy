@@ -1,13 +1,15 @@
+from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem, RequestStatusItem
+from fanza.movie.movie_constants import *
+from fanza.movie.movie_extract_helper import *
+from fanza.movie.factory.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory
+from fanza.exceptions.error_msg_constants import *
+from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
+from fanza.common import get_crawled
+
 from scrapy import Spider, Request
 from scrapy.http.response.html import HtmlResponse
+
 from re import search, match
-from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
-from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem, RequestStatusItem
-from fanza.movie_constants import *
-from fanza.movie_extract_helper import *
-from fanza.error_msg_constants import *
-from fanza.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory
-from fanza.common import get_crawled
 
 class VideoDetailSpider(Spider):
     name = 'video_detail'

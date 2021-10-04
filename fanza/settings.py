@@ -20,7 +20,7 @@ ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
 FAIL_FILE = 'failed.txt'
-VIDEO_DIR = r'D:/JAV/test/'
+VIDEO_DIR = r'E:/tmp/handle/'
 CRAWLED_FILE = 'crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
@@ -32,7 +32,7 @@ FALENO_ACTRESS_COMMITTED = 'faleno_actress.txt'
 FALENO_ACTRESS_TARGET = 'faleno_actress_target.txt'
 FALENO_ACTRESS_MODE = 'ground'
 EXT_WHITE_LIST = ['.mp4']
-MYSQL_HOST = '172.22.207.146'
+MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
 MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
@@ -106,7 +106,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    # 'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.AvbookImagePipeline': 302,
     'fanza.pipelines.RequestStatusPipline': 303,
 }
 

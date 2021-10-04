@@ -1,4 +1,4 @@
-from fanza.image_constants import *
+from fanza.image.image_constants import *
 from fanza.items import ImageItem, MovieImageItem, ActressImageItem
 from scrapy import Spider
 

@@ -1,14 +1,15 @@
+from fanza.common import get_crawled, get_target
+from fanza.items import ActressImageItem, PrestigeActressItem
+from fanza.exceptions.error_msg_constants import *
+from fanza.exceptions.fanza_exception import ExtractException
+from fanza.actress.prestige_actress_constants import *
+from fanza.actress.prestige_actress_extract_helper import *
+from fanza.actress.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
+from fanza.actress.actress_constants import *
+
 from scrapy import Spider
 from scrapy_splash import SplashRequest
 from scrapy.http.response.html import HtmlResponse
-from fanza.common import get_crawled, get_target
-from fanza.items import ActressImageItem, PrestigeActressItem
-from fanza.prestige_actress_constants import *
-from fanza.error_msg_constants import *
-from fanza.prestige_actress_extract_helper import *
-from fanza.fanza_exception import ExtractException
-from fanza.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
-from fanza.actress_constants import *
 
 class PrestigeActressSpider(Spider):
     name = 'prestige_actress'

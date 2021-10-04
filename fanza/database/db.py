@@ -1,12 +1,11 @@
 from pymysql import connect
 from fanza.items import FalenoActressItem, FanzaAmateurItem, FanzaItem, MgsItem, PrestigeActressItem, S1ActressItem, ItemMap, Item
 from pymysql import IntegrityError
-from fanza.db_constants import *
+from fanza.database.db_constants import *
 import logging
-from fanza.db_error_msg_constatns import INTEGRITY_ERROR_MSG
+from fanza.database.db_error_msg_constatns import *
 from pymysql import ProgrammingError
 from pymysql.err import DataError
-from fanza.db_error_msg_constatns import PROGRAMMING_ERROR_MSG, DROP_ITEM_PROGRAMMING_ERROR_MSG, DATA_ERROR_MSG, DROP_ITEM_DATA_ERROR_MSG, ATTRIBUTE_ERROR_MSG, DROP_ITEM_ATTRIBUTE_ERROR_MSG
 from scrapy.exceptions import DropItem
 
 class DB:

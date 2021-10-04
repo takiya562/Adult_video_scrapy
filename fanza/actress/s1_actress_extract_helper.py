@@ -1,7 +1,7 @@
 from scrapy.http.response.html import HtmlResponse
-from fanza.fanza_exception import ExtractException
+from fanza.exceptions.fanza_exception import ExtractException
 from re import search
-from fanza.s1_actress_constants import *
+from fanza.actress.s1_actress_constants import *
 
 def s1_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//p[text()="{}"]/following::div[@class="c-card main"]/descendant::a/@href'.format(S1_ACTRESS_TITLE)).getall()

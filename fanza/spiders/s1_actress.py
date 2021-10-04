@@ -1,13 +1,14 @@
 from fanza.common import get_crawled, get_target
 from fanza.items import ActressImageItem, S1ActressItem
-from fanza.s1_actress_constants import *
-from fanza.error_msg_constants import *
+from fanza.actress.s1_actress_constants import *
+from fanza.actress.s1_actress_extract_helper import *
+from fanza.actress.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
+from fanza.actress.actress_constants import *
+from fanza.exceptions.fanza_exception import ExtractException
+from fanza.exceptions.error_msg_constants import *
+
 from scrapy import Spider, Request
 from scrapy.http.response.html import HtmlResponse
-from fanza.s1_actress_extract_helper import *
-from fanza.fanza_exception import ExtractException
-from fanza.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
-from fanza.actress_constants import *
 
 class S1ActressSpider(Spider):
     name = 's1_actress'

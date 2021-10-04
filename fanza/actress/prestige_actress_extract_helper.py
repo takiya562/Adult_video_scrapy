@@ -1,7 +1,7 @@
 from scrapy.http.response.html import HtmlResponse
-from fanza.fanza_exception import ExtractException
+from fanza.exceptions.fanza_exception import ExtractException
 from re import search
-from fanza.prestige_actress_constants import *
+from fanza.actress.prestige_actress_constants import *
 
 def prestige_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//ul[@id="actress"]/li/a/@href').getall()

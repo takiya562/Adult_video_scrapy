@@ -1,4 +1,4 @@
-from fanza.actress_constants import *
+from fanza.actress.actress_constants import *
 
 def build_flag(mode: str):
     flag = 0

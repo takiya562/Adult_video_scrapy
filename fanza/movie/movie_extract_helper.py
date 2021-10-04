@@ -1,10 +1,10 @@
-from fanza.movie_constants import *
-from fanza.fanza_exception import ExtractException, EmptyGenreException, FormatException
+from fanza.movie.movie_constants import *
+from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
 from os.path import splitext, isfile, join
 from os import listdir
 from re import search
 from scrapy.http.response.html import HtmlResponse
-from fanza.img_url_factory import mgs_low_res_cover_url_factory
+from fanza.image.img_url_factory import mgs_low_res_cover_url_factory
 from re import search
 
 def scan_video_dir(dir: str, ext_list: list):

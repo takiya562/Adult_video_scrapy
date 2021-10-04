@@ -5,23 +5,25 @@
 
 
 # useful for handling different item types with a single interface
-from fanza.image_helper import handle_image_item
-from pymysql.err import OperationalError
 from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, RequestStatusItem
+from fanza.common import download_image, save_crawled_to_file
+from fanza.database.db import AvDB
+from fanza.database.db_error_msg_constatns import *
+from fanza.movie.movie_constants import FAIL_MOVIE_FLAG
+from fanza.image.image_helper import handle_image_item
+
+import logging
+from scrapy.exceptions import DropItem
+from scrapy import Spider
+from pymysql.err import OperationalError
+from pymysql.err import OperationalError
+
+from time import sleep
+from socket import timeout
 from urllib.request import urlretrieve, ProxyHandler, build_opener
 from urllib.error import URLError
 from os.path import isdir, isfile
 from os import makedirs
-from fanza.db import AvDB
-from pymysql.err import OperationalError
-from fanza.db_error_msg_constatns import *
-from fanza.common import download_image, save_crawled_to_file, save_to_file
-from scrapy import Spider
-import logging
-from fanza.movie_constants import FAIL_MOVIE_FLAG
-from scrapy.exceptions import DropItem
-from time import sleep
-from socket import timeout
 
 class FanzaPipeline:
     def __init__(self):
@@ -61,6 +63,8 @@ class FanzaPipeline:
     def close_spider(self, spider: Spider):
         # write the crawled av into specified file (see CRAWLED_FILE in settings)
         spdier_map_committed_file = spider.settings['SPIDER_ACTRESS_CRAWLED_FILE_MAP']
+        self.logger.info('movie sync to mysql: total\t%d', len(self.committedMovie))
+        self.logger.info('actress sync to mysql: total\t%d', len(self.committedActress))
         for committed in self.committedMovie:
             save_crawled_to_file(committed, spider.settings['CRAWLED_FILE'])
         for committed in self.committedActress:
