@@ -1,5 +1,3 @@
-KAWAII_ACTRESSID_META_KEY = 'id'
-
 KAWAII_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER = 'kawii/{}'
 
 KAWAII_BASE_URL = 'https://www.kawaiikawaii.jp'

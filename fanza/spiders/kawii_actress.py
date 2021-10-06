@@ -38,10 +38,15 @@ class KawaiiActressSpider(Spider):
                 yield Request(
                     KAWAII_ACTRESS_TARGET_FORMATTER.format(id),
                     callback=self.request_callback,
-                    meta={KAWAII_ACTRESSID_META_KEY: id}
+                    cb_kwargs=dict(id=id)
                 )
 
     def parse(self, response: HtmlResponse):
+        """ This function parse kawaii actress top page.
+
+        @url https://www.kawaiikawaii.jp/actress/
+        @returns requests 15 30
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
@@ -54,14 +59,20 @@ class KawaiiActressSpider(Spider):
             yield Request(
                 url,
                 callback=self.request_callback,
-                meta={KAWAII_ACTRESSID_META_KEY: id}
+                cb_kwargs=dict(id=id)
             )
 
-    def parse_detail(self, response: HtmlResponse):
+    def parse_detail(self, response: HtmlResponse, id):
+        """ This function parse kawaii actress detail page.
+
+        @url https://www.kawaiikawaii.jp/actress/detail/1042907/
+        @cb_kwargs {"id": "1042907"}
+        @avbookreturns actressItem 1 ImageItem 1
+        @avbookscrapes actressItem {"id": 1042907, "actressName": "伊藤舞雪"}
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[KAWAII_ACTRESSID_META_KEY]
         try:
             name, en_name = kawaii_actress_detail_extract_name(response)
         except ExtractException as err:
@@ -84,7 +95,7 @@ class KawaiiActressSpider(Spider):
         self.logger.info("%s\t%s", KAWAII_ACTRESS_DETAIL_TWITTER_TEXT, twitter)
         self.logger.info("%s\t%s", KAWAII_ACTRESS_DETAIL_INS_TEXT, ins)
         yield KawaiiActressItem(
-            id=id,
+            id=int(id),
             actressName=name, actressNameEn=en_name,
             birth=birth,
             height=height,
@@ -107,11 +118,10 @@ class KawaiiActressSpider(Spider):
             actress=name,
         )
 
-    def parse_image(self, response: HtmlResponse):
+    def parse_image(self, response: HtmlResponse, id):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[KAWAII_ACTRESSID_META_KEY]
         try:
             name, en_name = kawaii_actress_detail_extract_name(response)
         except ExtractException as err:

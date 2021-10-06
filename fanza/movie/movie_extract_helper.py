@@ -174,7 +174,7 @@ def mgs_format_video_len(video_len: str):
         return video_len
     m = search(r'\d+(?=min)', video_len)
     if m:
-        return m.group()
+        return int(m.group())
     else:
         raise FormatException('video len format error!')
 

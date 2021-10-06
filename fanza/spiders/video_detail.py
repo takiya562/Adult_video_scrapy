@@ -19,7 +19,6 @@ class VideoDetailSpider(Spider):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
-            meta={CENSORED_ID_META: censored_id},
             cb_kwargs=dict(censored_id=censored_id),
             callback=self.parse
         )
@@ -29,7 +28,6 @@ class VideoDetailSpider(Spider):
         return Request(
             url, cookies={MGS_AGE_COOKIE: MGS_AGE_COOKIE_VAL},
             callback=self.parse_mgstage,
-            meta={CENSORED_ID_META: censored_id},
             cb_kwargs=dict(censored_id=censored_id)
         )
 
@@ -37,7 +35,6 @@ class VideoDetailSpider(Spider):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},
-            meta={CENSORED_ID_META: censored_id},
             callback=self.parse_fanza_amateur,
             cb_kwargs=dict(censored_id=censored_id)
         )
@@ -65,6 +62,14 @@ class VideoDetailSpider(Spider):
 
     # fanza parse
     def parse(self, response: HtmlResponse, censored_id):
+        """ This function parse fanza movie page.
+
+        @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
+        @cb_kwargs {"censored_id": "CAWD-186"}
+        @cookies {"age_check_done": "1"}
+        @avbookreturns movieItem 1 ImageItem 22 requestStatusItem 1
+        @avbookscrapes movieItem {"title": "パーフェクトボディを視姦する超接写コケティッシュ肉感アングル 伊藤舞雪", "censoredId": "CAWD-186", "videoLen": 154}
+        """
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, FANZA_BAD_REQUEST_FLAG)
@@ -152,6 +157,14 @@ class VideoDetailSpider(Spider):
 
     # mgstage parse
     def parse_mgstage(self, response: HtmlResponse, censored_id):
+        """ This function parse mgstage movie page.
+
+        @url https://www.mgstage.com/product/product_detail/ABW-013/
+        @cb_kwargs {"censored_id": "ABW-013"}
+        @cookies {"adc": "1"}
+        @avbookreturns movieItem 1 ImageItem 26 requestStatusItem 1
+        @avbookscrapes movieItem {"title": "声が出せない状況で…こっそり いちゃラブ「密着」SEX vol.02 かつてない閉所でイキまくる3本番密着性交 鈴村あいり", "censoredId": "ABW-013", "videoLen": 190}
+        """
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, MGS_BAD_REQUEST_FLAG)
@@ -224,6 +237,14 @@ class VideoDetailSpider(Spider):
         self.logger.info('------------------------------------parse %s success------------------------------------', censored_id)
 
     def parse_fanza_amateur(self, response: HtmlResponse, censored_id):
+        """ This function parse fanza amateur movie page.
+
+        @url https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=yaho012/
+        @cb_kwargs {"censored_id": "YAHO-012"}
+        @cookies {"age_check_done": "1"}
+        @avbookreturns movieItem 1 ImageItem 11 requestStatusItem 1
+        @avbookscrapes movieItem {"title": "みゆきち", "censoredId": "YAHO-012", "videoLen": 120}
+        """
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(FANZA_AMATEUR_RESPONSE_STATUS_ERROR_MSG, censored_id)
             yield RequestStatusItem(censored_id, FANZA_AMATEUR_BAD_REQUEST_FLAG)

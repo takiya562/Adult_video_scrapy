@@ -26,8 +26,6 @@ VIDEO_LEN_TEXT = '収録時間'
 
 GENRE_INFO = 'ジャンル'
 
-CENSORED_ID_META = 'censored_id'
-
 FANZA_AGE_COOKIE = 'age_check_done'
 
 FANZA_AGE_COOKIE_VAL = '1'
@@ -75,7 +73,7 @@ MGS_AGE_COOKIE_VAL = '1'
 
 MGS_FORMAT_REGEX = compile(r'\s*\n\s*')
 
-MGS_TITLE_SUB_REGEX = compile(r'【.*MGS.*】')
+MGS_TITLE_SUB_REGEX = compile(r'\s*【.*MGS.*】\s*')
 
 MGS_SUB_STR = ''
 

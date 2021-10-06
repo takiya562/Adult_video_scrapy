@@ -57,8 +57,8 @@ class PrestigeActressSpider(Spider):
                     url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
                     endpoint='execute',
                     args={'lua_source': self.lua_script},
-                    meta={PRESTIGE_ACTRESSID_META_KEY: id},
-                    callback=self.parse_detail
+                    cb_kwargs=dict(id=id),
+                    callback=self.request_callback
                 )
 
     def parse(self, response: HtmlResponse):
@@ -76,18 +76,17 @@ class PrestigeActressSpider(Spider):
                     url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
                     endpoint='execute',
                     args={'lua_source': self.lua_script},
-                    meta={PRESTIGE_ACTRESSID_META_KEY: id},
-                    callback=self.parse_detail
+                    cb_kwargs=dict(id=id),
+                    callback=self.request_callback
                 )
         except ExtractException as err:
             self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
-    def parse_detail(self, response: HtmlResponse):
+    def parse_detail(self, response: HtmlResponse, id):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[PRESTIGE_ACTRESSID_META_KEY]
         try:
             name, en_name = prestige_actress_detail_extract_name(response)
         except ExtractException as err:
@@ -133,7 +132,6 @@ class PrestigeActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[PRESTIGE_ACTRESSID_META_KEY]
         try:
             name, en_name = prestige_actress_detail_extract_name(response)
         except ExtractException as err:

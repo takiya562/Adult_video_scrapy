@@ -1,7 +1,5 @@
 from re import compile
 
-S1_ACTRESSID_META_KEY = 'id'
-
 S1_ACTRESS_TITLE = 'ピックアップ女優'
 
 S1_ACTRESS_DETAIL_BIRTH_TEXT = '誕生日'

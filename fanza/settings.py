@@ -98,6 +98,13 @@ SPIDER_MIDDLEWARES = {
     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
 }
 
+# Customized contracts
+SPIDER_CONTRACTS = {
+    'fanza.contracts.CookiesContract': 10,
+    'fanza.contracts.AvbookReturnsContract': 11,
+    'fanza.contracts.AvbookScrapesContract': 12,
+}
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {

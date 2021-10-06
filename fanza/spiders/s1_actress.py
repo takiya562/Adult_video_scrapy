@@ -38,10 +38,15 @@ class S1ActressSpider(Spider):
                 yield Request(
                     url,
                     callback=self.request_callback,
-                    meta={S1_ACTRESSID_META_KEY: id}
+                    cb_kwargs=dict(id=id)
                 )
 
     def parse(self, response: HtmlResponse):
+        """ This function parse s1 actress top page.
+
+        @url https://s1s1s1.com/actress
+        @returns requests 24 60
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
@@ -52,16 +57,22 @@ class S1ActressSpider(Spider):
                 if not isUpdate(self.flag) and id in self.crawled:
                     self.logger.info('s1 actress is already crawled -> id: %s', id)
                     continue
-                yield Request(url, callback=self.request_callback, meta={S1_ACTRESSID_META_KEY: id})
+                yield Request(url, callback=self.request_callback, cb_kwargs=dict(id=id))
         except ExtractException as err:
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
-    def parse_detail(self, response: HtmlResponse):
+    def parse_detail(self, response: HtmlResponse, id):
+        """ This function parse s1 actress detail page.
+
+        @url https://s1s1s1.com/actress/detail/19573
+        @cb_kwargs {"id": "19573"}
+        @avbookreturns actressItem 1 ImageItem 4
+        @avbookscrapes actressItem {"id": 19573, "actressName": "三上悠亜"}
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[S1_ACTRESSID_META_KEY]
         try:
             name, en_name = s1_actress_detail_extract_name(response)
         except ExtractException as err:
@@ -92,7 +103,7 @@ class S1ActressSpider(Spider):
         self.logger.info('twitter\t%s', twitter)
         self.logger.info('ins\t%s', ins)
         yield S1ActressItem(
-            id, name, en_name,
+            int(id), name, en_name,
             birth, height, three_size,
             birth_palce, blood_type, hobby, trick,
             twitter, ins
@@ -117,11 +128,10 @@ class S1ActressSpider(Spider):
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
-    def parse_image(self, response: HtmlResponse):
+    def parse_image(self, response: HtmlResponse, id):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        id = response.meta[S1_ACTRESSID_META_KEY]
         try:
             name, en_name = s1_actress_detail_extract_name(response)
         except ExtractException as err:

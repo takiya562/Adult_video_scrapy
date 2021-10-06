@@ -35,10 +35,19 @@ class FalenoActressSpider(Spider):
                     self.logger.info('faleno actress is already crawled')
                     continue
                 url = FALENO_ACTRESS_TARGET_FORMATTER.format(en_name)
-                yield Request(url, callback=self.request_callback, meta={FALENO_ACTRESS_NAME_ID_META_KEY: en_name})
+                yield Request(
+                    url,
+                    callback=self.request_callback,
+                    cb_kwargs=dict(name_id=en_name)
+                )
                 
         
     def parse(self, response: HtmlResponse):
+        """ This function parse s1 actress top page.
+
+        @url https://faleno.jp/top/actress/
+        @returns requests 24 40
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
@@ -49,16 +58,26 @@ class FalenoActressSpider(Spider):
                 if not isUpdate(self.flag) and en_name in self.crawled:
                     self.logger.info('faleno actress is already crawled -> en_name: %s', en_name)
                     continue
-                yield Request(url, callback=self.request_callback, meta={FALENO_ACTRESS_NAME_ID_META_KEY: en_name})
+                yield Request(
+                    url,
+                    callback=self.request_callback,
+                    cb_kwargs=dict(name_id=en_name)
+                )
         except ExtractException as err:
             self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
-    def parse_detail(self, response: HtmlResponse):
+    def parse_detail(self, response: HtmlResponse, name_id):
+        """ This function parse faleno actress detail page.
+
+        @url https://faleno.jp/top/actress/arina_hashimoto/
+        @cb_kwargs {"name_id": "arina_hashimoto"}
+        @avbookreturns actressItem 1 ImageItem 1
+        @avbookscrapes actressItem {"id": "arina_hashimoto", "actressName": "橋本ありな"}
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        name_id = response.meta[FALENO_ACTRESS_NAME_ID_META_KEY]
         try:
             name, en_name = faleno_actress_detail_extract_name(response)
         except ExtractException as err:
@@ -95,11 +114,10 @@ class FalenoActressSpider(Spider):
             self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
             return
 
-    def parse_image(self, response: HtmlResponse):
+    def parse_image(self, response: HtmlResponse, name_id):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        name_id = response.meta[FALENO_ACTRESS_NAME_ID_META_KEY]
         try:
             name, en_name = faleno_actress_detail_extract_name(response)
         except ExtractException as err:
