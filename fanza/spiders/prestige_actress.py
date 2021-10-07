@@ -21,18 +21,6 @@ class PrestigeActressSpider(Spider):
         self.crawled = []
         self.flag = ACTRESS_AGGR_MODE
         self.request_callback = self.parse_detail
-        self.lua_script = """
-        function main(splash, args)
-        splash:add_cookie{"age_auth", "1", "/", domain=".prestige-av.com"}
-        splash.images_enabled = false
-        splash.js_enabled = true
-        assert(splash:go(args.url))
-        assert(splash:wait(0.5))
-        return {
-          html = splash:html()
-        }
-        end
-        """
 
     def start_requests(self):
         mode = self.settings['PRESTIGE_ACTRESS_MODE']
@@ -44,7 +32,7 @@ class PrestigeActressSpider(Spider):
             yield SplashRequest(
                 url=PRESTIGE_ACTRESS_TOP,
                 endpoint='execute',
-                args={'lua_source': self.lua_script},
+                cookies={PRESTIGE_AGE_COOKIES: PRESTIGE_AGE_COOKIES_VAL},
                 callback=self.parse
             )
         if isTarget(self.flag):
@@ -55,13 +43,20 @@ class PrestigeActressSpider(Spider):
                     continue
                 yield SplashRequest(
                     url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
-                    endpoint='execute',
-                    args={'lua_source': self.lua_script},
+                    endpoint='render.html',
+                    cookies={PRESTIGE_AGE_COOKIES: PRESTIGE_AGE_COOKIES_VAL},
                     cb_kwargs=dict(id=id),
                     callback=self.request_callback
                 )
 
     def parse(self, response: HtmlResponse):
+        """ This function parse s1 actress detail page.
+
+        @url https://www.prestige-av.com/actress/actress_top.php
+        @endpoint render.html
+        @cookies {"age_auth": "1"}
+        @returns requests 10 20
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
@@ -74,8 +69,8 @@ class PrestigeActressSpider(Spider):
                     continue
                 yield SplashRequest(
                     url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
-                    endpoint='execute',
-                    args={'lua_source': self.lua_script},
+                    endpoint='render.html',
+                    cookies={PRESTIGE_AGE_COOKIES: PRESTIGE_AGE_COOKIES_VAL},
                     cb_kwargs=dict(id=id),
                     callback=self.request_callback
                 )
@@ -84,6 +79,15 @@ class PrestigeActressSpider(Spider):
             return
 
     def parse_detail(self, response: HtmlResponse, id):
+        """ This function parse s1 actress detail page.
+
+        @url https://www.prestige-av.com/actress/actress_detail.php?actress_id=1313
+        @endpoint render.html
+        @cookies {"age_auth": "1"}
+        @cb_kwargs {"id": "1313"}
+        @avbookreturns actressItem 1 ImageItem 1
+        @avbookscrapes actressItem {"id": 1313, "actressName": "鈴村 あいり"}
+        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
@@ -111,7 +115,7 @@ class PrestigeActressSpider(Spider):
         self.logger.info('%s\t%s', PRESTIGE_ACTRESS_DETAIL_TWITTER_TEXT, twitter)
         self.logger.info('%s\t%s', PRESTIGE_ACTRESS_DETAIL_INS_TEXT, ins)
         yield PrestigeActressItem(
-            id=id, actressName=name, actressNameEn=en_name,
+            id=int(id), actressName=name, actressNameEn=en_name,
             birth=birth, height=height,
             birthPlace=birth_place, threeSize=three_size,
             bloodType=blood_type, hobbyTrick=hobby_trick,
@@ -126,7 +130,6 @@ class PrestigeActressSpider(Spider):
             url=img_url, subDir=PRESTIGE_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
             imageName=S1_ACTRESS_PROFILE_IMGNAME, isUpdate=isUpdate(self.flag), actress=name
         )
-
 
     def parse_image(self, response: HtmlResponse):
         if response.status == 404 or response.status == 302:

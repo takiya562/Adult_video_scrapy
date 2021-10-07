@@ -4,6 +4,10 @@ PRESTIGE_ACTRESS_TARGET_FORMATTER = 'https://www.prestige-av.com/actress/actress
 
 PRESTIGE_BASE_URL = 'https://www.prestige-av.com'
 
+PRESTIGE_AGE_COOKIES = 'age_auth'
+
+PRESTIGE_AGE_COOKIES_VAL = '1'
+
 PRESTIGE_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER = 'prestige/{}'
 
 PRESTIGE_ACTRESS_ID_REGEX = r'(?<=actress_id=)\d+$'
