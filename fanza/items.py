@@ -250,4 +250,26 @@ class MoodyzActressItem(AvbookActressBasicItem):
 @dataclass
 class MoodyzActressItem(AvbookActressBasicItem):
     actressNameEn: str = field(default=None)
+
+class IdeapocketActressItem(AvbookActressBasicItem):
+    actressNameEn = Field()
+    birth = Field()
+    height = Field()
+    threeSize = Field()
+    birthPlace = Field()
+    bloodType = Field()
+    hobbyTrick = Field()
+    twitter = Field()
+    ins = Field()
     
+@dataclass
+class IdeapocketActressItem(AvbookActressBasicItem):
+    actressNameEn: str = field(default=None)
+    birth: str = field(default=None)
+    height: str = field(default=None)
+    threeSize: str = field(default=None)
+    birthPlace: str = field(default=None)
+    bloodType: str = field(default=None)
+    hobbyTrick: str = field(default=None)
+    twitter: str = field(default=None)
+    ins: str = field(default=None)

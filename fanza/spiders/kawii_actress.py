@@ -67,7 +67,7 @@ class KawaiiActressSpider(Spider):
 
         @url https://www.kawaiikawaii.jp/actress/detail/1042907/
         @cb_kwargs {"id": "1042907"}
-        @avbookreturns actressItem 1 ImageItem 1
+        @avbookreturns actressItem 1 imageItem 1
         @avbookscrapes actressItem {"id": 1042907, "actressName": "伊藤舞雪"}
         """
         if response.status == 404 or response.status == 302:

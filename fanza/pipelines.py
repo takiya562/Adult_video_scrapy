@@ -17,6 +17,7 @@ from scrapy.exceptions import DropItem
 from scrapy import Spider
 from pymysql.err import OperationalError
 from pymysql.err import OperationalError
+from deprecated.sphinx import deprecated
 
 from time import sleep
 from socket import timeout
@@ -79,6 +80,7 @@ class FanzaPipeline:
     def commit_actress(self, item: AvbookActressBasicItem):
         self.committedActress.add(item.id)
 
+@deprecated(version='1.0', reason="This pipeline has been replaced by AvbookImagePipeline")
 class FanzaImagePipeline:
     def __init__(self) -> None:
         self.logger = logging.getLogger('pipeline-image')

@@ -72,7 +72,7 @@ class FalenoActressSpider(Spider):
 
         @url https://faleno.jp/top/actress/arina_hashimoto/
         @cb_kwargs {"name_id": "arina_hashimoto"}
-        @avbookreturns actressItem 1 ImageItem 1
+        @avbookreturns actressItem 1 imageItem 1
         @avbookscrapes actressItem {"id": "arina_hashimoto", "actressName": "橋本ありな"}
         """
         if response.status == 404 or response.status == 302:

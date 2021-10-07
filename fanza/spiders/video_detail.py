@@ -67,7 +67,7 @@ class VideoDetailSpider(Spider):
         @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
         @cb_kwargs {"censored_id": "CAWD-186"}
         @cookies {"age_check_done": "1"}
-        @avbookreturns movieItem 1 ImageItem 22 requestStatusItem 1
+        @avbookreturns movieItem 1 imageItem 22 requestStatusItem 1
         @avbookscrapes movieItem {"title": "パーフェクトボディを視姦する超接写コケティッシュ肉感アングル 伊藤舞雪", "censoredId": "CAWD-186", "videoLen": 154}
         """
         if response.status == 404 or response.status == 302 or response.status == 301:
@@ -162,7 +162,7 @@ class VideoDetailSpider(Spider):
         @url https://www.mgstage.com/product/product_detail/ABW-013/
         @cb_kwargs {"censored_id": "ABW-013"}
         @cookies {"adc": "1"}
-        @avbookreturns movieItem 1 ImageItem 26 requestStatusItem 1
+        @avbookreturns movieItem 1 imageItem 26 requestStatusItem 1
         @avbookscrapes movieItem {"title": "声が出せない状況で…こっそり いちゃラブ「密着」SEX vol.02 かつてない閉所でイキまくる3本番密着性交 鈴村あいり", "censoredId": "ABW-013", "videoLen": 190}
         """
         if response.status == 404 or response.status == 302 or response.status == 301:
@@ -242,7 +242,7 @@ class VideoDetailSpider(Spider):
         @url https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=yaho012/
         @cb_kwargs {"censored_id": "YAHO-012"}
         @cookies {"age_check_done": "1"}
-        @avbookreturns movieItem 1 ImageItem 11 requestStatusItem 1
+        @avbookreturns movieItem 1 imageItem 11 requestStatusItem 1
         @avbookscrapes movieItem {"title": "みゆきち", "censoredId": "YAHO-012", "videoLen": 120}
         """
         if response.status == 404 or response.status == 302 or response.status == 301:

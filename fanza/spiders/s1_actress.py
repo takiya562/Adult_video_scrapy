@@ -67,7 +67,7 @@ class S1ActressSpider(Spider):
 
         @url https://s1s1s1.com/actress/detail/19573
         @cb_kwargs {"id": "19573"}
-        @avbookreturns actressItem 1 ImageItem 4
+        @avbookreturns actressItem 1 imageItem 4
         @avbookscrapes actressItem {"id": 19573, "actressName": "三上悠亜"}
         """
         if response.status == 404 or response.status == 302:
@@ -103,10 +103,17 @@ class S1ActressSpider(Spider):
         self.logger.info('twitter\t%s', twitter)
         self.logger.info('ins\t%s', ins)
         yield S1ActressItem(
-            int(id), name, en_name,
-            birth, height, three_size,
-            birth_palce, blood_type, hobby, trick,
-            twitter, ins
+            id=int(id),
+            actressName=name, actressNameEn=en_name,
+            birth=birth,
+            height=height,
+            threeSize=three_size,
+            birthPlace=birth_palce,
+            bloodType=blood_type,
+            hobby=hobby,
+            trick=trick,
+            twitter=twitter,
+            ins=ins
         )
         try:
             img_url = s1_actress_extract_profile_img(response)

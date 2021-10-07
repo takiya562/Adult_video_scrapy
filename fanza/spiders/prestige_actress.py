@@ -85,7 +85,7 @@ class PrestigeActressSpider(Spider):
         @endpoint render.html
         @cookies {"age_auth": "1"}
         @cb_kwargs {"id": "1313"}
-        @avbookreturns actressItem 1 ImageItem 1
+        @avbookreturns actressItem 1 imageItem 1
         @avbookscrapes actressItem {"id": 1313, "actressName": "鈴村 あいり"}
         """
         if response.status == 404 or response.status == 302:

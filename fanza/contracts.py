@@ -72,7 +72,7 @@ class AvbookReturnsContract(Contract):
     object_type_verifiers = {
         'movieItem': lambda x: isinstance(x, AvbookMovieBasicItem),
         'actressItem': lambda x: isinstance(x, AvbookActressBasicItem),
-        'ImageItem': lambda x: isinstance(x, ImageItem),
+        'imageItem': lambda x: isinstance(x, ImageItem),
         'requestStatusItem': lambda x: isinstance(x, RequestStatusItem),
     }
 

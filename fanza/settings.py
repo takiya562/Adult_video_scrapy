@@ -34,9 +34,12 @@ FALENO_ACTRESS_MODE = 'ground'
 KAWAII_ACTRESS_COMMITTED = 'kawaii_actress.txt'
 KAWAII_ACTRESS_TARGET = 'kawaii_actress_target.txt'
 KAWAII_ACTRESS_MODE = 'ground'
-KAWAII_ACTRESS_COMMITTED = 'moodyz_actress.txt'
-KAWAII_ACTRESS_TARGET = 'moodyz_actress_target.txt'
-KAWAII_ACTRESS_MODE = 'ground'
+MOODYZ_ACTRESS_COMMITTED = 'moodyz_actress.txt'
+MOODYZ_ACTRESS_TARGET = 'moodyz_actress_target.txt'
+MOODYZ_ACTRESS_MODE = 'target'
+IDEAPOEKET_ACTRESS_COMMITTED = 'ideapocket_actress.txt'
+IDEAPOEKET_ACTRESS_TARGET = 'ideapocket_actress_target.txt'
+IDEAPOEKET_ACTRESS_MODE = 'ground'
 EXT_WHITE_LIST = ['.mp4']
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
@@ -59,7 +62,8 @@ SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
     'prestige_actress': PRESTIGE_ACTRESS_COMMITTED,
     'faleno_actress': FALENO_ACTRESS_COMMITTED,
     'kawaii_actress': KAWAII_ACTRESS_COMMITTED,
-    'moodyz_actress': KAWAII_ACTRESS_COMMITTED,
+    'moodyz_actress': MOODYZ_ACTRESS_COMMITTED,
+    'ideapocket_actress': IDEAPOEKET_ACTRESS_COMMITTED,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -125,10 +129,10 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'fanza.pipelines.FanzaPipeline': 300,
+    # 'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    'fanza.pipelines.AvbookImagePipeline': 302,
-    'fanza.pipelines.RequestStatusPipline': 303,
+    # 'fanza.pipelines.AvbookImagePipeline': 302,
+    # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

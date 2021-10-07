@@ -1,5 +1,5 @@
 from pymysql import connect
-from fanza.items import FalenoActressItem, FanzaAmateurItem, FanzaItem, KawaiiActressItem, MgsItem, MoodyzActressItem, PrestigeActressItem, S1ActressItem, ItemMap, Item
+from fanza.items import FalenoActressItem, FanzaAmateurItem, FanzaItem, IdeapocketActressItem, KawaiiActressItem, MgsItem, MoodyzActressItem, PrestigeActressItem, S1ActressItem, ItemMap, Item
 from pymysql import IntegrityError
 from fanza.database.db_constants import *
 import logging
@@ -20,6 +20,7 @@ class DB:
             ItemMap('Faleno Actress', FalenoActressItem, self.insert_faleno_actress),
             ItemMap('Kawaii Actress', KawaiiActressItem, self.insert_kawaii_actress),
             ItemMap('Moodyz Actress', MoodyzActressItem, self.insert_moodyz_actress),
+            ItemMap('Ideapocket Actress', IdeapocketActressItem, self.insert_ideapocket_actress),
         ]
         self.logger = logging.getLogger("database-mysql")
 
@@ -64,6 +65,9 @@ class DB:
         pass
 
     def insert_moodyz_actress(self, moodyz_actress_item: MoodyzActressItem) -> str:
+        pass
+
+    def insert_ideapocket_actress(self, ideapocket_actress_item: IdeapocketActressItem) -> str:
         pass
 
 class AvDB(DB):
@@ -123,6 +127,10 @@ class AvDB(DB):
     def insert_moodyz_actress(self, moodyz_actress_item: MoodyzActressItem) -> str:
         self.insert_avbook_moodyz_actress(moodyz_actress_item)
         return moodyz_actress_item.actressName
+
+    def insert_ideapocket_actress(self, ideapocket_actress_item: IdeapocketActressItem) -> str:
+        self.insert_avbook_ideapocket_actress(ideapocket_actress_item)
+        return ideapocket_actress_item.actressName
 
     def rollback(self):
         self.db.rollback()
@@ -348,6 +356,42 @@ class AvDB(DB):
     def insert_avbook_moodyz_actress(self, moodyz_actress_item: MoodyzActressItem):
         pass
             
+    def insert_avbook_ideapocket_actress(self, ideapocket_actress_item: IdeapocketActressItem):
+        if ideapocket_actress_item is None:
+            return
+        with self.db.cursor() as cursor:
+            sql_actress = "INSERT INTO `avbook_actress_ideapocket` (`id`," \
+                "`actress_name`," \
+                "`actress_en_name`," \
+                "`birth`," \
+                "`height`," \
+                "`three_size`," \
+                "`birth_place`," \
+                "`blood_type`," \
+                "`hobby_trick`," \
+                "`twitter`," \
+                "`ins`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" 
+            try:
+                cursor.execute(
+                    sql_actress, (
+                        ideapocket_actress_item.id,
+                        ideapocket_actress_item.actressName,
+                        ideapocket_actress_item.actressNameEn,
+                        ideapocket_actress_item.birth,
+                        ideapocket_actress_item.height,
+                        ideapocket_actress_item.threeSize,
+                        ideapocket_actress_item.birthPlace,
+                        ideapocket_actress_item.bloodType,
+                        ideapocket_actress_item.hobbyTrick,
+                        ideapocket_actress_item.twitter,
+                        ideapocket_actress_item.ins
+                    )
+                )
+                self.db.commit()
+            except IntegrityError as err:
+                self.db.rollback()
+                self.logger.debug(INTEGRITY_ERROR_MSG, ideapocket_actress_item.actressName, err)
+
     def insert_avbook_fanza(self, fanza_item: FanzaItem, attr: str):
         with self.db.cursor() as cursor:
             sql_insert = "INSERT INTO `avbook_fanza_{0}` (`{0}_id`, `{0}_name`) VALUES (%s, %s)".format(attr)
