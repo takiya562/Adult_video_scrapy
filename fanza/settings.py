@@ -20,7 +20,7 @@ ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
 FAIL_FILE = 'failed.txt'
-VIDEO_DIR = r'E:/tmp/handle/'
+VIDEO_DIR = r'J:/JAV/'
 CRAWLED_FILE = 'crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
@@ -129,10 +129,10 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # 'fanza.pipelines.FanzaPipeline': 300,
+    'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    # 'fanza.pipelines.AvbookImagePipeline': 302,
-    # 'fanza.pipelines.RequestStatusPipline': 303,
+    'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.RequestStatusPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

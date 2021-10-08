@@ -2,6 +2,8 @@ FANZA_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/'
 
 FANZA_URL_REPLACEMENT = '00'
 
+FANZA_URL_BLANK_REPLACEMENT = ''
+
 FANZA_AMATEUR_URL_REPLACEMENT = ''
 
 FANZA_AMATEUR_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/'
@@ -257,3 +259,47 @@ ZEX_PRE = 'h_720'
 SSIS = 'SSIS'
 
 SSIS_SUF = 're01'
+
+ARA = 'ARA'
+
+ARA_PRE = '261'
+
+GCP = 'GCP'
+
+GCP_PRE = '326'
+
+HHH = 'HHH'
+
+HHH_PRE = '451'
+
+ISRD = 'ISRD'
+
+ISRD_PRE = '24'
+
+MARA = 'MARA'
+
+MARA_PRE = 'h_237'
+
+MILK = 'MILK'
+
+MILK_PRE = 'h_1240'
+
+MLA = 'MLA'
+
+MLA_PRE = '476'
+
+NACR = 'NACR'
+
+NACR_PRE = 'h_237'
+
+SW = 'SW'
+
+SW_PRE = '1'
+
+TKWA = 'TKWA'
+
+TKWA_PRE = '491'
+
+HODV = 'HODV'
+
+HODV_PRE = '5642'

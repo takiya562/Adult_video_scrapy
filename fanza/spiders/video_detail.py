@@ -1,7 +1,7 @@
 from fanza.items import FanzaAmateurItem, FanzaItem, MgsItem, MovieImageItem, RequestStatusItem
 from fanza.movie.movie_constants import *
 from fanza.movie.movie_extract_helper import *
-from fanza.movie.factory.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory
+from fanza.movie.factory.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory, fanza_url_blank_replacement_factory
 from fanza.exceptions.error_msg_constants import *
 from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
 from fanza.common import get_crawled
@@ -58,6 +58,8 @@ class VideoDetailSpider(Spider):
                 yield self.produce_mgstage(censored_id, url)
             for url in fanza_amateur_url_factory.get_url(censored_id):
                 yield self.produce_fanza_amateur(censored_id, url)
+            for url in fanza_url_blank_replacement_factory.get_url(censored_id):
+                yield self.produce_fanza(censored_id, url)
                                 
 
     # fanza parse

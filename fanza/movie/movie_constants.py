@@ -10,7 +10,7 @@ MGS_BAD_REQUEST_FLAG = 1 << 3
 
 FAIL_MOVIE_FLAG = (1 << 4) - 2
 
-CENSORED_ID_REGEX = r'^[A-Z]{2,6}-\d{3,4}'
+CENSORED_ID_REGEX = r'^[A-Z]{2,6}-\d{3,5}'
 
 DATE_REGEX = r'\d{4}\/\d{2}\/\d{2}'
 
