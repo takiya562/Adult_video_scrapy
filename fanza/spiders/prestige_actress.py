@@ -1,11 +1,9 @@
 from fanza.common import get_crawled, get_target
 from fanza.items import ActressImageItem, PrestigeActressItem
-from fanza.exceptions.error_msg_constants import *
-from fanza.exceptions.fanza_exception import ExtractException
-from fanza.actress.prestige_actress_constants import *
+from fanza.exceptions.error_msg_constants import ACTRESS_RESPONSE_STATUS_ERROR_MSG, ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG
 from fanza.actress.prestige_actress_extract_helper import *
 from fanza.actress.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
-from fanza.actress.actress_constants import *
+from fanza.actress.actress_constants import ACTRESS_AGGR_MODE
 
 from scrapy import Spider
 from scrapy_splash import SplashRequest
@@ -50,33 +48,22 @@ class PrestigeActressSpider(Spider):
                 )
 
     def parse(self, response: HtmlResponse):
-        """ This function parse s1 actress detail page.
-
-        @url https://www.prestige-av.com/actress/actress_top.php
-        @endpoint render.html
-        @cookies {"age_auth": "1"}
-        @returns requests 10 20
-        """
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", response.url)
-        try:
-            for url in prestige_actress_ground_extract(response):
-                id = prestige_actress_detail_extract_id(url)
-                if not isUpdate(self.flag) and id in self.crawled:
-                    self.logger.info('prestige actress is already crawled -> id: %s', id)
-                    continue
-                yield SplashRequest(
-                    url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
-                    endpoint='render.html',
-                    cookies={PRESTIGE_AGE_COOKIES: PRESTIGE_AGE_COOKIES_VAL},
-                    cb_kwargs=dict(id=id),
-                    callback=self.request_callback
-                )
-        except ExtractException as err:
-            self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        for url in prestige_actress_ground_extract(response):
+            id = prestige_actress_detail_extract_id(url)
+            if not isUpdate(self.flag) and id in self.crawled:
+                self.logger.info('prestige actress is already crawled -> id: %s', id)
+                continue
+            yield SplashRequest(
+                url=PRESTIGE_ACTRESS_TARGET_FORMATTER.format(id),
+                endpoint='render.html',
+                cookies={PRESTIGE_AGE_COOKIES: PRESTIGE_AGE_COOKIES_VAL},
+                cb_kwargs=dict(id=id),
+                callback=self.request_callback
+            )
 
     def parse_detail(self, response: HtmlResponse, id):
         """ This function parse s1 actress detail page.
@@ -91,11 +78,7 @@ class PrestigeActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = prestige_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = prestige_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
         birth_place = prestige_actress_detail_extract_profile(response, PRESTIGE_ACTRESS_DETAIL_PLACE_TEXT)
         birth = prestige_actress_detail_extract_profile(response, PRESTIGE_ACTRESS_DETAIL_BIRTH_TEXT)
@@ -121,11 +104,7 @@ class PrestigeActressSpider(Spider):
             bloodType=blood_type, hobbyTrick=hobby_trick,
             twitter=twitter, ins=ins
         )
-        try:
-            img_url = prestige_actress_detail_extract_profile_image(response)
-        except ExtractException as err:
-            self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        img_url = prestige_actress_detail_extract_profile_image(response)
         yield ActressImageItem(
             url=img_url, subDir=PRESTIGE_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
             imageName=S1_ACTRESS_PROFILE_IMGNAME, isUpdate=isUpdate(self.flag), actress=name
@@ -135,17 +114,9 @@ class PrestigeActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = prestige_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = prestige_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
-        try:
-            img_url = prestige_actress_detail_extract_profile_image(response)
-        except ExtractException as err:
-            self.logger.error(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        img_url = prestige_actress_detail_extract_profile_image(response)
         yield ActressImageItem(
             url=img_url, subDir=PRESTIGE_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
             imageName=S1_ACTRESS_PROFILE_IMGNAME, isUpdate=isUpdate(self.flag), actress=name

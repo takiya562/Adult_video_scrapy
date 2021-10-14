@@ -34,6 +34,8 @@ FANZA_ACTRESS_INFO = 'info_actress'
 
 FANZA_DIRECTOR_INFO = 'info_director'
 
+FANZA_GENRE_INFO = 'info_genre'
+
 FANZA_MAKER_INFO = 'info_maker'
 
 FANZA_LABEL_INFO = 'info_label'
@@ -84,6 +86,8 @@ MGS_MAKER_INFO = 'メーカー'
 MGS_SERIES_INFO = 'シリーズ'
 
 MGS_LABEL_INFO = 'レーベル'
+
+MGS_GENRE_INFO = 'ジャンル'
 
 MGS_COVER_URL_SUB_REGEX = compile(r'(?<=\/)pf_o1(?=_)')
 

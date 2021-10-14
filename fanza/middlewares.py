@@ -3,7 +3,8 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from scrapy import signals
+from scrapy import signals, Spider
+from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -106,3 +107,7 @@ class FanzaDownloaderMiddleware:
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = "http://127.0.0.1:8181"
+
+class GlobalExceptionHandleMiddleware(object):
+    def process_spider_exception(self, response, exception, spider: Spider):
+        pass

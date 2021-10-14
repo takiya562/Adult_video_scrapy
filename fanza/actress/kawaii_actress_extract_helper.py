@@ -11,21 +11,21 @@ MAKER = 'kawaii'
 def kawaii_actress_ground_extract(response: HtmlResponse):
     hrefs = response.xpath('//div[@class="p-area-list"]/ul/li/a/@href').getall()
     if len(hrefs) == 0:
-       raise ExtractException(GROUND_EXTRACT_ERROR.format(maker=MAKER), response.url)
+       raise ExtractException(GROUND_EXTRACT_ERROR, MAKER)
     for url_path in hrefs:
         yield KAWAII_BASE_URL + url_path
 
 def kawaii_actress_detail_extract_id(url: str):
     id_m = search(KAWAII_ACTRESS_ID_REGEX, url)
     if id_m is None:
-        raise ExtractException(ILLEGAL_ACTRESS_DETAIL_PAGE_URL.format(maker=MAKER), url)
+        raise ExtractException(ILLEGAL_ACTRESS_DETAIL_PAGE_URL, MAKER)
     return id_m.group()
 
 def kawaii_actress_detail_extract_name(response: HtmlResponse):
     name = response.xpath('//h1[@class="tx-actress-name"]/text()').get()
     name_en = response.xpath('//p[@class="tx-actress"]/text()').get()
     if name is None or name_en is None:
-        raise ExtractException(EXTRACT_ACTRESS_NAME_ERROR.format(maker=MAKER), response.url)
+        raise ExtractException(EXTRACT_ACTRESS_NAME_ERROR, MAKER)
     return name, name_en
 
 def kawaii_actress_detail_extract_profile(response: HtmlResponse, meta_text: str):
@@ -42,5 +42,5 @@ def kawaii_actress_detail_extract_sns(response: HtmlResponse, meta_class: str):
 def kawaii_actress_detail_extract_profile_img(response: HtmlResponse):
     img_url_path = response.xpath('//div[@class="area-image js-tile"]/img/@src').get()
     if img_url_path is None:
-        raise ExtractException(EXTRACT_ACTRESS_PROFILE_IMG_ERROR.format(maker=MAKER), response.url)
+        raise ExtractException(EXTRACT_ACTRESS_PROFILE_IMG_ERROR, MAKER)
     return KAWAII_BASE_URL + img_url_path

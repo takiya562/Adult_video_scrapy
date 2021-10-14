@@ -51,16 +51,12 @@ class IdeapocketActressSpider(Spider):
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", response.url)
-        try:
-            for url in ideapocket_actress_ground_extract(response):
-                id = ideapcoket_actress_detail_extract_id(url)
-                if not isUpdate(self.flag) and id in self.crawled:
-                    self.logger.info('ideapocket actress is already crawled -> id: %s', id)
-                    continue
-                yield Request(url, callback=self.request_callback, cb_kwargs=dict(id=id))
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        for url in ideapocket_actress_ground_extract(response):
+            id = ideapcoket_actress_detail_extract_id(url)
+            if not isUpdate(self.flag) and id in self.crawled:
+                self.logger.info('ideapocket actress is already crawled -> id: %s', id)
+                continue
+            yield Request(url, callback=self.request_callback, cb_kwargs=dict(id=id))
 
     def parse_detail(self, response: HtmlResponse, id):
         """ This function parse s1 actress detail page.
@@ -73,11 +69,7 @@ class IdeapocketActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = ideapocket_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = ideapocket_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
         birth = ideapocket_actress_detail_extract_profile(response, IDEAPOCKET_ACTRESS_DETAIL_BIRTH_TEXT)
         height = ideapocket_actress_detail_extract_profile(response, IDEAPOCKET_ACTRESS_DETAIL_HEIGHT_TEXT)
@@ -111,12 +103,7 @@ class IdeapocketActressSpider(Spider):
             ins=ins
         )
 
-        try:
-            img_url = ideapocket_actress_extract_profile_img(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
-        
+        img_url = ideapocket_actress_extract_profile_img(response)
         yield ActressImageItem(
             url=img_url,
             subDir=IDEAPOCKET_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),

@@ -1,9 +1,8 @@
 from fanza.common import get_crawled, get_target
 from fanza.items import ActressImageItem, KawaiiActressItem
-from fanza.exceptions.error_msg_constants import *
-from fanza.exceptions.fanza_exception import ExtractException
+from fanza.exceptions.error_msg_constants import ACTRESS_RESPONSE_STATUS_ERROR_MSG, ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG
 from fanza.actress.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
-from fanza.actress.actress_constants import *
+from fanza.actress.actress_constants import ACTRESS_AGGR_MODE
 from fanza.actress.kawaii_actress_constants import *
 from fanza.actress.kawaii_actress_extract_helper import *
 
@@ -73,11 +72,7 @@ class KawaiiActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = kawaii_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = kawaii_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
         birth = kawaii_actress_detail_extract_profile(response, KAWAII_ACTRESS_DETAIL_BIRTH_TEXT)
         height = kawaii_actress_detail_extract_profile(response, KAWAII_ACTRESS_DETAIL_HEIGHT_TEXT)
@@ -105,11 +100,7 @@ class KawaiiActressSpider(Spider):
             twitter=twitter,
             ins=ins
         )
-        try:
-            img_url = kawaii_actress_detail_extract_profile_img(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        img_url = kawaii_actress_detail_extract_profile_img(response)
         yield ActressImageItem(
             url=img_url,
             subDir=KAWAII_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
@@ -122,17 +113,9 @@ class KawaiiActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = kawaii_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = kawaii_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
-        try:
-            img_url = kawaii_actress_detail_extract_profile_img(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        img_url = kawaii_actress_detail_extract_profile_img(response)
         yield ActressImageItem(
             url=img_url,
             subDir=KAWAII_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),

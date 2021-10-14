@@ -1,11 +1,9 @@
 from fanza.common import get_crawled, get_target
 from fanza.items import ActressImageItem, S1ActressItem
-from fanza.actress.s1_actress_constants import *
 from fanza.actress.s1_actress_extract_helper import *
 from fanza.actress.actress_common import build_flag, isUpdate, isGround, isTarget, isImage
-from fanza.actress.actress_constants import *
-from fanza.exceptions.fanza_exception import ExtractException
-from fanza.exceptions.error_msg_constants import *
+from fanza.actress.actress_constants import ACTRESS_AGGR_MODE
+from fanza.exceptions.error_msg_constants import ACTRESS_RESPONSE_STATUS_ERROR_MSG, ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG
 
 from scrapy import Spider, Request
 from scrapy.http.response.html import HtmlResponse
@@ -51,16 +49,12 @@ class S1ActressSpider(Spider):
             self.logger.error(ACTRESS_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
         self.logger.info("------------------------------------parse %s start------------------------------------", response.url)
-        try:
-            for url in s1_actress_ground_extract(response):
-                id = s1_actress_detail_extract_id(url)
-                if not isUpdate(self.flag) and id in self.crawled:
-                    self.logger.info('s1 actress is already crawled -> id: %s', id)
-                    continue
-                yield Request(url, callback=self.request_callback, cb_kwargs=dict(id=id))
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        for url in s1_actress_ground_extract(response):
+            id = s1_actress_detail_extract_id(url)
+            if not isUpdate(self.flag) and id in self.crawled:
+                self.logger.info('s1 actress is already crawled -> id: %s', id)
+                continue
+            yield Request(url, callback=self.request_callback, cb_kwargs=dict(id=id))
 
     def parse_detail(self, response: HtmlResponse, id):
         """ This function parse s1 actress detail page.
@@ -73,25 +67,17 @@ class S1ActressSpider(Spider):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = s1_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = s1_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
-        try:
-            birth = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_BIRTH_TEXT)
-            height = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_HEIGHT_TEXT)
-            three_size = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_SIZE_TEXT)
-            birth_palce = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_PLACE_TEXT)
-            blood_type = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_BLOOD_TYPE_TEXT)
-            hobby = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_HOBBY_TEXT)
-            trick = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_TRICK_TEXT)
-            twitter = s1_actress_detail_extract_sns(response, S1_ACTRESS_TWITTER_INDEX)
-            ins = s1_actress_detail_extract_sns(response, S1_ACTRESS_INS_INDEX)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        birth = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_BIRTH_TEXT)
+        height = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_HEIGHT_TEXT)
+        three_size = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_SIZE_TEXT)
+        birth_palce = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_PLACE_TEXT)
+        blood_type = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_BLOOD_TYPE_TEXT)
+        hobby = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_HOBBY_TEXT)
+        trick = s1_actress_detail_extract_profile(response, S1_ACTRESS_DETAIL_TRICK_TEXT)
+        twitter = s1_actress_detail_extract_sns(response, S1_ACTRESS_TWITTER_INDEX)
+        ins = s1_actress_detail_extract_sns(response, S1_ACTRESS_INS_INDEX)
         self.logger.info('id\t%s', id)
         self.logger.info('%s\t%s', S1_ACTRESS_DETAIL_BIRTH_TEXT, birth)
         self.logger.info('%s\t%s', S1_ACTRESS_DETAIL_HEIGHT_TEXT, height)
@@ -115,48 +101,36 @@ class S1ActressSpider(Spider):
             twitter=twitter,
             ins=ins
         )
-        try:
-            img_url = s1_actress_extract_profile_img(response)
+        img_url = s1_actress_extract_profile_img(response)
+        yield ActressImageItem(
+            url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
+            imageName=S1_ACTRESS_PROFILE_IMGNAME,
+            actress=name,
+            isUpdate=isUpdate(self.flag)
+        )
+        gallery_img_urls = s1_actress_extract_gallery(response)
+        for i in range(0, len(gallery_img_urls)):
             yield ActressImageItem(
-                url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
-                imageName=S1_ACTRESS_PROFILE_IMGNAME,
+                url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
+                imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1),
                 actress=name,
-                isUpdate=isUpdate(self.flag)
+                isGallery=1
             )
-            gallery_img_urls = s1_actress_extract_gallery(response)
-            for i in range(0, len(gallery_img_urls)):
-                yield ActressImageItem(
-                    url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
-                    imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1),
-                    actress=name,
-                    isGallery=1
-                )
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
 
     def parse_image(self, response: HtmlResponse, id):
         if response.status == 404 or response.status == 302:
             self.logger.error(ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG, self.name, response.url)
             return
-        try:
-            name, en_name = s1_actress_detail_extract_name(response)
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+        name, en_name = s1_actress_detail_extract_name(response)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract actress %s(%s) information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', name, en_name)
-        try:
-            img_url = s1_actress_extract_profile_img(response)
+        img_url = s1_actress_extract_profile_img(response)
+        yield ActressImageItem(
+            url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
+            imageName=S1_ACTRESS_PROFILE_IMGNAME, actress=name, isUpdate=isUpdate(self.flag)
+        )
+        gallery_img_urls = s1_actress_extract_gallery(response)
+        for i in range(0, len(gallery_img_urls)):
             yield ActressImageItem(
-                url=img_url, subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
-                imageName=S1_ACTRESS_PROFILE_IMGNAME, actress=name, isUpdate=isUpdate(self.flag)
-            )
-            gallery_img_urls = s1_actress_extract_gallery(response)
-            for i in range(0, len(gallery_img_urls)):
-                yield ActressImageItem(
-                    url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
-                    imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), actress=name, isGallery=1
-                )   
-        except ExtractException as err:
-            self.logger.exception(EXTRACT_GLOBAL_ERROR_MSG, err.message, err.url)
-            return
+                url=gallery_img_urls[i], subDir=S1_ACTRESS_PROFILE_IMG_SUBDIR_FORMATTER.format(id),
+                imageName=S1_ACTRESS_GALLERY_IMGNAME_FORMATTER.format(i + 1), actress=name, isGallery=1
+            )   
