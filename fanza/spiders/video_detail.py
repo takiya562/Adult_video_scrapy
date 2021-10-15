@@ -134,7 +134,7 @@ class VideoDetailSpider(Spider):
         @cb_kwargs {"censored_id": "ABW-013"}
         @cookies {"adc": "1"}
         @avbookreturns movieItem 1 imageItem 26 requestStatusItem 1
-        @avbookscrapes movieItem {"title": "声が出せない状況で…こっそり いちゃラブ「密着」SEX vol.02 かつてない閉所でイキまくる3本番密着性交 鈴村あいり 【MGSだけのおまけ映像付き+10分】", "censoredId": "ABW-013", "videoLen": 190}
+        @avbookscrapes movieItem {"title": "声が出せない状況で…こっそり いちゃラブ「密着」SEX vol.02 かつてない閉所でイキまくる3本番密着性交 鈴村あいり", "censoredId": "ABW-013", "videoLen": 190}
         """
         if response.status == 404 or response.status == 302 or response.status == 301:
             self.logger.debug(MGS_RESPONSE_STATUS_ERROR_MSG, censored_id)
@@ -145,7 +145,8 @@ class VideoDetailSpider(Spider):
         self.logger.info("url: %s", response.url)
         self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
         self.logger.info("Video id: %s", censored_id)
-        title = msg_extract_title(response)
+        title = mgs_extract_title(response)
+        title = mgs_clean_title(title)
         release_date = mgs_extract_meta_info(response, RELEASE_DATE_TEXT)
         if release_date is None or match(DATE_REGEX, release_date) is None:
             release_date = mgs_extract_meta_info(response, DELIVERY_DATE_TEXT)

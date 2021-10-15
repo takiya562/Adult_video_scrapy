@@ -5,7 +5,7 @@ from fanza.database.db_constants import *
 import logging
 from fanza.database.db_error_msg_constatns import *
 from pymysql import ProgrammingError
-from pymysql.err import DataError
+from pymysql.err import DataError, OperationalError
 from scrapy.exceptions import DropItem
 
 class DB:
@@ -32,16 +32,20 @@ class DB:
                     return map.callback(item)
                 except ProgrammingError as err:
                     self.db.rollback()
-                    self.logger.exception(PROGRAMMING_ERROR_MSG, err)
+                    self.logger.exception(PROGRAMMING_ERROR_MSG, map.itemName, exc_info=err)
                     raise DropItem(DROP_ITEM_PROGRAMMING_ERROR_MSG.format(item))
                 except DataError as err:
                     self.db.rollback()
-                    self.logger.exception(DATA_ERROR_MSG, err)
+                    self.logger.exception(DATA_ERROR_MSG, map.itemName, exc_info=err)
                     raise DropItem(DROP_ITEM_DATA_ERROR_MSG.format(item))
                 except AttributeError as err:
                     self.db.rollback()
-                    self.logger.exception(ATTRIBUTE_ERROR_MSG, err)
+                    self.logger.exception(ATTRIBUTE_ERROR_MSG, map.itemName, exc_info=err)
                     raise DropItem(DROP_ITEM_ATTRIBUTE_ERROR_MSG.format(item))
+                except OperationalError as err:
+                    self.db.rollback()
+                    self.logger.exception(OPERATIONAL_ERROR_MSG, map.itemName, exc_info=err)
+                    raise DropItem(DROP_ITEM_OPERATIONAL_ERROR_MSG.format(item))
 
     def insert_fanza_movie(self, fanza_item: FanzaItem) -> str:
         pass
@@ -162,7 +166,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, err)            
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, exc_info=err)            
 
     def insert_avbook_mgs_movie(self, mgs_item: MgsItem):
         if mgs_item.censoredId is None:
@@ -188,7 +192,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, mgs_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, mgs_item.censoredId, exc_info=err)
 
     def insert_avbook_fanza_amateur_movie(self, fanza_amateur_item: FanzaAmateurItem):
         if fanza_amateur_item is None:
@@ -214,7 +218,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, exc_info=err)
         
     def insert_avbook_s1_actress(self, s1_actress_item: S1ActressItem):
         if s1_actress_item is None:
@@ -250,7 +254,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, s1_actress_item.actressName, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, s1_actress_item.actressName, exc_info=err)
     
     def insert_avbook_prestige_actress(self, prestige_actress_item: PrestigeActressItem):
         if prestige_actress_item is None:
@@ -286,7 +290,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, prestige_actress_item.actressName, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, prestige_actress_item.actressName, exc_info=err)
     
     def insert_avbook_faleno_actress(self, faleno_actress_item: FalenoActressItem):
         if faleno_actress_item is None:
@@ -317,7 +321,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, faleno_actress_item.actressName, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, faleno_actress_item.actressName, exc_info=err)
 
     def insert_avbook_kawaii_actress(self, kawaii_actress_item: KawaiiActressItem):
         if kawaii_actress_item is None:
@@ -351,7 +355,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, kawaii_actress_item.actressName, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, kawaii_actress_item.actressName, exc_info=err)
 
     def insert_avbook_moodyz_actress(self, moodyz_actress_item: MoodyzActressItem):
         pass
@@ -390,7 +394,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, ideapocket_actress_item.actressName, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, ideapocket_actress_item.actressName, exc_info=err)
 
     def insert_avbook_fanza(self, fanza_item: FanzaItem, attr: str):
         with self.db.cursor() as cursor:
@@ -404,7 +408,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, exc_info=err)
 
     def insert_avbook_fanza_dict(self, id: int, name: str, table: str, fanza_item: FanzaItem):
         if id is None or name is None:
@@ -416,7 +420,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, exc_info=err)
     
     def insert_avbook_fanza_rel(self, fanza_item: FanzaItem, id: int, table: str):
         if id is None:
@@ -428,7 +432,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_item.censoredId, exc_info=err)
                 
     def insert_avbook_mgs(self, mgs_item: MgsItem, attr: str):
         with self.db.cursor() as cursor:
@@ -474,7 +478,7 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, exc_info=err)
     
     def insert_avbook_fanza_amateur_dict(self, id: int, name: str, table: str, fanza_amateur_item: FanzaAmateurItem):
         if id is None or name is None:
@@ -488,4 +492,4 @@ class AvDB(DB):
                 self.db.commit()
             except IntegrityError as err:
                 self.db.rollback()
-                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, err)
+                self.logger.debug(INTEGRITY_ERROR_MSG, fanza_amateur_item.censoredId, exc_info=err)

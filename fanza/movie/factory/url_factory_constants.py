@@ -307,3 +307,7 @@ HODV_PRE = '5642'
 REBD = 'REBD'
 
 REBD_PRE = 'h_346'
+
+MBMS = 'MBMS'
+
+MBMS_PRE = '360'

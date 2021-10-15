@@ -39,6 +39,8 @@ def fanza_extract_multi_info(response: HtmlResponse, meta_info: str):
         raise ExtractException('{} meta count mismatch, id: {} name: {}', meta_info, len(ids), len(texts))
     res = dict()
     for i in range(0, len(ids)):
+        if not ids[i].isdigit():
+            continue
         res[ids[i]] = texts[i]
     return res
 
@@ -50,7 +52,7 @@ def fanza_extract_video_info(response: HtmlResponse, info_x: str):
     return int(id), name
 
 def fanza_extract_meta_info(response: HtmlResponse, tag_text: str):
-    text = response.xpath(f'//td[contains(., "{tag_text}")]/following-sibling::td/text()').get()
+    text = response.xpath(f'//table[@class="mg-b20"]/tr/td[contains(., "{tag_text}")]/following-sibling::td/text()').get()
     if text is None:
         raise ExtractException('extract {} failed', tag_text)
     return text.replace('\n', '')
@@ -82,7 +84,7 @@ def mgs_clean_text(text: str):
 def mgs_clean_title(title: str):
     return MGS_TITLE_SUB_REGEX.sub(MGS_SUB_STR, mgs_clean_text(title))
 
-def msg_extract_title(response: HtmlResponse):
+def mgs_extract_title(response: HtmlResponse):
     title = response.xpath('//h1[@class="tag"]/text()').re_first(r'\n\s*(.*)\n\s*')
     if title is None:
         raise ExtractException('extract title failed')

@@ -49,23 +49,23 @@ class FanzaPipeline:
         try:
             self.db = AvDB(host=host, user=user, passwd=passwd, database=databse, port=port)
         except OperationalError as err:
-            spider.logger.error('Fail to connect mysql ->\n\terr: %s', err)
+            spider.logger.exception('fail to connect mysql', exc_info=err)
             self.close_spider()
-        self.logger.info('------------------------------------Connection success-------------------------------------')
+        spider.logger.info('------------------------------------Connection success-------------------------------------')
 
-    def process_item(self, item, spider):
+    def process_item(self, item, spider: Spider):
         res = self.db.trans_dispatch(item)
         for map in self.commitChain:
             if isinstance(item, map.type):
-                self.logger.info('--------------------------------------Commit %s %s-------------------------------------', map.itemName, res)
+                spider.logger.info('--------------------------------------Commit %s %s-------------------------------------', map.itemName, res)
                 map.callback(item)
         return item
 
     def close_spider(self, spider: Spider):
         # write the crawled av into specified file (see CRAWLED_FILE in settings)
         spdier_map_committed_file = spider.settings['SPIDER_ACTRESS_CRAWLED_FILE_MAP']
-        self.logger.info('movie sync to mysql: total\t%d', len(self.committedMovie))
-        self.logger.info('actress sync to mysql: total\t%d', len(self.committedActress))
+        spider.logger.info('movie sync to mysql: total\t%d', len(self.committedMovie))
+        spider.logger.info('actress sync to mysql: total\t%d', len(self.committedActress))
         for committed in self.committedMovie:
             save_crawled_to_file(committed, spider.settings['CRAWLED_FILE'])
         for committed in self.committedActress:
@@ -82,9 +82,6 @@ class FanzaPipeline:
 
 @deprecated(version='1.0', reason="This pipeline has been replaced by AvbookImagePipeline")
 class FanzaImagePipeline:
-    def __init__(self) -> None:
-        self.logger = logging.getLogger('pipeline-image')
-
     def process_item(self, item, spider: Spider):
         if not isinstance(item, FanzaImageItem):
             return item
@@ -95,24 +92,23 @@ class FanzaImagePipeline:
             if not isdir(cover_img_dir):
                 makedirs(cover_img_dir)
             if isfile(cover_img_des):
-                self.logger.info('already exist %s', item.image)
+                spider.logger.info('already exist %s', item.image)
                 return
             urlretrieve(item.url, cover_img_des)
-            self.logger.info('save cover %s', item.image)
+            spider.logger.info('save cover %s', item.image)
         else:
             preview_img_dir = r'%s/%s/preview' % (img_base_folder, item.censoredId)
             preview_img_des = r'%s/%s.jpg' % (preview_img_dir, item.image)
             if not isdir(preview_img_dir):
                 makedirs(preview_img_dir)
             if isfile(preview_img_des):
-                self.logger.info('already exist %s', item.image)
+                spider.logger.info('already exist %s', item.image)
                 return
             urlretrieve(item.url, preview_img_des)
-            self.logger.info('save preview %s', item.image)
+            spider.logger.info('save preview %s', item.image)
 
 class AvbookImagePipeline:
     def __init__(self) -> None:
-        self.logger = logging.getLogger('pipeline-avbook-image')
         self.opener = None
 
     def open_spider(self, spider: Spider):
@@ -126,7 +122,7 @@ class AvbookImagePipeline:
         if not isdir(img_dir):
             makedirs(img_dir)
         if not item.isUpdate and isfile(img_des):
-            self.logger.debug('already exist:\t%s %s', prefix, item.imageName)
+            spider.logger.debug('already exist: %s %s', prefix, item.imageName)
             return
         retry = 0
         delay = 1
@@ -135,19 +131,18 @@ class AvbookImagePipeline:
             try:
                 download_image(self.opener, item.url, img_des)
                 break
-            except (URLError, timeout) as err:
+            except (URLError, timeout):
                 if retry > retry_limit:
-                    self.logger.exception("download image error %s", err)
+                    spider.logger.exception("download image error, url: %s", item.url)
                     raise DropItem(DROP_ITEM_DOWNLOAD_ERROR_MSG.format(item))
                 sleep(delay)
                 retry += 1
                 delay *= 2
-                self.logger.debug('retry download image: retry\t%s url\t%s', retry, item.url)
-        self.logger.info('save img:\t%s %s', prefix, item.imageName)
+                spider.logger.debug('retry download image: retry\t%s url\t%s', retry, item.url)
+        spider.logger.info('save img:\t%s %s', prefix, item.imageName)
         
 class RequestStatusPipline:
     def __init__(self) -> None:
-        self.logger = logging.getLogger('pipline-bad-request')
         self.reqDict = dict()
         self.badCommitted = 'failed.txt'
 

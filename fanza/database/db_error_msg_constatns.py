@@ -1,12 +1,16 @@
-PROGRAMMING_ERROR_MSG = "encounter Programming error ->\t%s"
+PROGRAMMING_ERROR_MSG = "%s encounter programming error"
 
-INTEGRITY_ERROR_MSG = "encounter Integrity error ->\t%s"
+INTEGRITY_ERROR_MSG = "%s encounter integrity error"
 
-DATA_ERROR_MSG = "encounter Data error ->\t%s"
+DATA_ERROR_MSG = "%s encounter data error"
 
-ATTRIBUTE_ERROR_MSG = "encounter Attribute error ->\t%s"
+ATTRIBUTE_ERROR_MSG = "%s encounter attribute error"
+
+OPERATIONAL_ERROR_MSG = "%s encounter operational error"
 
 DROP_ITEM_ATTRIBUTE_ERROR_MSG = 'attribute error happend\titem: {}'
+
+DROP_ITEM_OPERATIONAL_ERROR_MSG = 'operational error happend\titem: {}'
 
 DROP_ITEM_PROGRAMMING_ERROR_MSG = 'programming error happend\titem: {}'
 
