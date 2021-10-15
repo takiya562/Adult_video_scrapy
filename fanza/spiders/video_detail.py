@@ -3,7 +3,6 @@ from fanza.movie.movie_constants import *
 from fanza.movie.movie_extract_helper import *
 from fanza.movie.factory.url_factroy import fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory, fanza_url_blank_replacement_factory
 from fanza.exceptions.error_msg_constants import *
-from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
 from fanza.common import get_crawled
 
 from scrapy import Spider, Request
@@ -31,7 +30,7 @@ class VideoDetailSpider(Spider):
             cb_kwargs=dict(censored_id=censored_id)
         )
 
-    def produce_fanza_amateur(self, censored_id: str, url: str):
+    def produce_fanza_amateur(self, censored_id: str, url: str):            
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={FANZA_AGE_COOKIE: FANZA_AGE_COOKIE_VAL},

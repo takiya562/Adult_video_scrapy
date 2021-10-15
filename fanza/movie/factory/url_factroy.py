@@ -63,6 +63,21 @@ class MgsUrlFactory(UrlFactory):
                 yield self.url_formatter % result.formated
         yield self.url_formatter % censored_id
 
+class FanzaAmateurFactory(UrlFactory):
+    def __init__(self, url_formatter: str, replacement: str, black_list: set, *args: FormatCensoredId) -> None:
+        super().__init__(url_formatter, *args)
+        self.replacement = replacement
+        self.black_list = black_list
+
+    def get_url(self, censored_id: str) -> str:
+        key = search_pre(censored_id)
+        for formatter in self.formatter_dict.get(key, set()):
+            result = formatter.format_censored_id(censored_id, key)
+            if result.ok:
+                yield self.url_formatter % result.formated.replace('-', self.replacement).lower()
+        if key not in self.black_list:
+            yield self.url_formatter % censored_id.replace('-', self.replacement).lower()
+
 # only pre
 # special
 fsdss_mgs_formatter = FormatCensoredId(FSDSS, prefix=FSDSS_MGS_PRE)
@@ -181,6 +196,8 @@ mgs_url_factory = MgsUrlFactory(
     gcp_formatter, hhh_formatter, mla_formatter, tkwa_formatter, mbms_formatter
 )
 
-fanza_amateur_url_factory = FanzaUrlFactory(
-    FANZA_AMATEUR_URL_FORMATTER, FANZA_AMATEUR_URL_REPLACEMENT
+fanza_amateur_black_list = {IMGN, HMDN, INST}
+
+fanza_amateur_url_factory = FanzaAmateurFactory(
+    FANZA_AMATEUR_URL_FORMATTER, FANZA_AMATEUR_URL_REPLACEMENT, fanza_amateur_black_list
 )
