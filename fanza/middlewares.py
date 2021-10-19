@@ -120,7 +120,6 @@ class SodDownloaderMiddleware(object):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
             return
         if len(self.jar._cookies) != 0:
-            spider.logger.info("add cookie")
             request.meta[MOVIE_STORE] = None
             request.headers.pop('Cookie', None)
             self.jar.add_cookie_header(request)
