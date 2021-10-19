@@ -5,7 +5,7 @@ from fanza.image.img_url_factory import mgs_low_res_cover_url_factory
 from scrapy.http.response.html import HtmlResponse
 
 from os.path import splitext, isfile, join
-from os import listdir
+from os import listdir, name
 from re import search
 
 def scan_video_dir(dir: str, ext_list: list):
@@ -132,3 +132,35 @@ def mgs_extract_preview_num(url: str, low_res: int):
     if num_m is None:
         raise ExtractException('preview image num is illegal, url: {}', url)
     return num_m.group()
+
+def sod_extract_title(response: HtmlResponse):
+    title = response.xpath('//div[@id="videos_head"]/h1[@style="display:none;"]/following-sibling::h1/text()').get()
+    if title is None:
+        raise ExtractException('extract video title failed')
+    return title
+
+def sod_extract_release_date(response: HtmlResponse):
+    date_text = response.xpath('//td[text()="発売年月日"]/following-sibling::td/text()').get()
+    date_m = search(r'(\d{4})年\s(\d{2})月\s(\d{2})日', date_text)
+    if date_m is None:
+        raise ExtractException('illegal date value')
+    return f'{date_m.group(1)}-{date_m.group(2)}-{date_m.group(3)}'
+
+def sod_extract_video_len(response: HtmlResponse):
+    video_len = response.xpath('//td[text()="再生時間"]/following-sibling::td/text()').re_first(r'\d+(?=分)')
+    if video_len is None:
+        raise ExtractException('extract video length failed')
+    return video_len
+
+def sod_extract_label(response: HtmlResponse):
+    return response.xpath('//td[text()="レーベル"]/following-sibling::td/text()').get()
+
+def sod_extract_video_info(response: HtmlResponse, meta_text: str):
+    ids = response.xpath(f'//td[text()="{meta_text}"]/following-sibling::td/a/@href').re(r'(?<=\[]=)\d+')
+    names = response.xpath(f'//td[text()="{meta_text}"]/following-sibling::td/a/text()').getall()
+    if len(ids) != len(names):
+        raise ExtractException('count mismatch, id: {} name: {}', len(ids), len(names))
+    res = dict()
+    for i in range(0, len(ids)):
+        res[int(ids[i])] = names[i]
+    return res

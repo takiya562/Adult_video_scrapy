@@ -12,7 +12,7 @@ from re import search, match
 
 class VideoDetailSpider(Spider):
     name = 'video_detail'
-    allowed_domains = ['dmm.co.jp', 'mgstage.com']
+    allowed_domains = ['dmm.co.jp', 'mgstage.com', 'ec.sod.co.jp']
         
     def produce_fanza(self, censored_id: str, url: str):
         self.logger.debug('Formatted url: %s', url)
@@ -26,6 +26,7 @@ class VideoDetailSpider(Spider):
         self.logger.debug('Formatted url: %s', url)
         return Request(
             url, cookies={MGS_AGE_COOKIE: MGS_AGE_COOKIE_VAL},
+            meta={'dont_redirect': True},
             callback=self.parse_mgstage,
             cb_kwargs=dict(censored_id=censored_id)
         )
@@ -242,3 +243,22 @@ class VideoDetailSpider(Spider):
                 low_res_preview_name = LOW_PREVIEW_IMAGE_FORMATTER.format(censored_id, preview_num)
                 yield MovieImageItem(url=jp, subDir=censored_id, imageName=high_res_preview_name)
                 yield MovieImageItem(url=url, subDir=censored_id, imageName=low_res_preview_name)
+
+    def parse_sod(self, response: HtmlResponse, censored_id):
+        """ This function parse sod movie page.
+        
+        @url https://ec.sod.co.jp/prime/videos/?id=STARS-449
+        @cb_kwargs {"censored_id": "STARS-449"}
+        @meta {"store": "sod"}
+        """
+        if response.status == 404:
+            self.logger.debug(SOD_RESPONSE_STATUS_ERROR_MSG, censored_id)
+            yield RequestStatusItem(censored_id, SOD_BAD_REQUEST_FLAG)
+            return
+        yield RequestStatusItem(censored_id, SUCCESS_REQUEST_FLAG)
+        self.logger.info("------------------------------------parse %s start------------------------------------", censored_id)
+        self.logger.info("url: %s", response.url)
+        self.logger.info('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<extract %s video information>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', censored_id)
+        title = sod_extract_title(response)
+        self.logger.info("Video id: %s", censored_id)
+        self.logger.info("Video title: %s", title)

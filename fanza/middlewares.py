@@ -4,9 +4,10 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals, Spider, Item
-from scrapy.http import HtmlResponse
+from scrapy.http import HtmlResponse, Request
+from scrapy.http.cookies import CookieJar
 from fanza.exceptions.fanza_exception import ExtractException
-import logging
+from fanza.movie.movie_constants import MOVIE_STORE, STORE_SOD, SOD_AGE_CHECK_URL
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -110,7 +111,37 @@ class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = "http://127.0.0.1:8181"
 
-class GlobalExceptionHandleMiddleware(object):    
+class SodDownloaderMiddleware(object):
+    def  __init__(self) -> None:
+        self.jar = CookieJar(check_expired_frequency=10)
+        self.processed = 0
+
+    def process_request(self, request: Request, spider: Spider):
+        if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
+            return
+        if len(self.jar._cookies) != 0:
+            spider.logger.info("add cookie")
+            request.meta[MOVIE_STORE] = None
+            request.headers.pop('Cookie', None)
+            self.jar.add_cookie_header(request)
+            self.processed += 1
+            if self.processed % self.jar.check_expired_frequency == 0:
+                self.jar.clear()            
+
+    def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
+        if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
+            return response
+        self.jar.extract_cookies(response, request)
+        req = Request(
+            SOD_AGE_CHECK_URL,
+            meta={'handle_httpstatus_list': [404], MOVIE_STORE: STORE_SOD},
+            cb_kwargs=request.cb_kwargs,
+            callback=request.callback
+        )
+        req.headers.appendlist('Referer', response.url)
+        return req
+
+class GlobalExceptionHandleSpiderMiddleware(object):    
     def process_spider_exception(self, response: HtmlResponse, exception, spider: Spider):
         if isinstance(exception, ExtractException):
             spider.logger.exception(exception.get_message() + ' url: %s', response.url, exc_info=exception)

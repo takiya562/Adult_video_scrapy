@@ -131,6 +131,7 @@ tkwa_formatter = FormatCensoredId(TKWA, prefix=TKWA_PRE)
 hodv_formatter = FormatCensoredId(HODV, prefix=HODV_PRE)
 redb_formatter = FormatCensoredId(REBD, prefix=REBD_PRE)
 mbms_formatter = FormatCensoredId(MBMS, prefix=MBMS_PRE)
+xmom_formatter = FormatCensoredId(XMOM, prefix=XMOM_PRE)
 
 # 3
 jac_formatter = FormatCensoredId(JAC, prefix=JAC_PRE)
@@ -177,7 +178,7 @@ fanza_url_factory = FanzaUrlFactory(
     hawa_formatter, hdka_formatter, hzgd_formatter, iqqq_formatter, kir_formatter, mcsr_formatter,
     nhdtb_formatter, oks_formatter, san_formatter, skmj_formatter, ss_formatter, zex_formatter,
     hmgl_formatter, ssis_formatter, isrd_formatter, mara_formatter, milk_formatter, nacr_formatter,
-    sw_formatter, redb_formatter
+    sw_formatter, redb_formatter, xmom_formatter
 )
 
 fanza_url_blank_replacement_factory = FanzaUrlFactory(

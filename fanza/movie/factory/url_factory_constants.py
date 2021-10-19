@@ -311,3 +311,7 @@ REBD_PRE = 'h_346'
 MBMS = 'MBMS'
 
 MBMS_PRE = '360'
+
+XMOM = 'XMOM'
+
+XMOM_PRE = 'h_086'

@@ -8,7 +8,9 @@ FANZA_AMATEUR_BAD_REQUEST_FLAG = 1 << 2
 
 MGS_BAD_REQUEST_FLAG = 1 << 3
 
-FAIL_MOVIE_FLAG = (1 << 4) - 2
+SOD_BAD_REQUEST_FLAG = 1 << 4
+
+FAIL_MOVIE_FLAG = (1 << 5) - 2
 
 CENSORED_ID_REGEX = r'^[A-Z]{2,6}-\d{3,5}'
 
@@ -108,3 +110,9 @@ MGS_HIGH_RES_PREVIEW_REGEX = r'(?<=cap_e_)\d+(?=_)'
 MGS_LOW_RES_IMG_URL_KEY = 'low_res_url'
 
 MSG_HIGH_RES_IMG_URL_KEY = 'high_res_url'
+
+MOVIE_STORE = 'store'
+
+STORE_SOD = 'sod'
+
+SOD_AGE_CHECK_URL = 'https://ec.sod.co.jp/prime/_ontime.php'

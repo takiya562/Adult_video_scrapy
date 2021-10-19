@@ -12,6 +12,8 @@ FANZA_AMATEUR_RESPONSE_STATUS_ERROR_MSG = 'can not find video %s in fanza amateu
 
 MGS_RESPONSE_STATUS_ERROR_MSG = 'can not find video %s in mgstage or wrong censored id'
 
+SOD_RESPONSE_STATUS_ERROR_MSG = 'can not find video %s in sod or wrong censored id'
+
 ACTRESS_RESPONSE_STATUS_ERROR_MSG = "%s page is not found.\turl: %s"
 
 ACTRESS_DETAIL_RESPONSE_STATUS_ERROR_MSG = "%s detail page is not found.\turl: %s"

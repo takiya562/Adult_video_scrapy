@@ -18,6 +18,17 @@ class CookiesContract(Contract):
         args['cookies'] = json.loads(' '.join(self.args))
         return args
 
+class MetaContract(Contract):
+    """ Contract to set the meta of the request
+        @meta {"key": "value"}
+    """
+
+    name = 'meta'
+
+    def adjust_request_args(self, args):
+        args['meta'] = json.loads(' '.join(self.args))
+        return args
+
 class AvbookScrapesContract(Contract):
     """ Contract to check value of fields in scraped items
         @avbookscrapes item {"key": "value", ...} ...

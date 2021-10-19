@@ -49,7 +49,9 @@ MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
 IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
-REDIRECT_ENABLED = False
+# sod needs to utilize redirect middleware, so this setting is commented
+# mgstage request add `dont_redirect` meta
+# REDIRECT_ENABLED = False
 RETRY_LIMIT = 3
 AUTOTHROTTLE_ENABLED = True
 AUTOTHROTTLE_START_DELAY = 0.5
@@ -99,8 +101,8 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-    'fanza.middlewares.GlobalExceptionHandleMiddleware': 352,
-    'fanza.middlewares.FanzaSpiderMiddleware': 542,
+    'fanza.middlewares.GlobalExceptionHandleSpiderMiddleware': 352,
+    # 'fanza.middlewares.FanzaSpiderMiddleware': 542,
 }
 
 # Customized contracts
@@ -109,13 +111,15 @@ SPIDER_CONTRACTS = {
     'fanza.contracts.AvbookReturnsContract': 11,
     'fanza.contracts.AvbookScrapesContract': 12,
     'fanza.contracts.SplashEndpointContract': 13,
+    'fanza.contracts.MetaContract': 14,
 }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'fanza.middlewares.ProxyMiddleware': 351,
-    'fanza.middlewares.FanzaDownloaderMiddleware': 543,
+    # 'fanza.middlewares.FanzaDownloaderMiddleware': 543,
+    'fanza.middlewares.SodDownloaderMiddleware': 544,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -131,7 +135,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'fanza.pipelines.FanzaPipeline': 300,
-    # 'fanza.pipelines.FanzaImagePipeline': 301,
+    'fanza.pipelines.FanzaImagePipeline': 301,
     'fanza.pipelines.AvbookImagePipeline': 302,
     'fanza.pipelines.RequestStatusPipline': 303,
 }
