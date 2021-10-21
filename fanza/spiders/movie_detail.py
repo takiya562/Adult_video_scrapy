@@ -1,13 +1,15 @@
+from typing import Dict
 from scrapy import Spider
 from scrapy.http import HtmlResponse
 from fanza.movie.impl.fanza_amateur_extractor import FanzaAmateurExtractor
 from fanza.movie.impl.fanza_extractor import FanzaExtractor
 from fanza.movie.impl.mgs_extractor import MgstageExtractor
+from fanza.movie.movie_extractor import MovieExtractor
 
 class MovieDetailSpider(Spider):
     name = 'movie_detail'
     allowed_domains = ['dmm.co.jp']
-    extractors = {
+    extractors: Dict[str, MovieExtractor] = {
         'fanza': FanzaExtractor(),
         'fanza_amateur': FanzaAmateurExtractor(),
         'mgstage': MgstageExtractor()

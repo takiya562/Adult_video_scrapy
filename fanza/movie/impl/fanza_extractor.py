@@ -1,11 +1,12 @@
-from scrapy.http import HtmlResponse
 from fanza.movie.movie_extractor import MovieExtractor
 from typing import Iterator
-from fanza.movie.movie_constants import *
-from fanza.annotations import checkdate, checkvideolen, collect
-from fanza.movie.movie_error_msg_constants import *
+from fanza.movie.movie_constants import DATE_REGEX, RELEASE_DATE_TEXT, DELIVERY_DATE_TEXT
+from fanza.movie.movie_constants import FANZA_ACTRESS_INFO, FANZA_DIRECTOR_INFO, FANZA_MAKER_INFO, FANZA_LABEL_INFO
+from fanza.movie.movie_constants import FANZA_SERIES_INFO, FANZA_GENRE_INFO
+from fanza.annotations import checkdate, checkvideolen, collect, notnull
 
 class FanzaExtractor(MovieExtractor):
+    @notnull
     def extract_title(self) -> str:
         return self.response.xpath('//h1[@id="title"]/text()').get()
 
@@ -17,6 +18,7 @@ class FanzaExtractor(MovieExtractor):
     def extract_delivery_date(self) -> str:
         return self.fanza_extract_meta_info(DELIVERY_DATE_TEXT)
 
+    @notnull
     @checkvideolen
     def extract_video_len(self) -> str:
         return self.response.xpath('//table[@class="mg-b20"]/tr/td[contains(., "収録時間")]/following-sibling::td/text()').re_first(r'\d+(?=分)')

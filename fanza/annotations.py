@@ -28,4 +28,12 @@ def collect(func):
             res[id] = name
         return res
     return after
+
+def notnull(func):
+    def after(*args, **kwargs):
+        ret = func(args, **kwargs)
+        if ret is None:
+            raise ExtractException('%s returned null value', func.__name__)
+        return ret
+    return after
         

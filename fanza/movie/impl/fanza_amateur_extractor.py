@@ -1,5 +1,5 @@
 from fanza.movie.impl.fanza_extractor import FanzaExtractor
-from fanza.movie.movie_constants import AMATEUR_NAME_TEXT, AMATEUR_THREE_SIZE_TEXT
+from fanza.movie.movie_constants import AMATEUR_NAME_TEXT
 
 class FanzaAmateurExtractor(FanzaExtractor):
     def extract(self, response) -> dict:

@@ -1,5 +1,4 @@
 from scrapy.http import HtmlResponse
-from typing import Dict, Iterator
 
 class MovieExtractor:
     def extract(self, response: HtmlResponse) -> dict:
@@ -27,32 +26,32 @@ class MovieExtractor:
             "genre": genre
         }
 
-    def extract_title(self) -> str:
+    def extract_title(self):
         pass
 
-    def extract_director(self) -> Iterator[tuple]:
+    def extract_director(self):
         pass
 
-    def extract_maker(self) -> Iterator[tuple]:
+    def extract_maker(self):
         pass
 
-    def extract_actress(self) -> Iterator[tuple]:
+    def extract_actress(self):
         pass
 
-    def extract_release_date(self) -> str:
+    def extract_release_date(self):
         pass
 
-    def extract_delivery_date(self) -> str:
+    def extract_delivery_date(self):
         pass
 
-    def extract_series(self) -> Iterator[tuple]:
+    def extract_series(self):
         pass
 
-    def extract_video_len(self) -> int:
+    def extract_video_len(self):
         pass
 
-    def extract_genre(self) -> Iterator[tuple]:
+    def extract_genre(self):
         pass
 
-    def extract_label(self) -> Iterator[tuple]:
+    def extract_label(self):
         pass
