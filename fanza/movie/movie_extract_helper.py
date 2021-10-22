@@ -1,5 +1,5 @@
 from fanza.movie.movie_constants import *
-from fanza.exceptions.fanza_exception import ExtractException, EmptyGenreException, FormatException
+from fanza.exceptions.fanza_exception import ExtractException
 from fanza.image.img_url_factory import mgs_low_res_cover_url_factory
 
 from scrapy.http.response.html import HtmlResponse

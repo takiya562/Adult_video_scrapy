@@ -24,14 +24,18 @@ def checkvideolen(func):
 def collect(func):
     def after(*args, **kwargs):
         res = dict()
-        for id, name in func(*args, **kwargs):
-            res[id] = name
+        ids, names = func(*args, **kwargs)
+        n = len(ids) if len(ids) < len(names) else len(names)
+        for i in range(0, n):
+            if not ids[i].isdigit():
+                continue
+            res[ids[i]] = names[i]
         return res
     return after
 
 def notnull(func):
     def after(*args, **kwargs):
-        ret = func(args, **kwargs)
+        ret = func(*args, **kwargs)
         if ret is None:
             raise ExtractException('%s returned null value', func.__name__)
         return ret

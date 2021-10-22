@@ -14,7 +14,7 @@ FAIL_MOVIE_FLAG = (1 << 5) - 2
 
 CENSORED_ID_REGEX = r'^[A-Z]{2,6}-\d{3,5}'
 
-DATE_REGEX = r'\d{4}\/\d{2}\/\d{2}'
+DATE_REGEX = r'\d{4}[\/-]\d{2}[\/-]\d{2}'
 
 AMATEUR_NAME_TEXT = '名前'
 
