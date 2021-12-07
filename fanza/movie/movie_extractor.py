@@ -4,10 +4,10 @@ class MovieExtractor:
     def extract(self, response: HtmlResponse) -> dict:
         self.response = response
         title = self.extract_title()
-        video_len = self.extract_video_len()
+        duration = self.extract_video_len()
         actress = self.extract_actress()
-        release_date = self.extract_release_date()
-        delivery_date = self.extract_delivery_date()
+        release = self.extract_release_date()
+        delivery = self.extract_delivery_date()
         director = self.extract_director()
         maker = self.extract_maker()
         label = self.extract_label()
@@ -15,10 +15,10 @@ class MovieExtractor:
         genre = self.extract_genre()
         return {
             "title": title,
-            "videoLen": video_len,
+            "duration": duration,
             "actress": actress,
-            "releaseDate": release_date,
-            "deliveryDate": delivery_date,
+            "release": release,
+            "delivery": delivery,
             "director": director,
             "maker": maker,
             "label": label,
@@ -54,4 +54,13 @@ class MovieExtractor:
         pass
 
     def extract_label(self):
+        pass
+
+    def extract_high_res_cover(self):
+        pass
+
+    def extract_low_res_cover(self):
+        pass
+
+    def extract_preview(self):
         pass

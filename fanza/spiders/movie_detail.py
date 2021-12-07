@@ -6,6 +6,7 @@ from fanza.movie.impl.fanza_extractor import FanzaExtractor
 from fanza.movie.impl.mgs_extractor import MgstageExtractor
 from fanza.movie.impl.sod_extractor import SodExtractor
 from fanza.movie.movie_extractor import MovieExtractor
+from fanza.items import MovieImageItem
 
 class MovieDetailSpider(Spider):
     name = 'movie_detail'
@@ -51,3 +52,16 @@ class MovieDetailSpider(Spider):
         res = extractor.extract(response)
         self.logger.info("id: %s", censored_id)
         self.logger.info("movie info: %s", res)
+        high_res_cover = extractor.extract_high_res_cover(response)
+        low_res_cover = extractor.extract_low_res_cover(response)
+        self.logger.info("high_res_cover: %s", high_res_cover)
+        self.logger.info("low_res_cover: %s", low_res_cover)
+        yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
+        yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
+        for low_res_url, high_res_url, num in extractor.extract_preview(response):
+            self.logger.info("low_res_url: %s", low_res_url)
+            self.logger.info("high_res_url: %s", high_res_url)
+            low_res_preview_name = f'{censored_id}-{num}'
+            high_res_preview_name = f'{censored_id}jp-{num}'
+            yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)
+            yield MovieImageItem(url=high_res_url, subDir=censored_id, imageName=high_res_preview_name, isCover=0)

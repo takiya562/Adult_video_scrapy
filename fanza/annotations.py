@@ -40,4 +40,12 @@ def notnull(func):
             raise ExtractException('%s returned null value', func.__name__)
         return ret
     return after
+
+def notempty(func):
+    def after(*args, **kwargs):
+        ret = func(*args, **kwargs)
+        if len(ret) == 0:
+            raise ExtractException('%s returned empty value', func.__name__)
+        return ret
+    return after
         

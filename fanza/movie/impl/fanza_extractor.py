@@ -1,7 +1,8 @@
+from re import search
 from fanza.movie.movie_extractor import MovieExtractor
 from fanza.movie.movie_constants import DATE_REGEX
 from fanza.enums import Actress, DeliveryDate, Genre, Label, Maker, ReleaseDate, Series, Director, VideoLen
-from fanza.annotations import checkdate, checkvideolen, collect, notnull
+from fanza.annotations import checkdate, checkvideolen, collect, notempty, notnull
 
 class FanzaExtractor(MovieExtractor):
     @notnull
@@ -44,6 +45,27 @@ class FanzaExtractor(MovieExtractor):
     @collect
     def extract_genre(self):
         return self.fanza_extract_multi_info(Genre.FANZA.value)
+
+    @notnull
+    def extract_high_res_cover(self):
+        return self.response.xpath('//div[@class="center"]/a[@name="package-image"]/@href').get()
+
+    @notnull
+    def extract_low_res_cover(self):
+        return self.response.xpath('//a[@name="package-image"]/img/@src').get()
+
+    def extract_preview(self):
+        low_res_preview = self.extract_low_res_cover()
+        for url in low_res_preview:
+            num_m = search(r'(?<=-)\d+(?=\.jpg)', url)
+            if num_m:
+                num = num_m.group()
+                high_res_url = compile(r'-(?=\d{1,2}(\.jpg)*$)').sub('jp-', url)
+                yield low_res_preview, high_res_url, num
+
+    @notempty
+    def extract_low_res_preview(self):
+        return self.response.xpath('//div[@id="sample-image-block"]/a/img/@src').getall()
 
     def fanza_extract_multi_info(self, meta_info):
         ids = self.response.xpath(f'//a[@data-i3pst="{meta_info}"]/@href').re(r'(?<=id=)\d*')
