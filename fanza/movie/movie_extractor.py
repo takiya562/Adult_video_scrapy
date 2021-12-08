@@ -56,10 +56,7 @@ class MovieExtractor:
     def extract_label(self):
         pass
 
-    def extract_high_res_cover(self):
-        pass
-
-    def extract_low_res_cover(self):
+    def extract_cover(self):
         pass
 
     def extract_preview(self):

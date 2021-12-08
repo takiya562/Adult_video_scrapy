@@ -134,10 +134,10 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'fanza.pipelines.FanzaPipeline': 300,
-    'fanza.pipelines.FanzaImagePipeline': 301,
+    # 'fanza.pipelines.FanzaPipeline': 300,
+    # 'fanza.pipelines.FanzaImagePipeline': 301,
     'fanza.pipelines.AvbookImagePipeline': 302,
-    'fanza.pipelines.RequestStatusPipline': 303,
+    # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

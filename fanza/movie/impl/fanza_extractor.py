@@ -1,4 +1,4 @@
-from re import search
+from re import search, compile
 from fanza.movie.movie_extractor import MovieExtractor
 from fanza.movie.movie_constants import DATE_REGEX
 from fanza.enums import Actress, DeliveryDate, Genre, Label, Maker, ReleaseDate, Series, Director, VideoLen
@@ -54,13 +54,16 @@ class FanzaExtractor(MovieExtractor):
     def extract_low_res_cover(self):
         return self.response.xpath('//a[@name="package-image"]/img/@src').get()
 
+    def extract_cover(self):
+        return self.extract_high_res_cover(), self.extract_low_res_cover()
+
     def extract_preview(self):
-        low_res_preview = self.extract_low_res_cover()
-        for url in low_res_preview:
-            num_m = search(r'(?<=-)\d+(?=\.jpg)', url)
+        low_res_previews = self.extract_low_res_preview()
+        for low_res_preview in low_res_previews:
+            num_m = search(r'(?<=-)\d+(?=\.jpg)', low_res_preview)
             if num_m:
                 num = num_m.group()
-                high_res_url = compile(r'-(?=\d{1,2}(\.jpg)*$)').sub('jp-', url)
+                high_res_url = compile(r'-(?=\d{1,2}(\.jpg)*$)').sub('jp-', low_res_preview)
                 yield low_res_preview, high_res_url, num
 
     @notempty
