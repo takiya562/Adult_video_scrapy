@@ -46,6 +46,9 @@ class FanzaExtractor(MovieExtractor):
     def extract_genre(self):
         return self.fanza_extract_multi_info(Genre.FANZA.value)
 
+    def extract_store(self):
+        return "fanza"
+
     @notnull
     def extract_high_res_cover(self):
         return self.response.xpath('//div[@class="center"]/a[@name="package-image"]/@href').get()

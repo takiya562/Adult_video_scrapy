@@ -13,6 +13,7 @@ class MovieExtractor:
         label = self.extract_label()
         series = self.extract_series()
         genre = self.extract_genre()
+        store = self.extract_store()
         return {
             "title": title,
             "duration": duration,
@@ -23,7 +24,8 @@ class MovieExtractor:
             "maker": maker,
             "label": label,
             "series": series,
-            "genre": genre
+            "genre": genre,
+            "store": store
         }
 
     def extract_title(self):
@@ -54,6 +56,9 @@ class MovieExtractor:
         pass
 
     def extract_label(self):
+        pass
+
+    def extract_store(self):
         pass
 
     def extract_cover(self):

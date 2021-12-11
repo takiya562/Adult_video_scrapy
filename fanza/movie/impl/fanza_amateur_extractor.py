@@ -14,6 +14,9 @@ class FanzaAmateurExtractor(FanzaExtractor):
     def extract_director(self):
         return dict()
 
+    def extract_store(self):
+        return "fanza-amateur"
+
     @notnull
     def extract_low_res_cover(self):
         return self.response.xpath('//div[@id="sample-video"]/img/@src').get()

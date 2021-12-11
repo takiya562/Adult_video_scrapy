@@ -46,6 +46,9 @@ class MgstageExtractor(MovieExtractor):
     def extract_genre(self):
         return self.mgs_extract_multi_info(Genre.MGSTAGE.value)
 
+    def extract_store(self):
+        return "mgstage"
+
     @notnull
     def extract_low_res_cover(self):
         return self.response.xpath('//img[@class="enlarge_image"]/@src').get()
@@ -72,7 +75,7 @@ class MgstageExtractor(MovieExtractor):
 
     def mgs_extract_multi_info(self, meta_text):
         names = self.response.xpath(f'//th[contains(., "{meta_text}")]/following-sibling::td/a/text()').re(r'\n\s*(.*)\n\s*')
-        return [n for n in range(0, len(names))], names
+        return ["00000000" for n in range(0, len(names))], names
 
     def mgs_extract_meta_info(self, meta_text):
         return self.response.xpath(f'//th[contains(., "{meta_text}")]/following-sibling::td/text()').get()
