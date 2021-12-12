@@ -50,3 +50,9 @@ class AgeCookie(Enum):
 class AgeCookieVal(Enum):
     FANZA = '1'
     MGSTAGE = '1'
+
+class Store(Enum):
+    FANZA = 'fanza'
+    MGSTAGE = 'mgstage'
+    FANZA_AMATEUR = 'fanza_amateur'
+    SOD = 'sod'

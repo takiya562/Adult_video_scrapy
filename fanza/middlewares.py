@@ -3,6 +3,7 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from re import T
 from scrapy import signals, Spider, Item
 from scrapy.http import HtmlResponse, Request
 from scrapy.http.cookies import CookieJar
@@ -120,6 +121,7 @@ class SodDownloaderMiddleware(object):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
             return
         if len(self.jar._cookies) != 0:
+            spider.logger.info('add sod cookie, url: %s', request.url)
             request.meta[MOVIE_STORE] = None
             request.headers.pop('Cookie', None)
             self.jar.add_cookie_header(request)
@@ -129,19 +131,23 @@ class SodDownloaderMiddleware(object):
 
     def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
+            spider.logger.info('not sod, url: %s', request.url)
             return response
+        spider.logger.info('extract sod cookie start, url: %s', response.url)
         self.jar.extract_cookies(response, request)
         req = Request(
             SOD_AGE_CHECK_URL,
             meta={'handle_httpstatus_list': [404], MOVIE_STORE: STORE_SOD},
             cb_kwargs=request.cb_kwargs,
-            callback=request.callback
+            callback=request.callback,
+            dont_filter=True
         )
         req.headers.appendlist('Referer', response.url)
+        spider.logger.info('add sod cookie finish, url: %s', req.url)
         return req
 
 class GlobalExceptionHandleSpiderMiddleware(object):    
     def process_spider_exception(self, response: HtmlResponse, exception, spider: Spider):
         if isinstance(exception, ExtractException):
-            spider.logger.exception(exception.get_message() + ' url: %s', response.url, exc_info=exception)
+            spider.logger.exception(exception.get_message() + ' ,url: %s', response.url, exc_info=exception)
             return Item()

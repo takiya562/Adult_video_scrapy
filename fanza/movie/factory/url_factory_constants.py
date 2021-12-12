@@ -10,6 +10,8 @@ FANZA_AMATEUR_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoc/-/detail/=/c
 
 MGS_URL_FORMATTER = 'https://www.mgstage.com/product/product_detail/%s/'
 
+SOD_URL_FORMATTER = 'https://ec.sod.co.jp/prime/videos/?id=%s'
+
 CENSORED_ID_PRE_REGEX = r'\w+(?=-)'
 
 SIMM = 'SIMM'

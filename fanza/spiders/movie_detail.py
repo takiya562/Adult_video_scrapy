@@ -8,6 +8,11 @@ from fanza.movie.impl.sod_extractor import SodExtractor
 from fanza.movie.movie_extractor import MovieExtractor
 from fanza.items import MovieImageItem
 from scrapy.exporters import JsonLinesItemExporter
+from fanza.movie.factory.request_factory import request_generate_chain
+from fanza.common import get_crawled, scan_movie_dir
+
+from re import search
+
 
 class MovieDetailSpider(Spider):
     name = 'movie_detail'
@@ -21,7 +26,22 @@ class MovieDetailSpider(Spider):
     json_exporter = JsonLinesItemExporter(open('items.json', 'ab'), ensure_ascii=False, encoding='utf-8')
 
     def start_requests(self):
-        pass
+        movie_dir = self.settings['MOVIE_DIR']
+        ext_white_list = self.settings['EXT_WHITE_LIST']
+        crawled = get_crawled(self.settings['CRAWLED_FILE'])
+        for censored_id in scan_movie_dir(movie_dir, ext_white_list):
+            id_m = search(r'^[A-Z]{2,6}-\d{3,5}', censored_id)
+            if id_m is None:
+                self.logger.info('%s is not a valid movie id', censored_id)
+                continue
+            censored_id = id_m.group()
+            if censored_id in crawled:
+                self.logger.debug('%s has been crawled', censored_id)
+                continue
+            for req in request_generate_chain.generate_request(self.parse, censored_id):
+                yield req
+
+        
 
     def parse(self, response: HtmlResponse, censored_id, store):
         # """ This function parse fanza movie page.
@@ -48,6 +68,10 @@ class MovieDetailSpider(Spider):
         @cb_kwargs {"censored_id": "STARS-449", "store": "sod"}
         @meta {"store": "sod"}
         """
+        if response.status != 200:
+            self.logger.info('%s is not a valid movie page', response.url)
+            return
+        self.logger.info('%s is a valid movie page', response.url)
         extractor = self.extractors.get(store, None)
         if extractor is None:
             return
@@ -56,13 +80,13 @@ class MovieDetailSpider(Spider):
         self.logger.info("id: %s", censored_id)
         self.logger.info("movie info: %s", res)
         high_res_cover, low_res_cover = extractor.extract_cover()
-        self.logger.info("high_res_cover: %s", high_res_cover)
-        self.logger.info("low_res_cover: %s", low_res_cover)
+        # self.logger.info("high_res_cover: %s", high_res_cover)
+        # self.logger.info("low_res_cover: %s", low_res_cover)
         yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
         yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
         for low_res_url, high_res_url, num in extractor.extract_preview():
-            self.logger.info("low_res_preview: %s", low_res_url)
-            self.logger.info("high_res_preview: %s", high_res_url)
+            # self.logger.info("low_res_preview: %s", low_res_url)
+            # self.logger.info("high_res_preview: %s", high_res_url)
             low_res_preview_name = f'{censored_id}-{num}'
             high_res_preview_name = f'{censored_id}jp-{num}'
             yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)

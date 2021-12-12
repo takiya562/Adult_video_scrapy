@@ -37,7 +37,7 @@ def notnull(func):
     def after(*args, **kwargs):
         ret = func(*args, **kwargs)
         if ret is None:
-            raise ExtractException('%s returned null value', func.__name__)
+            raise ExtractException('returned null value')
         return ret
     return after
 
@@ -45,7 +45,7 @@ def notempty(func):
     def after(*args, **kwargs):
         ret = func(*args, **kwargs)
         if len(ret) == 0:
-            raise ExtractException('%s returned empty value', func.__name__)
+            raise ExtractException('returned empty value')
         return ret
     return after
         
