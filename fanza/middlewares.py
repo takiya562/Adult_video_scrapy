@@ -121,7 +121,7 @@ class SodDownloaderMiddleware(object):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
             return
         if len(self.jar._cookies) != 0:
-            spider.logger.info('add sod cookie, url: %s', request.url)
+            spider.logger.debug('add sod cookie, url: %s', request.url)
             request.meta[MOVIE_STORE] = None
             request.headers.pop('Cookie', None)
             self.jar.add_cookie_header(request)
@@ -131,9 +131,9 @@ class SodDownloaderMiddleware(object):
 
     def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
-            spider.logger.info('not sod, url: %s', request.url)
+            spider.logger.debug('not sod, url: %s', request.url)
             return response
-        spider.logger.info('extract sod cookie start, url: %s', response.url)
+        spider.logger.debug('extract sod cookie start, url: %s', response.url)
         self.jar.extract_cookies(response, request)
         req = Request(
             SOD_AGE_CHECK_URL,
@@ -143,7 +143,7 @@ class SodDownloaderMiddleware(object):
             dont_filter=True
         )
         req.headers.appendlist('Referer', response.url)
-        spider.logger.info('add sod cookie finish, url: %s', req.url)
+        spider.logger.debug('add sod cookie finish, url: %s', req.url)
         return req
 
 class GlobalExceptionHandleSpiderMiddleware(object):    

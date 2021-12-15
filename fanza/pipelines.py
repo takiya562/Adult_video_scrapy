@@ -5,7 +5,7 @@
 
 
 # useful for handling different item types with a single interface
-from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, RequestStatusItem
+from fanza.items import AvbookActressBasicItem, AvbookMovieBasicItem, FanzaImageItem, ImageItem, ItemMap, RequestStatusItem, SuccessResponseItem
 from fanza.common import download_image, save_crawled_to_file
 from fanza.database.db import AvDB
 from fanza.database.db_error_msg_constatns import *
@@ -140,6 +140,15 @@ class AvbookImagePipeline:
                 delay *= 2
                 spider.logger.debug('retry download image: retry\t%s url\t%s', retry, item.url)
         spider.logger.info('save img:\t%s %s', prefix, item.imageName)
+
+class SuccessResponsePipeline:
+    def close_spider(self, spider: Spider):
+        for success_response in spider.successed:
+            save_crawled_to_file(success_response, spider.settings['CRAWLED_FILE'])
+        failed = spider.processed - spider.successed
+        with open('failed.txt', 'w', encoding='utf-8') as f:
+            for failed_id in failed:
+                f.write(failed_id + '\n')
         
 class RequestStatusPipline:
     def __init__(self) -> None:

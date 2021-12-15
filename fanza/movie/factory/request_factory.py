@@ -58,5 +58,6 @@ fanza_amateur_request_factory = FanzaAmateurRequestFactory(fanza_amateur_url_fac
 mgstage_request_factory = MgstageRequestFactory(mgs_url_factory)
 sod_request_factory = SodRequestFactory(sod_url_factory)
 
-# request_generate_chain = RequestGenerateChain(fanza_request_factory, mgstage_request_factory, fanza_amateur_request_factory, sod_request_factory)
-request_generate_chain = RequestGenerateChain(sod_request_factory)
+request_generate_chain = RequestGenerateChain(fanza_request_factory, mgstage_request_factory, fanza_amateur_request_factory, sod_request_factory)
+# request_generate_chain = RequestGenerateChain(fanza_request_factory, mgstage_request_factory, fanza_amateur_request_factory)
+# request_generate_chain = RequestGenerateChain(sod_request_factory)

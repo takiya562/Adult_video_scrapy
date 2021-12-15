@@ -3,8 +3,8 @@ from fanza.movie.impl.fanza_extractor import FanzaExtractor
 from fanza.movie.movie_constants import AMATEUR_NAME_TEXT
 
 class FanzaAmateurExtractor(FanzaExtractor):
-    def extract(self, response) -> dict:
-        res = super().extract(response)
+    def extract(self, response, censored_id) -> dict:
+        res = super().extract(response, censored_id)
         amateur = self.extract_amateur()
         three_size = self.extract_three_size()
         res['amateur'] = amateur

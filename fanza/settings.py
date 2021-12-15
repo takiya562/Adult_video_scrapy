@@ -22,7 +22,7 @@ LOG_FILE = 'logfile.log'
 FAIL_FILE = 'failed.txt'
 VIDEO_DIR = r'I:/Finished'
 MOVIE_DIR = r'I:/Finished'
-CRAWLED_FILE = 'crawled.txt'
+CRAWLED_FILE = 'new-crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
 S1_ACTRESS_MODE = 'image-update-target'
@@ -48,6 +48,7 @@ MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
+REDIRECT_MAX_TIMES = 1
 IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
 # sod needs to utilize redirect middleware, so this setting is commented
@@ -138,6 +139,7 @@ ITEM_PIPELINES = {
     # 'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
     'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.SuccessResponsePipeline': 303,
     # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 

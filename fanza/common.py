@@ -13,7 +13,7 @@ def save_to_file(record: str, file: str):
 
 def get_crawled(file: str):
     l = set()
-    with open(file, 'w+') as f:
+    with open(file, 'r') as f:
         for line in f.readlines():
             l.add(line.replace('\n', ''))
     return l

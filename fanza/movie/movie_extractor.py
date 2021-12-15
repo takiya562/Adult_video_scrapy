@@ -1,7 +1,7 @@
 from scrapy.http import HtmlResponse
 
 class MovieExtractor:
-    def extract(self, response: HtmlResponse) -> dict:
+    def extract(self, response: HtmlResponse, censored_id: str) -> dict:
         self.response = response
         title = self.extract_title()
         duration = self.extract_video_len()
@@ -15,6 +15,7 @@ class MovieExtractor:
         genre = self.extract_genre()
         store = self.extract_store()
         return {
+            "censored_id": censored_id,
             "title": title,
             "duration": duration,
             "actress": actress,

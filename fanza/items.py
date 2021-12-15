@@ -5,9 +5,15 @@
 
 from scrapy.item import Field, Item
 
-from logging import debug
 from typing import Any, Callable
 from dataclasses import dataclass, field
+
+class SuccessResponseItem(Item):
+    censored_id = Field()
+
+@dataclass
+class SuccessResponseItem:
+    censored_id: str = field(default=None)
 
 class ItemMap:
     def __init__(self, item_name: str, type: type, callback: Callable[[Item], Any]) -> None:

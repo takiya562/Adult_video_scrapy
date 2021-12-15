@@ -23,7 +23,9 @@ class MovieDetailSpider(Spider):
         'mgstage': MgstageExtractor(),
         'sod': SodExtractor()
     }
-    json_exporter = JsonLinesItemExporter(open('items.json', 'ab'), ensure_ascii=False, encoding='utf-8')
+    json_exporter = JsonLinesItemExporter(open('items.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
+    processed = set()
+    successed = set()
 
     def start_requests(self):
         movie_dir = self.settings['MOVIE_DIR']
@@ -38,6 +40,7 @@ class MovieDetailSpider(Spider):
             if censored_id in crawled:
                 self.logger.debug('%s has been crawled', censored_id)
                 continue
+            self.processed.add(censored_id)
             for req in request_generate_chain.generate_request(self.parse, censored_id):
                 yield req
 
@@ -69,16 +72,20 @@ class MovieDetailSpider(Spider):
         @meta {"store": "sod"}
         """
         if response.status != 200:
-            self.logger.info('%s is not a valid movie page', response.url)
+            self.logger.debug('%s is not a valid movie page', response.url)
+            return
+        if censored_id in self.successed:
+            self.logger.debug('%s is duplicated', censored_id)
             return
         self.logger.info('%s is a valid movie page', response.url)
         extractor = self.extractors.get(store, None)
         if extractor is None:
             return
-        res = extractor.extract(response)
+        res = extractor.extract(response, censored_id)
         self.json_exporter.export_item(res)
-        self.logger.info("id: %s", censored_id)
-        self.logger.info("movie info: %s", res)
+        self.successed.add(censored_id)
+        self.logger.info('%s has been crawled', censored_id)
+        self.logger.debug("movie info: %s", res)
         high_res_cover, low_res_cover = extractor.extract_cover()
         # self.logger.info("high_res_cover: %s", high_res_cover)
         # self.logger.info("low_res_cover: %s", low_res_cover)
