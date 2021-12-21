@@ -67,11 +67,9 @@ class SodExtractor(MovieExtractor):
         for i in range(0, n):
             yield low_res_previews[i], high_res_previews[i], i
 
-    @notempty
     def extract_high_res_preview(self):
         return self.response.xpath('//div[@id="videos_samsbox"]/a/@href').getall()
 
-    @notempty
     def extract_low_res_preview(self):
         return self.response.xpath('//div[@id="videos_samsbox"]/a/img/@src').getall()
 

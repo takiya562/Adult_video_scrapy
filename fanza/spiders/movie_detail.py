@@ -23,7 +23,7 @@ class MovieDetailSpider(Spider):
         'mgstage': MgstageExtractor(),
         'sod': SodExtractor()
     }
-    json_exporter = JsonLinesItemExporter(open('items.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
+    json_exporter = JsonLinesItemExporter(open('item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
     processed = set()
     successed = set()
 

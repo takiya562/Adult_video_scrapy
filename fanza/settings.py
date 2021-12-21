@@ -48,7 +48,7 @@ MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
-REDIRECT_MAX_TIMES = 1
+# REDIRECT_MAX_TIMES = 1
 IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
 # sod needs to utilize redirect middleware, so this setting is commented

@@ -6,6 +6,7 @@
 from re import T
 from scrapy import signals, Spider, Item
 from scrapy.http import HtmlResponse, Request
+from scrapy.exceptions import IgnoreRequest
 from scrapy.http.cookies import CookieJar
 from fanza.exceptions.fanza_exception import ExtractException
 from fanza.movie.movie_constants import MOVIE_STORE, STORE_SOD, SOD_AGE_CHECK_URL
@@ -116,33 +117,32 @@ class SodDownloaderMiddleware(object):
     def  __init__(self) -> None:
         self.jar = CookieJar(check_expired_frequency=10)
         self.processed = 0
-
-    def process_request(self, request: Request, spider: Spider):
-        if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
-            return
-        if len(self.jar._cookies) != 0:
-            spider.logger.debug('add sod cookie, url: %s', request.url)
-            request.meta[MOVIE_STORE] = None
-            request.headers.pop('Cookie', None)
-            self.jar.add_cookie_header(request)
-            self.processed += 1
-            if self.processed % self.jar.check_expired_frequency == 0:
-                self.jar.clear()            
-
+    
     def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
         if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
             spider.logger.debug('not sod, url: %s', request.url)
             return response
+        redirect_url = request.meta.get('redirect_url', None)
+        if redirect_url is not None:
+            if redirect_url == response.url:
+                spider.logger.debug('valid sod response, url: %s', response.url)
+                return response
+            else:
+                raise IgnoreRequest('invalid sod response')
         spider.logger.debug('extract sod cookie start, url: %s', response.url)
-        self.jar.extract_cookies(response, request)
+        if self.processed % self.jar.check_expired_frequency == 0: 
+            self.jar.extract_cookies(response, request)
         req = Request(
             SOD_AGE_CHECK_URL,
-            meta={'handle_httpstatus_list': [404], MOVIE_STORE: STORE_SOD},
+            meta={MOVIE_STORE: STORE_SOD, "redirect_url": request.url},
             cb_kwargs=request.cb_kwargs,
             callback=request.callback,
             dont_filter=True
         )
-        req.headers.appendlist('Referer', response.url)
+        self.processed += 1
+        req.headers.appendlist('Referer', request.url)
+        req.headers.pop('Cookie', None)
+        self.jar.add_cookie_header(req)
         spider.logger.debug('add sod cookie finish, url: %s', req.url)
         return req
 

@@ -41,6 +41,7 @@ class SodRequestFactory(RequestFactory):
         for req in super().get_request(callback, censored_id):
             req.cb_kwargs['store'] = Store.SOD.value
             req.meta['store'] = 'sod'
+            req.meta['dont_filter'] = True
             yield req
 
 class RequestGenerateChain:
