@@ -143,8 +143,6 @@ class AvbookImagePipeline:
 
 class SuccessResponsePipeline:
     def close_spider(self, spider: Spider):
-        for success_response in spider.successed:
-            save_crawled_to_file(success_response, spider.settings['CRAWLED_FILE'])
         failed = spider.processed - spider.successed
         with open('failed.txt', 'w', encoding='utf-8') as f:
             for failed_id in failed:

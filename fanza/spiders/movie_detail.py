@@ -9,7 +9,7 @@ from fanza.movie.movie_extractor import MovieExtractor
 from fanza.items import MovieImageItem
 from scrapy.exporters import JsonLinesItemExporter
 from fanza.movie.factory.request_factory import request_generate_chain
-from fanza.common import get_crawled, scan_movie_dir
+from fanza.common import get_crawled, save_crawled_to_file, scan_movie_dir
 
 from re import search
 
@@ -83,6 +83,7 @@ class MovieDetailSpider(Spider):
             return
         res = extractor.extract(response, censored_id)
         self.json_exporter.export_item(res)
+        save_crawled_to_file(censored_id, self.settings['CRAWLED_FILE'])
         self.successed.add(censored_id)
         self.logger.info('%s has been crawled', censored_id)
         self.logger.debug("movie info: %s", res)

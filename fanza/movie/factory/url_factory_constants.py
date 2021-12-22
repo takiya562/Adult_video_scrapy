@@ -317,3 +317,43 @@ MBMS_PRE = '360'
 XMOM = 'XMOM'
 
 XMOM_PRE = 'h_086'
+
+BDSR = 'BDSR'
+
+BDSR_PRE = '57'
+
+WFR = 'WFR'
+
+WFR_PRE = '2'
+
+GCB = 'GCB'
+
+GCB_PRE = '485'
+
+SRTD = 'SRTD'
+
+SRTD_PRE = '324'
+
+CUBEX = 'CUBEX'
+
+CUBEX_PRE = 'h_1593'
+
+PAPAK = 'PAPAK'
+
+PAPAK_PRE = 'h_1593'
+
+SGKX = 'SGKX'
+
+SGKX_PRE = 'h_1575'
+
+STSK = 'STSK'
+
+STSK_PRE = 'h_1605'
+
+CLOT = 'CLOT'
+
+CLOT_PRE = 'h_237'
+
+ONEZ = 'ONEZ'
+
+ONEZ_PRE = '013'
