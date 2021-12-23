@@ -357,3 +357,17 @@ CLOT_PRE = 'h_237'
 ONEZ = 'ONEZ'
 
 ONEZ_PRE = '013'
+
+BANK = 'BANK'
+
+BANK_PRE = 'h_1495'
+
+KTRA = 'KTRA'
+
+KTRA_PRE = 'h_094'
+
+KTRA_SUF = 'e'
+
+MXGS = 'MXGS'
+
+MXGS_PRE = '071'
