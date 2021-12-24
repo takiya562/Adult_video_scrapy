@@ -22,7 +22,7 @@ from deprecated.sphinx import deprecated
 from time import sleep
 from socket import timeout
 from urllib.request import urlretrieve, ProxyHandler, build_opener
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 from os.path import isdir, isfile
 from os import makedirs
 
@@ -114,6 +114,8 @@ class AvbookImagePipeline:
     def open_spider(self, spider: Spider):
         img_download_proxy = spider.settings['IMAGE_DOWNLOAD_PROXY']
         self.opener = build_opener(ProxyHandler({'https': img_download_proxy, 'http': img_download_proxy}))
+        self.img_fail = spider.settings['IMAGE_FAIL_FILE']
+        self.failed = set()
     
     async def process_item(self, item, spider: Spider):
         if not isinstance(item, ImageItem):
@@ -131,9 +133,13 @@ class AvbookImagePipeline:
             try:
                 download_image(self.opener, item.url, img_des)
                 break
-            except (URLError, timeout):
+            except (URLError, HTTPError, timeout):
                 if retry > retry_limit:
                     spider.logger.exception("download image error, url: %s", item.url)
+                    if item.subDir not in self.failed:
+                        self.failed.add(item.subDir)
+                        with open(self.img_fail, 'w', encoding='utf-8') as f:
+                            f.write(f'{item.subDir}\n')
                     raise DropItem(DROP_ITEM_DOWNLOAD_ERROR_MSG.format(item))
                 sleep(delay)
                 retry += 1
@@ -143,6 +149,8 @@ class AvbookImagePipeline:
 
 class SuccessResponsePipeline:
     def close_spider(self, spider: Spider):
+        if spider.name != 'moive_detail':
+            return
         failed = spider.processed - spider.successed
         with open('failed.txt', 'w', encoding='utf-8') as f:
             for failed_id in failed:

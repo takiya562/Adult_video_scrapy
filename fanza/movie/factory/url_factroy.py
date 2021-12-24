@@ -149,6 +149,7 @@ clot_formatter = FormatCensoredId(CLOT, prefix=CLOT_PRE)
 onez_formatter = FormatCensoredId(ONEZ, prefix=ONEZ_PRE)
 bank_formatter = FormatCensoredId(BANK, prefix=BANK_PRE)
 mxgs_formatter = FormatCensoredId(MXGS, prefix=MXGS_PRE)
+spro_formatter = FormatCensoredId(SPRO, prefix=SPRO_PRE)
 
 # 3
 jac_formatter = FormatCensoredId(JAC, prefix=JAC_PRE)
@@ -202,7 +203,8 @@ fanza_url_factory = FanzaUrlFactory(
     nhdtb_formatter, oks_formatter, san_formatter, skmj_formatter, ss_formatter, zex_formatter,
     hmgl_formatter, ssis_formatter, isrd_formatter, mara_formatter, milk_formatter, nacr_formatter,
     sw_formatter, redb_formatter, xmom_formatter, bdsr_formatter, wfr_formatter, cubex_formatter,
-    papak_formatter, sgkx_formatter, stsk_formatter, clot_formatter, bank_formatter, ktra_formatter
+    papak_formatter, sgkx_formatter, stsk_formatter, clot_formatter, bank_formatter, ktra_formatter,
+    spro_formatter
 )
 
 fanza_url_blank_replacement_factory = FanzaUrlFactory(

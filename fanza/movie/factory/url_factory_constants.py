@@ -371,3 +371,7 @@ KTRA_SUF = 'e'
 MXGS = 'MXGS'
 
 MXGS_PRE = '071'
+
+SPRO = 'SPRO'
+
+SPRO_PRE = 'h_1594'
