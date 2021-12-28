@@ -375,3 +375,27 @@ MXGS_PRE = '071'
 SPRO = 'SPRO'
 
 SPRO_PRE = 'h_1594'
+
+MACB = 'MACB'
+
+MACB_PRE = 'h_687'
+
+UMD = 'UMD'
+
+UMD_PRE = '125'
+
+GNAB = 'GNAB'
+
+GNAB_PRE = '278'
+
+OTIM = 'OTIM'
+
+OTIM_PRE = '393'
+
+NTRD = 'NTRD'
+
+NTRD_PRE = '18'
+
+WKD = 'WKD'
+
+WKD_PRE = '2'
