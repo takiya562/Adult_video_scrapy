@@ -12,7 +12,7 @@ from fanza.movie.movie_extractor import MovieExtractor
 
 
 class MoiveImageSpider(Spider):
-    name = 'moive_image'
+    name = 'movie_image'
     allowed_domains = ['dmm.co.jp', 'mgstage.com', 'ec.sod.co.jp']
     start_urls = ['http://dmm.co.jp/']
     extractors: Dict[str, MovieExtractor] = {

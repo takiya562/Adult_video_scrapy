@@ -399,3 +399,15 @@ NTRD_PRE = '18'
 WKD = 'WKD'
 
 WKD_PRE = '2'
+
+KSS = 'KSS'
+
+KSS_PRE = '326'
+
+FANH = 'FANH'
+
+FANH_PRE = 'h_1472'
+
+AMBI = 'AMBI'
+
+AMBI_PRE = 'h_237'

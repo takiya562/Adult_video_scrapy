@@ -154,6 +154,8 @@ macb_formatter = FormatCensoredId(MACB, prefix=MACB_PRE)
 gnab_formatter = FormatCensoredId(GNAB, prefix=GNAB_PRE)
 otim_formatter = FormatCensoredId(OTIM, prefix=OTIM_PRE)
 ntrd_formatter = FormatCensoredId(NTRD, prefix=NTRD_PRE)
+fanh_formatter = FormatCensoredId(FANH, prefix=FANH_PRE)
+ambi_formatter = FormatCensoredId(AMBI, prefix=AMBI_PRE)
 
 # 3
 jac_formatter = FormatCensoredId(JAC, prefix=JAC_PRE)
@@ -186,6 +188,7 @@ wfr_formatter = FormatCensoredId(WFR, prefix=WFR_PRE)
 gcb_formatter = FormatCensoredId(GCB, prefix=GCB_PRE)
 umd_formatter = FormatCensoredId(UMD, prefix=UMD_PRE)
 wkd_formatter = FormatCensoredId(WKD, prefix=WKD_PRE)
+kss_formatter = FormatCensoredId(KSS, prefix=KSS_PRE)
 
 # 2
 my_formatter = FormatCensoredId(MY, prefix=MY_PRE)
@@ -210,7 +213,8 @@ fanza_url_factory = FanzaUrlFactory(
     hmgl_formatter, ssis_formatter, isrd_formatter, mara_formatter, milk_formatter, nacr_formatter,
     sw_formatter, redb_formatter, xmom_formatter, bdsr_formatter, wfr_formatter, cubex_formatter,
     papak_formatter, sgkx_formatter, stsk_formatter, clot_formatter, bank_formatter, ktra_formatter,
-    spro_formatter, macb_formatter, umd_formatter, ntrd_formatter, wkd_formatter
+    spro_formatter, macb_formatter, umd_formatter, ntrd_formatter, wkd_formatter, fanh_formatter,
+    ambi_formatter
 )
 
 fanza_url_blank_replacement_factory = FanzaUrlFactory(
@@ -227,7 +231,7 @@ mgs_url_factory = MgsUrlFactory(
     fcdss_formatter, imgn_formatter, inst_formatter, jnt_formatter, kbi_formatter, knb_formatter,
     mgfx_formatter, orec_formatter, shh_formatter, scpy_formatter, stcv_formatter, ara_formatter,
     gcp_formatter, hhh_formatter, mla_formatter, tkwa_formatter, mbms_formatter, gcb_formatter,
-    srtd_formatter, onez_formatter, mxgs_formatter, gnab_formatter, otim_formatter
+    srtd_formatter, onez_formatter, mxgs_formatter, gnab_formatter, otim_formatter, kss_formatter
 )
 
 fanza_amateur_black_list = {IMGN, HMDN, INST}
