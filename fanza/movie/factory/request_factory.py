@@ -1,6 +1,6 @@
 from scrapy import Request
 from fanza.enums import AgeCookie, AgeCookieVal, Store
-from fanza.movie.factory.url_factroy import UrlFactory, fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory, fanza_url_blank_replacement_factory, sod_url_factory
+from fanza.movie.factory.url_factroy import UrlFactory, fanza_url_factory, mgs_url_factory, fanza_amateur_url_factory, fanza_url_blank_replacement_factory, sod_url_factory, fanza_url_one_zero_factory
 
 class RequestFactory:
     def __init__(self, *url_factories: UrlFactory) -> None:
@@ -54,7 +54,7 @@ class RequestGenerateChain:
                 yield req
         
 
-fanza_request_factory = FanzaRequestFactory(fanza_url_factory, fanza_url_blank_replacement_factory)
+fanza_request_factory = FanzaRequestFactory(fanza_url_factory, fanza_url_blank_replacement_factory, fanza_url_one_zero_factory)
 fanza_amateur_request_factory = FanzaAmateurRequestFactory(fanza_amateur_url_factory)
 mgstage_request_factory = MgstageRequestFactory(mgs_url_factory)
 sod_request_factory = SodRequestFactory(sod_url_factory)

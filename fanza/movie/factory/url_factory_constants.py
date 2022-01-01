@@ -415,3 +415,45 @@ AMBI_PRE = 'h_237'
 TEN = 'TEN'
 
 TEN_PRE = '459'
+
+IND = 'IND'
+
+IND_PRE = '534'
+
+MXSPS = 'MXSPS'
+
+MXSPS_PRE = '071'
+
+FCT = 'FCT'
+
+FCT_PRE = '326'
+
+EVA = 'EVA'
+
+EVA_PRE = '326'
+
+SPRD = 'SPRD'
+
+SPRD_PRE = '18'
+
+MBDD = 'MBDD'
+
+MBDD_PRE = '301'
+
+DOKS = 'DOKS'
+
+DOKS_PRE = '36'
+
+CSCT = 'CSCT'
+
+CSCT_PRE = '55'
+
+IBW = 'IBW'
+
+IBW_PRE = '504'
+
+IBW_SUF = 'z'
+
+JUKF = 'JUKF'
+
+JUKF_PRE = 'h_227'
