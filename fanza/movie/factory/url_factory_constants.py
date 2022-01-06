@@ -457,3 +457,27 @@ IBW_SUF = 'z'
 JUKF = 'JUKF'
 
 JUKF_PRE = 'h_227'
+
+JBJB = 'JBJB'
+
+JBJB_PRE = 'h_687'
+
+VOV = 'VOV'
+
+VOV_PRE = 'h_1350'
+
+SEI = 'SEI'
+
+SEI_PRE = '502'
+
+RKD = 'RKD'
+
+RKD_PRE = '383'
+
+LOL = 'LOL'
+
+LOL_PRE = '12'
+
+PED = 'PED'
+
+PED_PRE = '24'

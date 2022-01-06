@@ -162,6 +162,7 @@ mbdd_formatter = FormatCensoredId(MBDD, prefix=MBDD_PRE)
 doks_formatter = FormatCensoredId(DOKS, prefix=DOKS_PRE)
 csct_formatter = FormatCensoredId(CSCT, prefix=CSCT_PRE)
 jukf_formatter = FormatCensoredId(JUKF, prefix=JUKF_PRE)
+jbjb_formatter = FormatCensoredId(JBJB, prefix=JBJB_PRE)
 ktra_pre_formatter = FormatCensoredId(KTRA, prefix=KTRA_PRE)
 
 # 3
@@ -200,6 +201,11 @@ ten_formatter = FormatCensoredId(TEN, prefix=TEN_PRE)
 ind_formatter = FormatCensoredId(IND, prefix=IND_PRE)
 fct_formatter = FormatCensoredId(FCT, prefix=FCT_PRE)
 eva_formatter = FormatCensoredId(EVA, prefix=EVA_PRE)
+vov_formatter = FormatCensoredId(VOV, prefix=VOV_PRE)
+sei_formatter = FormatCensoredId(SEI, prefix=SEI_PRE)
+rkd_formatter = FormatCensoredId(RKD, prefix=RKD_PRE)
+lol_formatter = FormatCensoredId(LOL, prefix=LOL_PRE)
+ped_formatter = FormatCensoredId(PED, prefix=PED_PRE)
 
 # 2
 my_formatter = FormatCensoredId(MY, prefix=MY_PRE)
@@ -228,7 +234,8 @@ fanza_url_factory = FanzaUrlFactory(
     sw_formatter, redb_formatter, xmom_formatter, bdsr_formatter, wfr_formatter, cubex_formatter,
     papak_formatter, sgkx_formatter, stsk_formatter, clot_formatter, bank_formatter, ktra_formatter,
     spro_formatter, macb_formatter, umd_formatter, ntrd_formatter, wkd_formatter, fanh_formatter,
-    ambi_formatter, ktra_pre_formatter, doks_formatter, csct_formatter, ibw_pre_suf_formatter, jukf_formatter
+    ambi_formatter, ktra_pre_formatter, doks_formatter, csct_formatter, ibw_pre_suf_formatter, jukf_formatter,
+    jbjb_formatter, vov_formatter, lol_formatter, ped_formatter
 )
 
 fanza_url_one_zero_factory = FanzaUrlFactory(
@@ -251,7 +258,8 @@ mgs_url_factory = MgsUrlFactory(
     mgfx_formatter, orec_formatter, shh_formatter, scpy_formatter, stcv_formatter, ara_formatter,
     gcp_formatter, hhh_formatter, mla_formatter, tkwa_formatter, mbms_formatter, gcb_formatter,
     srtd_formatter, onez_formatter, mxgs_formatter, gnab_formatter, otim_formatter, kss_formatter,
-    ten_formatter, ind_formatter, mxsps_formatter, fct_formatter, eva_formatter
+    ten_formatter, ind_formatter, mxsps_formatter, fct_formatter, eva_formatter, sei_formatter,
+    rkd_formatter
 )
 
 fanza_amateur_black_list = {IMGN, HMDN, INST}
