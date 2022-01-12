@@ -10,7 +10,6 @@ class MgstageExtractor(MovieExtractor):
         title = self.response.xpath('//h1[@class="tag"]/text()').re_first(r'\n\s*(.*)\n\s*')
         return MGS_TITLE_SUB_REGEX.sub(MGS_SUB_STR, title)
 
-    @collect
     def extract_actress(self):
         return self.mgs_extract_multi_info(Actress.MGSTAGE.value)
 
@@ -30,19 +29,15 @@ class MgstageExtractor(MovieExtractor):
     def extract_director(self):
         return dict()
 
-    @collect
     def extract_label(self):
         return self.mgs_extract_multi_info(Label.MGSTAGE.value)
 
-    @collect
     def extract_maker(self):
         return self.mgs_extract_multi_info(Maker.MGSTAGE.value)
 
-    @collect
     def extract_series(self):
         return self.mgs_extract_multi_info(Series.MGSTAGE.value)
 
-    @collect
     def extract_genre(self):
         return self.mgs_extract_multi_info(Genre.MGSTAGE.value)
 
@@ -75,7 +70,7 @@ class MgstageExtractor(MovieExtractor):
 
     def mgs_extract_multi_info(self, meta_text):
         names = self.response.xpath(f'//th[contains(., "{meta_text}")]/following-sibling::td/a/text()').re(r'\n\s*(.*)\n\s*')
-        return ["00000000" for n in range(0, len(names))], names
+        return names
 
     def mgs_extract_meta_info(self, meta_text):
         return self.response.xpath(f'//th[contains(., "{meta_text}")]/following-sibling::td/text()').get()

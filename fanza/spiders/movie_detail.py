@@ -47,12 +47,12 @@ class MovieDetailSpider(Spider):
         
 
     def parse(self, response: HtmlResponse, censored_id, store):
-        # """ This function parse fanza movie page.
+        """ This function parse fanza movie page.
 
-        # @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
-        # @cb_kwargs {"censored_id": "CAWD-186", "store": "fanza"}
-        # @cookies {"age_check_done": "1"}
-        # """
+        @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
+        @cb_kwargs {"censored_id": "CAWD-186", "store": "fanza"}
+        @cookies {"age_check_done": "1"}
+        """
         # """ This function parse fanza amateur movie page.
 
         # @url https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=yaho012/
@@ -65,12 +65,12 @@ class MovieDetailSpider(Spider):
         # @cb_kwargs {"censored_id": "ABW-013", "store": "mgstage"}
         # @cookies {"adc": "1"}
         # """
-        """ This function parse sod movie page.
+        # """ This function parse sod movie page.
         
-        @url https://ec.sod.co.jp/prime/videos/?id=STARS-449
-        @cb_kwargs {"censored_id": "STARS-449", "store": "sod"}
-        @meta {"store": "sod"}
-        """
+        # @url https://ec.sod.co.jp/prime/videos/?id=STARS-449
+        # @cb_kwargs {"censored_id": "STARS-449", "store": "sod"}
+        # @meta {"store": "sod"}
+        # """
         if response.status != 200:
             self.logger.debug('%s is not a valid movie page', response.url)
             return

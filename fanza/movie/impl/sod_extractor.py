@@ -23,26 +23,21 @@ class SodExtractor(MovieExtractor):
     def extract_video_len(self):
         return self.response.xpath(f'//td[text()="{VideoLen.SOD.value}"]/following-sibling::td/text()').re_first(r'\d+(?=分)')
     
-    @collect
     def extract_actress(self):
         return self.sod_extract_multi_info(Actress.SOD.value)
 
-    @collect
     def extract_director(self):
         return self.sod_extract_multi_info(Director.SOD.value)
 
-    @collect
     def extract_maker(self):
         return self.sod_extract_multi_info(Maker.SOD.value)
 
     def extract_label(self):
-        return self.response.xpath(f'//td[text()="{Label.SOD.value}"]/following-sibling::td/text()').get()
+        return self.response.xpath(f'//td[text()="{Label.SOD.value}"]/following-sibling::td/text()').getall()
 
-    @collect
     def extract_series(self):
         return self.sod_extract_multi_info(Series.SOD.value)
     
-    @collect
     def extract_genre(self):
         return self.sod_extract_multi_info(Genre.SOD.value)
 
@@ -74,8 +69,7 @@ class SodExtractor(MovieExtractor):
         return self.response.xpath('//div[@id="videos_samsbox"]/a/img/@src').getall()
 
     def sod_extract_multi_info(self, meta_info):
-        ids = self.response.xpath(f'//td[text()="{meta_info}"]/following-sibling::td/a/@href').re(r'(?<==)\d+$')
         names = self.response.xpath(f'//td[text()="{meta_info}"]/following-sibling::td/a/text()').getall()
-        return ids, names
+        return names
         
     
