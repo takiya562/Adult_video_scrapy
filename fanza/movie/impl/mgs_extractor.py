@@ -27,7 +27,7 @@ class MgstageExtractor(MovieExtractor):
         return self.mgs_extract_meta_info(DeliveryDate.MGSTAGE.value)
 
     def extract_director(self):
-        return dict()
+        return []
 
     def extract_label(self):
         return self.mgs_extract_multi_info(Label.MGSTAGE.value)
