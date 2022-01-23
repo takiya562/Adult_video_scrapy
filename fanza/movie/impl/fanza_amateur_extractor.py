@@ -12,7 +12,7 @@ class FanzaAmateurExtractor(FanzaExtractor):
         return res
     
     def extract_director(self):
-        return dict()
+        return []
 
     def extract_store(self):
         return "fanza-amateur"

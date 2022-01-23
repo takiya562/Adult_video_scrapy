@@ -149,7 +149,7 @@ class AvbookImagePipeline:
 
 class SuccessResponsePipeline:
     def close_spider(self, spider: Spider):
-        if spider.name != 'movie_detail':
+        if spider.name != 'movie_detail' and spider.name != 'movie_image':
             return
         spider.logger.info('------------------------------------save failed------------------------------------')
         failed = spider.processed - spider.successed

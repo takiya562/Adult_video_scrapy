@@ -21,6 +21,8 @@ class MoiveImageSpider(Spider):
         'mgstage': MgstageExtractor(),
         'sod': SodExtractor()
     }
+    processed = set()
+    successed = set()
 
     def __init__(self, censored_id=None, **kwargs):
         super().__init__(**kwargs)
@@ -29,6 +31,7 @@ class MoiveImageSpider(Spider):
     def start_requests(self):
         if self.censored_id is None:
             for censored_id in get_image_fail(self.settings['IMAGE_FAIL_FILE']):
+                self.processed.add(censored_id)
                 for req in request_generate_chain.generate_request(self.parse, censored_id):
                     yield req
         else:
@@ -49,7 +52,8 @@ class MoiveImageSpider(Spider):
         yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
         yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
         for low_res_url, high_res_url, num in extractor.extract_preview():
-            low_res_preview_name = f'{censored_id}-{num}'
-            high_res_preview_name = f'{censored_id}jp-{num}'
+            low_res_preview_name = f'{censored_id}-{num:02d}'
+            high_res_preview_name = f'{censored_id}jp-{num:02d}'
             yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)
             yield MovieImageItem(url=high_res_url, subDir=censored_id, imageName=high_res_preview_name, isCover=0)
+        self.successed.add(censored_id)

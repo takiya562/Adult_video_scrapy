@@ -95,7 +95,7 @@ class MovieDetailSpider(Spider):
         for low_res_url, high_res_url, num in extractor.extract_preview():
             # self.logger.info("low_res_preview: %s", low_res_url)
             # self.logger.info("high_res_preview: %s", high_res_url)
-            low_res_preview_name = f'{censored_id}-{num}'
-            high_res_preview_name = f'{censored_id}jp-{num}'
+            low_res_preview_name = f'{censored_id}-{num:02d}'
+            high_res_preview_name = f'{censored_id}jp-{num:02d}'
             yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)
             yield MovieImageItem(url=high_res_url, subDir=censored_id, imageName=high_res_preview_name, isCover=0)

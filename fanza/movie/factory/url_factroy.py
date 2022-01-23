@@ -206,6 +206,7 @@ sei_formatter = FormatCensoredId(SEI, prefix=SEI_PRE)
 rkd_formatter = FormatCensoredId(RKD, prefix=RKD_PRE)
 lol_formatter = FormatCensoredId(LOL, prefix=LOL_PRE)
 ped_formatter = FormatCensoredId(PED, prefix=PED_PRE)
+sgk_formatter = FormatCensoredId(SGK, prefix=SGK_PRE)
 
 # 2
 my_formatter = FormatCensoredId(MY, prefix=MY_PRE)
@@ -259,7 +260,7 @@ mgs_url_factory = MgsUrlFactory(
     gcp_formatter, hhh_formatter, mla_formatter, tkwa_formatter, mbms_formatter, gcb_formatter,
     srtd_formatter, onez_formatter, mxgs_formatter, gnab_formatter, otim_formatter, kss_formatter,
     ten_formatter, ind_formatter, mxsps_formatter, fct_formatter, eva_formatter, sei_formatter,
-    rkd_formatter
+    rkd_formatter, sgk_formatter
 )
 
 fanza_amateur_black_list = {IMGN, HMDN, INST}

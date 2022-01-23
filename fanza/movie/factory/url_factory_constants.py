@@ -481,3 +481,7 @@ LOL_PRE = '12'
 PED = 'PED'
 
 PED_PRE = '24'
+
+SGK = 'SGK'
+
+SGK_PRE = '483'
