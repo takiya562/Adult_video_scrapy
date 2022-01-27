@@ -485,3 +485,39 @@ PED_PRE = '24'
 SGK = 'SGK'
 
 SGK_PRE = '483'
+
+NAPK = 'NAPK'
+
+NAPK_PRE = '201'
+
+GAMA = 'GAMA'
+
+GAMA_PRE = '201'
+
+CHUC = 'CHUC'
+
+CHUC_PRE = '201'
+
+MFCS = 'MFCS'
+
+MFCS_PRE = '435'
+
+SHIND = 'SHIND'
+
+SHIND_PRE = 'h_1560'
+
+KNAM = 'KNAM'
+
+KNAM_PRE = '201'
+
+UTSU = 'UTSU'
+
+UTSU_PRE = '279'
+
+OMT = 'OMT'
+
+OMT_PRE = 'h_1359'
+
+FGAN = 'FGAN'
+
+FGAN_PRE = 'h_1440'

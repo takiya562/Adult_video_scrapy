@@ -102,6 +102,7 @@ nhdtb_formatter = FormatCensoredId(NHDTB, prefix=NHDTB_PRE)
 cubex_formatter = FormatCensoredId(CUBEX, prefix=CUBEX_PRE)
 papak_formatter = FormatCensoredId(PAPAK, prefix=PAPAK_PRE)
 mxsps_formatter = FormatCensoredId(MXSPS, prefix=MXSPS_PRE)
+shind_formatter = FormatCensoredId(SHIND, prefix=SHIND_PRE)
 
 # 4
 gana_formatter = FormatCensoredId(GANA, prefix=GANA_PRE)
@@ -163,6 +164,13 @@ doks_formatter = FormatCensoredId(DOKS, prefix=DOKS_PRE)
 csct_formatter = FormatCensoredId(CSCT, prefix=CSCT_PRE)
 jukf_formatter = FormatCensoredId(JUKF, prefix=JUKF_PRE)
 jbjb_formatter = FormatCensoredId(JBJB, prefix=JBJB_PRE)
+napk_formatter = FormatCensoredId(NAPK, prefix=NAPK_PRE)
+gama_formatter = FormatCensoredId(GAMA, prefix=GAMA_PRE)
+chuc_formatter = FormatCensoredId(CHUC, prefix=CHUC_PRE)
+mfcs_formatter = FormatCensoredId(MFCS, prefix=MFCS_PRE)
+knam_formatter = FormatCensoredId(KNAM, prefix=KNAM_PRE)
+utsu_formatter = FormatCensoredId(UTSU, prefix=UTSU_PRE)
+fgan_formatter = FormatCensoredId(FGAN, prefix=FGAN_PRE)
 ktra_pre_formatter = FormatCensoredId(KTRA, prefix=KTRA_PRE)
 
 # 3
@@ -207,6 +215,7 @@ rkd_formatter = FormatCensoredId(RKD, prefix=RKD_PRE)
 lol_formatter = FormatCensoredId(LOL, prefix=LOL_PRE)
 ped_formatter = FormatCensoredId(PED, prefix=PED_PRE)
 sgk_formatter = FormatCensoredId(SGK, prefix=SGK_PRE)
+omt_formatter = FormatCensoredId(OMT, prefix=OMT_PRE)
 
 # 2
 my_formatter = FormatCensoredId(MY, prefix=MY_PRE)
@@ -236,7 +245,7 @@ fanza_url_factory = FanzaUrlFactory(
     papak_formatter, sgkx_formatter, stsk_formatter, clot_formatter, bank_formatter, ktra_formatter,
     spro_formatter, macb_formatter, umd_formatter, ntrd_formatter, wkd_formatter, fanh_formatter,
     ambi_formatter, ktra_pre_formatter, doks_formatter, csct_formatter, ibw_pre_suf_formatter, jukf_formatter,
-    jbjb_formatter, vov_formatter, lol_formatter, ped_formatter
+    jbjb_formatter, vov_formatter, lol_formatter, ped_formatter, omt_formatter, fgan_formatter, shind_formatter
 )
 
 fanza_url_one_zero_factory = FanzaUrlFactory(
@@ -260,7 +269,8 @@ mgs_url_factory = MgsUrlFactory(
     gcp_formatter, hhh_formatter, mla_formatter, tkwa_formatter, mbms_formatter, gcb_formatter,
     srtd_formatter, onez_formatter, mxgs_formatter, gnab_formatter, otim_formatter, kss_formatter,
     ten_formatter, ind_formatter, mxsps_formatter, fct_formatter, eva_formatter, sei_formatter,
-    rkd_formatter, sgk_formatter
+    rkd_formatter, sgk_formatter, napk_formatter, gama_formatter, chuc_formatter, mfcs_formatter,
+    knam_formatter, utsu_formatter
 )
 
 fanza_amateur_black_list = {IMGN, HMDN, INST}

@@ -23,7 +23,8 @@ class MovieDetailSpider(Spider):
         'mgstage': MgstageExtractor(),
         'sod': SodExtractor()
     }
-    json_exporter = JsonLinesItemExporter(open('v-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
+    append_json_exporter = JsonLinesItemExporter(open('v-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
+    new_json_exporter = JsonLinesItemExporter(open('new-item.txt', 'wb'), ensure_ascii=False, encoding='utf-8')
     processed = set()
     successed = set()
 
@@ -82,7 +83,8 @@ class MovieDetailSpider(Spider):
         if extractor is None:
             return
         res = extractor.extract(response, censored_id)
-        self.json_exporter.export_item(res)
+        self.append_json_exporter.export_item(res)
+        self.new_json_exporter.export_item(res)
         save_crawled_to_file(censored_id, self.settings['CRAWLED_FILE'])
         self.successed.add(censored_id)
         self.logger.info('%s has been crawled', censored_id)

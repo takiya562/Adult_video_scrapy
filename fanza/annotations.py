@@ -9,8 +9,7 @@ def checkdate(regex):
             ret = func(*args, **kwargs)
             if ret is None or match(regex, ret) is None:
                 return None
-            ret.replace('/', '-')
-            return ret
+            return ret.replace('/', '-')
         return after
     return decorator
 

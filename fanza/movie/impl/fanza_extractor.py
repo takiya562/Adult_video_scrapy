@@ -61,7 +61,7 @@ class FanzaExtractor(MovieExtractor):
             if num_m:
                 num = num_m.group()
                 high_res_url = compile(r'-(?=\d{1,2}(\.jpg)*$)').sub('jp-', low_res_preview)
-                yield low_res_preview, high_res_url, num
+                yield low_res_preview, high_res_url, int(num)
 
     @notempty
     def extract_low_res_preview(self):
