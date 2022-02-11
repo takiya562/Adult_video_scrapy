@@ -1,0 +1,426 @@
+fanza:  
+  -
+    url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
+    url_replacement: '00'
+    formatters:
+      -
+        key: GVH
+        prefix: '13'
+      -
+        key: MSFH
+        prefix: '1'
+      - 
+        key: TOEN
+        prefix: h_086
+      - 
+        key: STARS
+        prefix: '1'
+      -
+        key: DAVK
+        prefix: '55'
+      - 
+        key: HBAD
+        prefix: '1'
+      -
+        key: KIR
+        prefix: h_254
+      - 
+        key: KUSE
+        prefix: '1'
+      -
+        key: SDDE
+        prefix: '1'
+      - 
+        key: DANDAN
+        prefix: '1'
+      -
+        key: DANDY
+        prefix: '1'
+      -
+        key: DFDM
+        prefix: '2'
+      -
+        key: DFE
+        prefix: '2'
+      -
+        key: ECB
+        prefix: '2' 
+      -
+        key: FSDSS
+        prefix: '1'
+      -
+        key: HAWA
+        prefix: '1'
+      -
+        key: HDKA
+        prefix: h_237
+      -
+        key: HZGD
+        prefix: h_1100
+      - 
+        key: IQQQ
+        prefix: h_086
+      -
+        key: MCSR
+        prefix: '57'
+      -
+        key: NHDTB
+        prefix: '1'
+      -
+        key: OKS
+        prefix: '1'
+      -
+        key: SAN
+        prefix: h_796
+      -
+        key: SKMJ
+        prefix: h_1324
+      -
+        key: SS
+        prefix: h_113
+      -
+        key: ZEX
+        prefix: h_720
+      -
+        key: HMGL
+        prefix: h_172
+      -
+        key: SSIS
+        suffix: re01
+      -
+        key: ISRD
+        prefix: '24'
+      -
+        key: MARA
+        prefix: h_237
+      -
+        key: MILK
+        prefix: h_1240
+      -
+        key: NACR
+        prefix: h_237
+      -
+        key: SW
+        prefix: '1'
+      - 
+        key: REBD
+        prefix: h_346
+      -
+        key: XMOM
+        prefix: h_086
+      -
+        key: BDSR
+        prefix: '57'
+      -
+        key: WFR
+        prefix: '2'
+      -
+        key: CUBEX
+        prefix: h_1593
+      -
+        key: PAPAK
+        prefix: h_1593
+      -
+        key: SGKX
+        prefix: h_1575
+      -
+        key: STSK
+        prefix: h_1605
+      - 
+        key: CLOT
+        prefix: h_237
+      -
+        key: BANK
+        prefix: h_1495
+      -
+        key: KTRA
+        prefix: h_094
+        suffix: e
+      -
+        key: SPRO
+        prefix: h_1594
+      -
+        key: MACB
+        prefix: h_687
+      -
+        key: UMD
+        prefix: '125'
+      -
+        key: NTRD
+        prefix: '18'
+      -
+        key: WKD
+        prefix: '2'
+      -
+        key: FANH
+        prefix: h_1472
+      -
+        key: AMBI
+        prefix: h_237
+      -
+        key: KTRA
+        prefix: h_094
+      -
+        key: DOKS
+        prefix: '36'
+      -
+        key: CSCT
+        prefix: '55'
+      -
+        key: IBW
+        prefix: '504'
+        suffix: z
+      -
+        key: JUKF
+        prefix: h_227
+      -
+        key: JBJB
+        prefix: h_687
+      -
+        key: VOV
+        prefix: h_1350
+      -
+        key: LOL
+        prefix: '12'
+      -
+        key: PED
+        prefix: '24'
+      -
+        key: OMT
+        prefix: h_1359
+      -
+        key: FGAN
+        prefix: h_1440
+      -
+        key: SHIND
+        prefix: h_1560
+      -
+        key: EMSK
+        prefix: '2'
+      -
+        key: NAD
+        prefix: '24'
+      -
+        key: MDVHJ
+        prefix: '48'
+  -
+    url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
+    url_replacement: '0'
+    formatters:
+      -
+        key: SPRD
+        prefix: '18'
+      -
+        key: MBDD
+        prefix: 'MBDD'
+  -
+    url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
+    url_replacement: ''
+    formatters:
+      -
+        key: HODV
+        prefix: '5642'
+      -
+        key: T
+        prefix: '55'
+mgstage:
+  -
+    url_formatter: https://www.mgstage.com/product/product_detail/%s/
+    formatters:
+      -
+        key: DLDSS
+        prefix: '513'
+      -
+        key: FSDSS
+        prefix: '406'
+      -
+        key: GANA
+        prefix: '200'
+      -
+        key: LUXU
+        prefix: '259'
+      -
+        key: MIUM
+        prefix: '300'
+      -
+        key: JAC
+        prefix: '390'
+      -
+        key: SUKE
+        prefix: '428'
+      -
+        key: NTK
+        prefix: '300'
+      -
+        key: AEG
+        prefix: '360'
+      -
+        key: DDH
+        prefix: '498'
+      -
+        key: EKW
+        prefix: '223'
+      -
+        key: HOI
+        prefix: '420'
+      -
+        key: HMDN
+        prefix: '328'
+      -
+        key: DTT
+        prefix: '336'
+      -
+        key: MAAN
+        prefix: '300'
+      -
+        key: MFC
+        prefix: '435'
+      -
+        key: MGMR
+        prefix: '420'
+      -
+        key: REIW
+        prefix: '383'
+      -
+        key: MY
+        prefix: '292'
+      -
+        key: SIMM
+        prefix: '345'
+      -
+        key: DCV
+        prefix: '277'
+      -
+        key: DHT
+        prefix: '522'
+      -
+        key: FCDSS
+        prefix: '406'
+      -
+        key: IMGN
+        prefix: '374'
+      -
+        key: INST
+        prefix: '413'
+      -
+        key: JNT
+        prefix: '390'
+      -
+        key: KBI
+        prefix: '336'
+      -
+        key: KNB
+        prefix: '336'
+      -
+        key: MGFX
+        prefix: '521'
+      -
+        key: OREC
+        prefix: '230'
+      -
+        key: SHH
+        prefix: '116'
+      -
+        key: SCPY
+        prefix: '460'
+      -
+        key: STCV
+        prefix: '529'
+      -
+        key: ARA
+        prefix: '261'
+      -
+        key: GCP
+        prefix: '326'
+      -
+        key: HHH
+        prefix: '451'
+      -
+        key: MLA
+        prefix: '476'
+      -
+        key: TKWA
+        prefix: '491'
+      -
+        key: MBMS
+        prefix: '360'
+      -
+        key: GCB
+        prefix: '485'
+      -
+        key: SRTD
+        prefix: '324'
+      -
+        key: ONEZ
+        prefix: '013'
+      -
+        key: MXGS
+        prefix: '071'
+      -
+        key: GNAB
+        prefix: '278'
+      -
+        key: OTIM
+        prefix: '393'
+      -
+        key: KSS
+        prefix: '326'
+      -
+        key: TEN
+        prefix: '459'
+      -
+        key: IND
+        prefix: '534'
+      -
+        key: MXSPS
+        prefix: '071'
+      -
+        key: FCT
+        prefix: '326'
+      -
+        key: EVA
+        prefix: '326'
+      -
+        key: SEI
+        prefix: '502'
+      -
+        key: RKD
+        prefix: '383'
+      -
+        key: SGK
+        prefix: '483'
+      -
+        key: NAPK
+        prefix: '201'
+      -
+        key: GAMA
+        prefix: '201'
+      -
+        key: CHUC
+        prefix: '201'
+      -
+        key: MFCS
+        prefix: '435'
+      -
+        key: KNAM
+        prefix: '201'
+      -
+        key: UTSU
+        prefix: '279'
+      -
+        key: NMCH
+        prefix: '383'
+      -
+        key: DAM
+        prefix: '483'
+fanza_amateur:
+  -
+    url_formatter: https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/
+    url_replacement: ''
+    black_list:
+      - IMGN
+      - HMDN
+      - INST
+sod:
+  -
+    url_formatter: https://ec.sod.co.jp/prime/videos/?id=%s

@@ -24,7 +24,7 @@ class MovieDetailSpider(Spider):
         'sod': SodExtractor()
     }
     append_json_exporter = JsonLinesItemExporter(open('v-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
-    new_json_exporter = JsonLinesItemExporter(open('new-item.txt', 'wb'), ensure_ascii=False, encoding='utf-8')
+    new_json_exporter = JsonLinesItemExporter(open('new-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
     processed = set()
     successed = set()
 
@@ -33,7 +33,7 @@ class MovieDetailSpider(Spider):
         ext_white_list = self.settings['EXT_WHITE_LIST']
         crawled = get_crawled(self.settings['CRAWLED_FILE'])
         for censored_id in scan_movie_dir(movie_dir, ext_white_list):
-            id_m = search(r'^[A-Z]{2,6}-\d{3,5}', censored_id)
+            id_m = search(r'^[A-Z]{1,6}-\d{3,7}', censored_id)
             if id_m is None:
                 self.logger.info('%s is not a valid movie id', censored_id)
                 continue
@@ -90,13 +90,13 @@ class MovieDetailSpider(Spider):
         self.logger.info('%s has been crawled', censored_id)
         self.logger.debug("movie info: %s", res)
         high_res_cover, low_res_cover = extractor.extract_cover()
-        # self.logger.info("high_res_cover: %s", high_res_cover)
-        # self.logger.info("low_res_cover: %s", low_res_cover)
+        self.logger.debug("high_res_cover: %s", high_res_cover)
+        self.logger.debug("low_res_cover: %s", low_res_cover)
         yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
         yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
         for low_res_url, high_res_url, num in extractor.extract_preview():
-            # self.logger.info("low_res_preview: %s", low_res_url)
-            # self.logger.info("high_res_preview: %s", high_res_url)
+            self.logger.debug("low_res_preview: %s", low_res_url)
+            self.logger.debug("high_res_preview: %s", high_res_url)
             low_res_preview_name = f'{censored_id}-{num:02d}'
             high_res_preview_name = f'{censored_id}jp-{num:02d}'
             yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)
