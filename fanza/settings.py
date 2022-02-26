@@ -19,35 +19,12 @@ MOVIE_IMG_BASE_FOLDER = r'fanza/img/movie'
 ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
-FAIL_FILE = 'failed.txt'
+FAIL_FILE = r'resources/failed.txt'
 IMAGE_FAIL_FILE = 'img-failed.txt'
 VIDEO_DIR = r'I:/Finished'
 MOVIE_DIR = r'V:/Finished'
-CRAWLED_FILE = 'v-crawled.txt'
-S1_ACTRESS_COMMITTED = 's1_actress.txt'
-S1_ACTRESS_TARGET = 's1_actress_target.txt'
-S1_ACTRESS_MODE = 'image-update-target'
-PRESTIGE_ACTRESS_COMMITTED = 'prestige_actress.txt'
-PRESIIGE_ACTRESS_TARGET = 'pretige_actress_target.txt'
-PRESTIGE_ACTRESS_MODE = 'ground'
-FALENO_ACTRESS_COMMITTED = 'faleno_actress.txt'
-FALENO_ACTRESS_TARGET = 'faleno_actress_target.txt'
-FALENO_ACTRESS_MODE = 'ground'
-KAWAII_ACTRESS_COMMITTED = 'kawaii_actress.txt'
-KAWAII_ACTRESS_TARGET = 'kawaii_actress_target.txt'
-KAWAII_ACTRESS_MODE = 'ground'
-MOODYZ_ACTRESS_COMMITTED = 'moodyz_actress.txt'
-MOODYZ_ACTRESS_TARGET = 'moodyz_actress_target.txt'
-MOODYZ_ACTRESS_MODE = 'target'
-IDEAPOEKET_ACTRESS_COMMITTED = 'ideapocket_actress.txt'
-IDEAPOEKET_ACTRESS_TARGET = 'ideapocket_actress_target.txt'
-IDEAPOEKET_ACTRESS_MODE = 'ground'
+CRAWLED_FILE = r'resources/v-crawled.txt'
 EXT_WHITE_LIST = ['.mp4', '.mkv']
-MYSQL_HOST = '127.0.0.1'
-MYSQL_PORT = 3306
-MYSQL_DATABASE = 'avbook'
-MYSQL_USER = 'root'
-MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
 # REDIRECT_MAX_TIMES = 1
 IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
@@ -61,15 +38,6 @@ AUTOTHROTTLE_START_DELAY = 0.5
 AUTOTHROTTLE_MAX_DELAY = 5.0
 AUTOTHROTTLE_TARGET_CONCURRENCY = 3.0
 DOWNLOAD_DELAY = 0.25
-
-SPIDER_ACTRESS_CRAWLED_FILE_MAP = {
-    's1_actress': S1_ACTRESS_COMMITTED,
-    'prestige_actress': PRESTIGE_ACTRESS_COMMITTED,
-    'faleno_actress': FALENO_ACTRESS_COMMITTED,
-    'kawaii_actress': KAWAII_ACTRESS_COMMITTED,
-    'moodyz_actress': MOODYZ_ACTRESS_COMMITTED,
-    'ideapocket_actress': IDEAPOEKET_ACTRESS_COMMITTED,
-}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'fanza (+http://www.yourdomain.com)'
