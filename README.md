@@ -12,18 +12,18 @@ After a period of development, the project support crawl av information, cover a
 
 *   [x] crawl mgstage movie data
 
-*   [x] crawl s1 actress data
-
-*   [x] crawl prestige actress data
-
-*   [x] crawl faleno actress data
-
-*   [x] crawl kawaii actress data
-
-*   [x] crawl ideapocket actress data
+*   [x] crawl SOD movie data
 
 # Comming features
 
-*   [ ] crawl SOD movie data
+*   [ ] crawl moodyz actress data
 
-*   [ ] crawl moodyz actress datase
+*   [ ] crawl s1 actress data
+
+*   [ ] crawl prestige actress data
+
+*   [ ] crawl faleno actress data
+
+*   [ ] crawl kawaii actress data
+
+*   [ ] crawl ideapocket actress data
