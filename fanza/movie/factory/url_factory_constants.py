@@ -10,6 +10,8 @@ FANZA_AMATEUR_URL_FORMATTER = 'https://www.dmm.co.jp/digital/videoc/-/detail/=/c
 
 MGS_URL_FORMATTER = 'https://www.mgstage.com/product/product_detail/%s/'
 
+SOD_URL_FORMATTER = 'https://ec.sod.co.jp/prime/videos/?id=%s'
+
 CENSORED_ID_PRE_REGEX = r'\w+(?=-)'
 
 SIMM = 'SIMM'
@@ -303,3 +305,219 @@ TKWA_PRE = '491'
 HODV = 'HODV'
 
 HODV_PRE = '5642'
+
+REBD = 'REBD'
+
+REBD_PRE = 'h_346'
+
+MBMS = 'MBMS'
+
+MBMS_PRE = '360'
+
+XMOM = 'XMOM'
+
+XMOM_PRE = 'h_086'
+
+BDSR = 'BDSR'
+
+BDSR_PRE = '57'
+
+WFR = 'WFR'
+
+WFR_PRE = '2'
+
+GCB = 'GCB'
+
+GCB_PRE = '485'
+
+SRTD = 'SRTD'
+
+SRTD_PRE = '324'
+
+CUBEX = 'CUBEX'
+
+CUBEX_PRE = 'h_1593'
+
+PAPAK = 'PAPAK'
+
+PAPAK_PRE = 'h_1593'
+
+SGKX = 'SGKX'
+
+SGKX_PRE = 'h_1575'
+
+STSK = 'STSK'
+
+STSK_PRE = 'h_1605'
+
+CLOT = 'CLOT'
+
+CLOT_PRE = 'h_237'
+
+ONEZ = 'ONEZ'
+
+ONEZ_PRE = '013'
+
+BANK = 'BANK'
+
+BANK_PRE = 'h_1495'
+
+KTRA = 'KTRA'
+
+KTRA_PRE = 'h_094'
+
+KTRA_SUF = 'e'
+
+MXGS = 'MXGS'
+
+MXGS_PRE = '071'
+
+SPRO = 'SPRO'
+
+SPRO_PRE = 'h_1594'
+
+MACB = 'MACB'
+
+MACB_PRE = 'h_687'
+
+UMD = 'UMD'
+
+UMD_PRE = '125'
+
+GNAB = 'GNAB'
+
+GNAB_PRE = '278'
+
+OTIM = 'OTIM'
+
+OTIM_PRE = '393'
+
+NTRD = 'NTRD'
+
+NTRD_PRE = '18'
+
+WKD = 'WKD'
+
+WKD_PRE = '2'
+
+KSS = 'KSS'
+
+KSS_PRE = '326'
+
+FANH = 'FANH'
+
+FANH_PRE = 'h_1472'
+
+AMBI = 'AMBI'
+
+AMBI_PRE = 'h_237'
+
+TEN = 'TEN'
+
+TEN_PRE = '459'
+
+IND = 'IND'
+
+IND_PRE = '534'
+
+MXSPS = 'MXSPS'
+
+MXSPS_PRE = '071'
+
+FCT = 'FCT'
+
+FCT_PRE = '326'
+
+EVA = 'EVA'
+
+EVA_PRE = '326'
+
+SPRD = 'SPRD'
+
+SPRD_PRE = '18'
+
+MBDD = 'MBDD'
+
+MBDD_PRE = '301'
+
+DOKS = 'DOKS'
+
+DOKS_PRE = '36'
+
+CSCT = 'CSCT'
+
+CSCT_PRE = '55'
+
+IBW = 'IBW'
+
+IBW_PRE = '504'
+
+IBW_SUF = 'z'
+
+JUKF = 'JUKF'
+
+JUKF_PRE = 'h_227'
+
+JBJB = 'JBJB'
+
+JBJB_PRE = 'h_687'
+
+VOV = 'VOV'
+
+VOV_PRE = 'h_1350'
+
+SEI = 'SEI'
+
+SEI_PRE = '502'
+
+RKD = 'RKD'
+
+RKD_PRE = '383'
+
+LOL = 'LOL'
+
+LOL_PRE = '12'
+
+PED = 'PED'
+
+PED_PRE = '24'
+
+SGK = 'SGK'
+
+SGK_PRE = '483'
+
+NAPK = 'NAPK'
+
+NAPK_PRE = '201'
+
+GAMA = 'GAMA'
+
+GAMA_PRE = '201'
+
+CHUC = 'CHUC'
+
+CHUC_PRE = '201'
+
+MFCS = 'MFCS'
+
+MFCS_PRE = '435'
+
+SHIND = 'SHIND'
+
+SHIND_PRE = 'h_1560'
+
+KNAM = 'KNAM'
+
+KNAM_PRE = '201'
+
+UTSU = 'UTSU'
+
+UTSU_PRE = '279'
+
+OMT = 'OMT'
+
+OMT_PRE = 'h_1359'
+
+FGAN = 'FGAN'
+
+FGAN_PRE = 'h_1440'

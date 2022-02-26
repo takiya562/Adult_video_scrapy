@@ -14,3 +14,4 @@ fanza/*.bak
 *.log
 backup
 fanza/**/__pycache__
+log-bak

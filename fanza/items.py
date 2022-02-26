@@ -5,9 +5,15 @@
 
 from scrapy.item import Field, Item
 
-from logging import debug
 from typing import Any, Callable
 from dataclasses import dataclass, field
+
+class SuccessResponseItem(Item):
+    censored_id = Field()
+
+@dataclass
+class SuccessResponseItem:
+    censored_id: str = field(default=None)
 
 class ItemMap:
     def __init__(self, item_name: str, type: type, callback: Callable[[Item], Any]) -> None:
@@ -152,10 +158,6 @@ class FanzaAmateurItem(AvbookMovieBasicItem):
     deliveryDate: str = field(default=None)
     genre: dict = field(default=None)
 
-if __name__ == '__main__':
-    test = MgsItem()
-    print(isinstance(test, AvbookMovieBasicItem))
-
 class S1ActressItem(AvbookActressBasicItem):
     actressNameEn = Field()
     birth = Field()
@@ -273,3 +275,8 @@ class IdeapocketActressItem(AvbookActressBasicItem):
     hobbyTrick: str = field(default=None)
     twitter: str = field(default=None)
     ins: str = field(default=None)
+
+if __name__ == '__main__':
+    m = {'censoredId': 'SSIS-156', 'title': '巨乳', 'videoLen': 100}
+    t = AvbookMovieBasicItem(**m)
+    print(t.censoredId)

@@ -20,8 +20,10 @@ ACTRESS_IMG_BASE_FOLDER = r'fanza/img/actress'
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
 FAIL_FILE = 'failed.txt'
-VIDEO_DIR = r'J:/JAV/'
-CRAWLED_FILE = 'crawled.txt'
+IMAGE_FAIL_FILE = 'img-failed.txt'
+VIDEO_DIR = r'I:/Finished'
+MOVIE_DIR = r'V:/Finished'
+CRAWLED_FILE = 'v-crawled.txt'
 S1_ACTRESS_COMMITTED = 's1_actress.txt'
 S1_ACTRESS_TARGET = 's1_actress_target.txt'
 S1_ACTRESS_MODE = 'image-update-target'
@@ -40,16 +42,19 @@ MOODYZ_ACTRESS_MODE = 'target'
 IDEAPOEKET_ACTRESS_COMMITTED = 'ideapocket_actress.txt'
 IDEAPOEKET_ACTRESS_TARGET = 'ideapocket_actress_target.txt'
 IDEAPOEKET_ACTRESS_MODE = 'ground'
-EXT_WHITE_LIST = ['.mp4']
+EXT_WHITE_LIST = ['.mp4', '.mkv']
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306
 MYSQL_DATABASE = 'avbook'
 MYSQL_USER = 'root'
 MYSQL_PASSWD = '123456'
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
+# REDIRECT_MAX_TIMES = 1
 IMAGE_DOWNLOAD_PROXY = '127.0.0.1:8181'
 DOWNLOAD_TIMEOUT = 60
-REDIRECT_ENABLED = False
+# sod needs to utilize redirect middleware, so this setting is commented
+# mgstage request add `dont_redirect` meta
+# REDIRECT_ENABLED = False
 RETRY_LIMIT = 3
 AUTOTHROTTLE_ENABLED = True
 AUTOTHROTTLE_START_DELAY = 0.5
@@ -98,23 +103,24 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-    'fanza.middlewares.FanzaSpiderMiddleware': 542,
     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+    'fanza.middlewares.GlobalExceptionHandleSpiderMiddleware': 352,
+    # 'fanza.middlewares.FanzaSpiderMiddleware': 542,
 }
 
 # Customized contracts
 SPIDER_CONTRACTS = {
     'fanza.contracts.CookiesContract': 10,
-    'fanza.contracts.AvbookReturnsContract': 11,
-    'fanza.contracts.AvbookScrapesContract': 12,
     'fanza.contracts.SplashEndpointContract': 13,
+    'fanza.contracts.MetaContract': 14,
 }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'fanza.middlewares.FanzaDownloaderMiddleware': 543,
     'fanza.middlewares.ProxyMiddleware': 351,
+    # 'fanza.middlewares.FanzaDownloaderMiddleware': 543,
+    'fanza.middlewares.SodDownloaderMiddleware': 544,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -129,10 +135,11 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'fanza.pipelines.FanzaPipeline': 300,
+    # 'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
     'fanza.pipelines.AvbookImagePipeline': 302,
-    'fanza.pipelines.RequestStatusPipline': 303,
+    'fanza.pipelines.SuccessResponsePipeline': 303,
+    # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

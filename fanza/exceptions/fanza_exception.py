@@ -1,22 +1,13 @@
 class ExtractException(Exception):
-    def __init__(self, message, url):
-        self.message = message
-        self.url = url
-
-
-class EmptyGenreException(Exception):
-    def __init__(self, message, url):
-        self.message = message
-        self.url = url
-
-
-class FormatException(Exception):
-    def __init__(self, message):
-        self.message = message
-
+    def __init__(self, formatter: str, *args: object) -> None:
+        super().__init__(*args)
+        self.formatter = formatter
+    
+    def get_message(self) -> str:
+        return self.formatter.format(*self.args)
 
 if __name__ == '__main__':
     try:
-        raise ExtractException('Extract sample error msg', 'sample.com')
+        raise ExtractException('{} {}', 'Hello', 'World')
     except ExtractException as err:
-        print("catch exception\nmsg: {}\t url:{}".format(err.message, err.url))
+        print(err.get_message())

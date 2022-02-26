@@ -3,10 +3,13 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from scrapy import signals
-
-# useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+from scrapy import signals, Spider, Item
+from scrapy.http import HtmlResponse, Request
+from scrapy.exceptions import IgnoreRequest
+from scrapy.http.cookies import CookieJar
+from fanza.exceptions.fanza_exception import ExtractException
+from fanza.movie.movie_constants import MOVIE_STORE
+from fanza.enums import Store
 
 
 class FanzaSpiderMiddleware:
@@ -106,3 +109,42 @@ class FanzaDownloaderMiddleware:
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta['proxy'] = "http://127.0.0.1:8181"
+
+class SodDownloaderMiddleware(object):
+    def  __init__(self) -> None:
+        self.jar = CookieJar(check_expired_frequency=10)
+        self.processed = 0
+    
+    def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
+        if request.meta.get(MOVIE_STORE, None) != Store.SOD.value:
+            spider.logger.debug('not sod, url: %s', request.url)
+            return response
+        redirect_url = request.meta.get('redirect_url', None)
+        if redirect_url is not None:
+            if redirect_url == response.url:
+                spider.logger.debug('valid sod response, url: %s', response.url)
+                return response
+            else:
+                raise IgnoreRequest('invalid sod response')
+        spider.logger.debug('extract sod cookie start, url: %s', response.url)
+        if self.processed % self.jar.check_expired_frequency == 0: 
+            self.jar.extract_cookies(response, request)
+        req = Request(
+            'https://ec.sod.co.jp/prime/_ontime.php',
+            meta={MOVIE_STORE: Store.SOD.value, "redirect_url": request.url},
+            cb_kwargs=request.cb_kwargs,
+            callback=request.callback,
+            dont_filter=True
+        )
+        self.processed += 1
+        req.headers.appendlist('Referer', request.url)
+        req.headers.pop('Cookie', None)
+        self.jar.add_cookie_header(req)
+        spider.logger.debug('add sod cookie finish, url: %s', req.url)
+        return req
+
+class GlobalExceptionHandleSpiderMiddleware(object):    
+    def process_spider_exception(self, response: HtmlResponse, exception, spider: Spider):
+        if isinstance(exception, ExtractException):
+            spider.logger.exception(exception.get_message() + ' ,url: %s', response.url, exc_info=exception)
+            return Item()
