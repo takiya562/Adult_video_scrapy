@@ -111,8 +111,6 @@ SPIDER_MIDDLEWARES = {
 # Customized contracts
 SPIDER_CONTRACTS = {
     'fanza.contracts.CookiesContract': 10,
-    'fanza.contracts.AvbookReturnsContract': 11,
-    'fanza.contracts.AvbookScrapesContract': 12,
     'fanza.contracts.SplashEndpointContract': 13,
     'fanza.contracts.MetaContract': 14,
 }

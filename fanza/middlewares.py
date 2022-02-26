@@ -3,16 +3,13 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from re import T
 from scrapy import signals, Spider, Item
 from scrapy.http import HtmlResponse, Request
 from scrapy.exceptions import IgnoreRequest
 from scrapy.http.cookies import CookieJar
 from fanza.exceptions.fanza_exception import ExtractException
-from fanza.movie.movie_constants import MOVIE_STORE, STORE_SOD, SOD_AGE_CHECK_URL
-
-# useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+from fanza.movie.movie_constants import MOVIE_STORE
+from fanza.enums import Store
 
 
 class FanzaSpiderMiddleware:
@@ -119,7 +116,7 @@ class SodDownloaderMiddleware(object):
         self.processed = 0
     
     def process_response(self, request: Request, response: HtmlResponse, spider: Spider):
-        if request.meta.get(MOVIE_STORE, None) != STORE_SOD:
+        if request.meta.get(MOVIE_STORE, None) != Store.SOD.value:
             spider.logger.debug('not sod, url: %s', request.url)
             return response
         redirect_url = request.meta.get('redirect_url', None)
@@ -133,8 +130,8 @@ class SodDownloaderMiddleware(object):
         if self.processed % self.jar.check_expired_frequency == 0: 
             self.jar.extract_cookies(response, request)
         req = Request(
-            SOD_AGE_CHECK_URL,
-            meta={MOVIE_STORE: STORE_SOD, "redirect_url": request.url},
+            'https://ec.sod.co.jp/prime/_ontime.php',
+            meta={MOVIE_STORE: Store.SOD.value, "redirect_url": request.url},
             cb_kwargs=request.cb_kwargs,
             callback=request.callback,
             dont_filter=True

@@ -1,14 +1,14 @@
 from re import compile
 from fanza.movie.movie_extractor import MovieExtractor
-from fanza.movie.movie_constants import MGS_TITLE_SUB_REGEX, MGS_SUB_STR, DATE_REGEX
+from fanza.movie.movie_constants import DATE_REGEX
 from fanza.enums import Actress, DeliveryDate, Label, Maker, Genre, ReleaseDate, Series, VideoLen
-from fanza.annotations import collect, checkvideolen, checkdate, notempty, notnull
+from fanza.annotations import checkvideolen, checkdate, notempty, notnull
 
 class MgstageExtractor(MovieExtractor):
     @notnull
     def extract_title(self):
         title = self.response.xpath('//h1[@class="tag"]/text()').re_first(r'\n\s*(.*)\n\s*')
-        return MGS_TITLE_SUB_REGEX.sub(MGS_SUB_STR, title)
+        return compile(r'\s*【.*MGS.*】\s*').sub('', title)
 
     def extract_actress(self):
         return self.mgs_extract_multi_info(Actress.MGSTAGE.value)

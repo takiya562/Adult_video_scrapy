@@ -1,6 +1,7 @@
 from scrapy import Request
 from fanza.enums import AgeCookie, AgeCookieVal, Store
 from fanza.movie.factory.url_factroy import UrlFactory, fanza_url_factories, fanza_amateur_url_factories, mgstage_url_factories, sod_url_factories
+from fanza.movie.movie_constants import MOVIE_STORE
 
 class RequestFactory:
     def __init__(self, *url_factories: UrlFactory) -> None:
@@ -19,28 +20,28 @@ class FanzaRequestFactory(RequestFactory):
     def get_request(self, callback, censored_id):
         for req in super().get_request(callback, censored_id):
             req.cookies = {AgeCookie.FANZA.value: AgeCookieVal.FANZA.value}
-            req.cb_kwargs['store'] = Store.FANZA.value
+            req.cb_kwargs[MOVIE_STORE] = Store.FANZA.value
             yield req
 
 class MgstageRequestFactory(RequestFactory):
     def get_request(self, callback, censored_id):
         for req in super().get_request(callback, censored_id):
             req.cookies = {AgeCookie.MGSTAGE.value: AgeCookieVal.MGSTAGE.value}
-            req.cb_kwargs['store'] = Store.MGSTAGE.value
+            req.cb_kwargs[MOVIE_STORE] = Store.MGSTAGE.value
             req.meta['dont_redirect'] = True
             yield req
 
 class FanzaAmateurRequestFactory(FanzaRequestFactory):
     def get_request(self, callback, censored_id):
         for req in super().get_request(callback, censored_id):
-            req.cb_kwargs['store'] = Store.FANZA_AMATEUR.value
+            req.cb_kwargs[MOVIE_STORE] = Store.FANZA_AMATEUR.value
             yield req
 
 class SodRequestFactory(RequestFactory):
     def get_request(self, callback, censored_id):
         for req in super().get_request(callback, censored_id):
-            req.cb_kwargs['store'] = Store.SOD.value
-            req.meta['store'] = 'sod'
+            req.cb_kwargs[MOVIE_STORE] = Store.SOD.value
+            req.meta[MOVIE_STORE] = 'sod'
             req.meta['dont_filter'] = True
             yield req
 

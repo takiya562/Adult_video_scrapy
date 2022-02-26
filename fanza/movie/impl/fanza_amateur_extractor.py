@@ -1,6 +1,5 @@
 from fanza.annotations import notnull
 from fanza.movie.impl.fanza_extractor import FanzaExtractor
-from fanza.movie.movie_constants import AMATEUR_NAME_TEXT
 
 class FanzaAmateurExtractor(FanzaExtractor):
     def extract(self, response, censored_id) -> dict:
@@ -26,7 +25,7 @@ class FanzaAmateurExtractor(FanzaExtractor):
         return low_res_cover, low_res_cover
 
     def extract_amateur(self):
-        return self.fanza_extract_meta_info(AMATEUR_NAME_TEXT)
+        return self.fanza_extract_meta_info('名前')
 
     def extract_three_size(self):
         return self.response.xpath('//table[@class="mg-b20"]/tr/td[contains(., "サイズ")]/following-sibling::td/text()').get()
