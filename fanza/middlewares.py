@@ -146,5 +146,5 @@ class SodDownloaderMiddleware(object):
 class GlobalExceptionHandleSpiderMiddleware(object):    
     def process_spider_exception(self, response: HtmlResponse, exception, spider: Spider):
         if isinstance(exception, ExtractException):
-            spider.logger.exception(exception.get_message() + ' ,url: %s', response.url, exc_info=exception)
+            spider.logger.exception(exception.get_message() + ', url: %s', response.url, exc_info=exception)
             return Item()

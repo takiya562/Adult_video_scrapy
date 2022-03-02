@@ -203,6 +203,9 @@ fanza:
       -
         key: MDVHJ
         prefix: '48'
+      -
+        key: CHERD
+        prefix: h_086
   -
     url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
     url_replacement: '0'
@@ -413,6 +416,9 @@ mgstage:
       -
         key: DAM
         prefix: '483'
+      -
+        key: NTR
+        prefix: '348'
 fanza_amateur:
   -
     url_formatter: https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/

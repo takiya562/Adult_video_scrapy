@@ -46,6 +46,7 @@ class AvbookImagePipeline:
                 download_image(self.opener, item.url, img_des)
                 break
             except (URLError, HTTPError, timeout):
+                retry += 1
                 if retry > retry_limit:
                     spider.logger.exception("download image error, url: %s", item.url)
                     if item.subDir not in self.failed:
@@ -54,7 +55,6 @@ class AvbookImagePipeline:
                             f.write(f'{item.subDir}\n')
                     raise DropItem(f'download error happend\titem: {item}')
                 sleep(delay)
-                retry += 1
                 delay *= 2
                 spider.logger.debug('retry download image: retry\t%s url\t%s', retry, item.url)
         spider.logger.info('save img:\t%s %s', prefix, item.imageName)
@@ -65,6 +65,6 @@ class SuccessResponsePipeline:
             return
         spider.logger.info('------------------------------------save failed------------------------------------')
         failed = spider.processed - spider.successed
-        with open('failed.txt', 'w', encoding='utf-8') as f:
+        with open(r'resources/failed.txt', 'w', encoding='utf-8') as f:
             for failed_id in failed:
                 f.write(failed_id + '\n')

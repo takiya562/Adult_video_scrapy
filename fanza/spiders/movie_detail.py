@@ -23,7 +23,7 @@ class MovieDetailSpider(Spider):
         'mgstage': MgstageExtractor(),
         'sod': SodExtractor()
     }
-    append_json_exporter = JsonLinesItemExporter(open(r'resources/v-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
+    append_json_exporter = JsonLinesItemExporter(open(r'resources/item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
     new_json_exporter = JsonLinesItemExporter(open(r'resources/new-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
     processed = set()
     successed = set()
