@@ -39,7 +39,7 @@ class MovieDetailSpider(Spider):
                 continue
             censored_id = id_m.group()
             if censored_id in crawled:
-                self.logger.debug('%s has been crawled', censored_id)
+                self.logger.info('%s has been crawled', censored_id)
                 continue
             self.processed.add(censored_id)
             for req in request_generate_chain.generate_request(self.parse, censored_id):

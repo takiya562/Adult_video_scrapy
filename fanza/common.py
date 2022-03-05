@@ -53,3 +53,6 @@ def download_image(opener: OpenerDirector, url: str, des: str):
                 break
             f.write(chunk)
     resp.close()
+
+def normalize_space(s: str):
+    return ' '.join(s.split()) if s else None
