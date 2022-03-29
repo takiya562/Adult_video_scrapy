@@ -5,6 +5,7 @@ from fanza.movie.impl.fanza_amateur_extractor import FanzaAmateurExtractor
 from fanza.movie.impl.fanza_extractor import FanzaExtractor
 from fanza.movie.impl.mgs_extractor import MgstageExtractor
 from fanza.movie.impl.sod_extractor import SodExtractor
+from fanza.movie.impl.fanza_dvd_extractor import FanzaDvdExtractor
 from fanza.movie.movie_extractor import MovieExtractor
 from fanza.items import MovieImageItem
 from scrapy.exporters import JsonLinesItemExporter
@@ -21,7 +22,8 @@ class MovieDetailSpider(Spider):
         'fanza': FanzaExtractor(),
         'fanza_amateur': FanzaAmateurExtractor(),
         'mgstage': MgstageExtractor(),
-        'sod': SodExtractor()
+        'sod': SodExtractor(),
+        'fanza_dvd': FanzaDvdExtractor()
     }
     append_json_exporter = JsonLinesItemExporter(open(r'resources/item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
     new_json_exporter = JsonLinesItemExporter(open(r'resources/new-item.txt', 'ab'), ensure_ascii=False, encoding='utf-8')
@@ -39,7 +41,7 @@ class MovieDetailSpider(Spider):
                 continue
             censored_id = id_m.group()
             if censored_id in crawled:
-                self.logger.info('%s has been crawled', censored_id)
+                self.logger.info('duplicate movie %s', censored_id)
                 continue
             self.processed.add(censored_id)
             for req in request_generate_chain.generate_request(self.parse, censored_id):

@@ -1,4 +1,4 @@
-S1:
+s1:
   -
     hiragana: 七ツ森りり
     katakana: NANATSUMORI RIRI
@@ -267,7 +267,7 @@ kawaii:
     hiragana: 天音ゆい
     katakana: AMANE YUI
     id: 796383
-FALENO:
+faleno:
   -
     hiragana: 天使もえ
     katakana: Moe Amatsuka
@@ -369,3 +369,13 @@ moodyz:
     hiragana: 藍芽みずき
     katakana: AIGA MIZUKI
     id: 712812
+sod:
+  -
+    hiragana: MINAMO
+    katakana: MINAMO
+    id: 16784
+  -
+    hiragana: 唯井まひろ
+    katakana: TADAI MAHIRO
+    threesize: T156 86(E)/58/86
+    id: 12824

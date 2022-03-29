@@ -1,6 +1,6 @@
 from scrapy import Request
 from fanza.enums import AgeCookie, AgeCookieVal, Store
-from fanza.movie.factory.url_factroy import UrlFactory, fanza_url_factories, fanza_amateur_url_factories, mgstage_url_factories, sod_url_factories
+from fanza.movie.factory.url_factroy import UrlFactory, fanza_url_factories, fanza_amateur_url_factories, mgstage_url_factories, sod_url_factories, fanza_dvd_url_factories
 from fanza.movie.movie_constants import MOVIE_STORE
 
 class RequestFactory:
@@ -37,6 +37,12 @@ class FanzaAmateurRequestFactory(FanzaRequestFactory):
             req.cb_kwargs[MOVIE_STORE] = Store.FANZA_AMATEUR.value
             yield req
 
+class FanzaDvdRequestFactory(FanzaRequestFactory):
+    def get_request(self, callback, censored_id):
+        for req in super().get_request(callback, censored_id):
+            req.cb_kwargs[MOVIE_STORE] = Store.FANZA_DVD.value
+            yield req
+
 class SodRequestFactory(RequestFactory):
     def get_request(self, callback, censored_id):
         for req in super().get_request(callback, censored_id):
@@ -57,7 +63,8 @@ class RequestGenerateChain:
 
 fanza_request_factory = FanzaRequestFactory(*fanza_url_factories)
 fanza_amateur_request_factory = FanzaAmateurRequestFactory(*fanza_amateur_url_factories)
+fanza_dvd_request_factory = FanzaDvdRequestFactory(*fanza_dvd_url_factories)
 mgstage_request_factory = MgstageRequestFactory(*mgstage_url_factories)
 sod_request_factory = SodRequestFactory(*sod_url_factories)
 
-request_generate_chain = RequestGenerateChain(fanza_request_factory, mgstage_request_factory, fanza_amateur_request_factory, sod_request_factory)
+request_generate_chain = RequestGenerateChain(fanza_request_factory, mgstage_request_factory, fanza_amateur_request_factory, sod_request_factory, fanza_dvd_request_factory)

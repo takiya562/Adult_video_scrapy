@@ -2,7 +2,7 @@ from re import search, compile
 from fanza.movie.movie_extractor import MovieExtractor
 from fanza.movie.movie_constants import DATE_REGEX
 from fanza.enums import Actress, DeliveryDate, Genre, Label, Maker, ReleaseDate, Series, Director, VideoLen
-from fanza.annotations import checkdate, checkvideolen, collect, notempty, notnull
+from fanza.annotations import checkdate, checkvideolen, notempty, notnull
 
 class FanzaExtractor(MovieExtractor):
     @notnull
@@ -32,7 +32,7 @@ class FanzaExtractor(MovieExtractor):
         return self.fanza_extract_multi_info(Maker.FANZA.value)
 
     def extract_label(self):
-        return self.fanza_extract_multi_info(Label.FANZa.value)
+        return self.fanza_extract_multi_info(Label.FANZA.value)
 
     def extract_series(self):
         return self.fanza_extract_multi_info(Series.FANZA.value)

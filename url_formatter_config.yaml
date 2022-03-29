@@ -419,6 +419,15 @@ mgstage:
       -
         key: NTR
         prefix: '348'
+      -
+        key: TAXD
+        prefix: '543'
+      -
+        key: ENDX
+        prefix: '285'
+      -
+        key: PPZ
+        prefix: '563'
 fanza_amateur:
   -
     url_formatter: https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/
@@ -427,6 +436,14 @@ fanza_amateur:
       - IMGN
       - HMDN
       - INST
+fanza_dvd:
+  -
+    url_formatter: https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=%s/
+    url_replacement: ''
+    formatters:
+      -
+        key: KV
+        prefix: h_955
 sod:
   -
     url_formatter: https://ec.sod.co.jp/prime/videos/?id=%s

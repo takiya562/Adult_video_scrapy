@@ -1,5 +1,6 @@
 from scrapy.http import HtmlResponse
 from fanza.common import normalize_space
+from fanza.annotations import notnull
 
 class ActressExtractor:
     def extract(self, response: HtmlResponse) -> dict:
@@ -12,7 +13,18 @@ class ActressExtractor:
         blood = self.extract_blood()
         hobby = self.extract_hobby()
         trick = self.extract_trick()
+        return {
+            "birth": birth,
+            "three_size": three_size,
+            "height": height,
+            "birth_place": birth_place,
+            "blood": blood,
+            "hobby": hobby,
+            "trick": trick,
+            "maker": self.maker(),
+        }
 
+    @notnull
     def extract_image(self):
         return self.response.xpath('//div[@class="p-profile__imgArea"]//img/@data-src').get()
 
@@ -43,3 +55,6 @@ class ActressExtractor:
     def extract_trick(self):
         trick = self.response.xpath('//div[@class="p-profile__info"]/div[@class="table"]/div[@class="item"]/p[text()="特技"]/following-sibling::*/text()').get()
         return normalize_space(trick)
+
+    def maker(self):
+        pass
