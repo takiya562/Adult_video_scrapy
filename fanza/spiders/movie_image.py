@@ -1,3 +1,4 @@
+import imp
 from typing import Dict
 from scrapy import Spider
 from scrapy.http import HtmlResponse
@@ -26,26 +27,31 @@ class MoiveImageSpider(Spider):
     processed = set()
     successed = set()
 
-    def __init__(self, censored_id=None, **kwargs):
+    def __init__(self, censored_id=None, flag=None, **kwargs):
         super().__init__(**kwargs)
         self.censored_id = censored_id
+        self.flag = flag
 
     def start_requests(self):
-        movie_dir = self.settings['MOVIE_DIR']
-        ext_white_list = self.settings['EXT_WHITE_LIST']
-        crawled = get_crawled(self.settings['CRAWLED_FILE'])
-        for censored_id in scan_movie_dir(movie_dir, ext_white_list):
-            id_m = search(r'^[A-Z]{1,6}-\d{3,7}', censored_id)
-            if id_m is None:
-                self.logger.info('%s is not a valid movie id', censored_id)
-                continue
-            censored_id = id_m.group()
-            if censored_id in crawled:
-                self.logger.debug('%s has been crawled', censored_id)
-                continue
-            self.processed.add(censored_id)
-            for req in request_generate_chain.generate_request(self.parse, censored_id):
+        if self.censored_id is not None:
+            for req in request_generate_chain.generate_request(self.parse, self.censored_id):
                 yield req
+        else:
+            movie_dir = self.settings['MOVIE_DIR']
+            ext_white_list = self.settings['EXT_WHITE_LIST']
+            crawled = get_crawled(self.settings['CRAWLED_FILE'])
+            for censored_id in scan_movie_dir(movie_dir, ext_white_list):
+                id_m = search(r'^[A-Z]{1,6}-\d{3,7}', censored_id)
+                if id_m is None:
+                    self.logger.info('%s is not a valid movie id', censored_id)
+                    continue
+                censored_id = id_m.group()
+                if censored_id in crawled:
+                    self.logger.debug('%s has been crawled', censored_id)
+                    continue
+                self.processed.add(censored_id)
+                for req in request_generate_chain.generate_request(self.parse, censored_id):
+                    yield req
 
 
     def parse(self, response: HtmlResponse, censored_id, store):

@@ -1,5 +1,6 @@
 from fanza.annotations import notnull
 from fanza.movie.impl.fanza_extractor import FanzaExtractor
+from re import search, compile
 
 class FanzaAmateurExtractor(FanzaExtractor):
     def extract(self, response, censored_id) -> dict:
@@ -15,6 +16,15 @@ class FanzaAmateurExtractor(FanzaExtractor):
 
     def extract_store(self):
         return "fanza-amateur"
+
+    def extract_preview(self):
+        low_res_previews = self.extract_low_res_preview()
+        for low_res_preview in low_res_previews:
+            num_m = search(r'(?<=-)\d+(?=\.jpg)', low_res_preview)
+            if num_m:
+                num = num_m.group()
+                high_res_url = compile(r'js-(?=\d{3}(\.jpg)*$)').sub('jp-', low_res_preview)
+                yield low_res_preview, high_res_url, int(num)
 
     @notnull
     def extract_low_res_cover(self):

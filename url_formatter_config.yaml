@@ -206,6 +206,12 @@ fanza:
       -
         key: CHERD
         prefix: h_086
+      -
+        key: ZMAR
+        prefix: h_237
+      -
+        key: GAS
+        prefix: 71
   -
     url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
     url_replacement: '0'
@@ -444,6 +450,9 @@ fanza_dvd:
       -
         key: KV
         prefix: h_955
+      -
+        key: HONB
+        prefix: h_1133
 sod:
   -
     url_formatter: https://ec.sod.co.jp/prime/videos/?id=%s
