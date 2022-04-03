@@ -50,12 +50,12 @@ class MovieDetailSpider(Spider):
         
 
     def parse(self, response: HtmlResponse, censored_id, store):
-        """ This function parse fanza movie page.
+        # """ This function parse fanza movie page.
 
-        @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
-        @cb_kwargs {"censored_id": "CAWD-186", "store": "fanza"}
-        @cookies {"age_check_done": "1"}
-        """
+        # @url https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=cawd00186/
+        # @cb_kwargs {"censored_id": "CAWD-186", "store": "fanza"}
+        # @cookies {"age_check_done": "1"}
+        # """
         # """ This function parse fanza amateur movie page.
 
         # @url https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=yaho012/
@@ -68,12 +68,12 @@ class MovieDetailSpider(Spider):
         # @cb_kwargs {"censored_id": "ABW-013", "store": "mgstage"}
         # @cookies {"adc": "1"}
         # """
-        # """ This function parse sod movie page.
+        """ This function parse sod movie page.
         
-        # @url https://ec.sod.co.jp/prime/videos/?id=STARS-449
-        # @cb_kwargs {"censored_id": "STARS-449", "store": "sod"}
-        # @meta {"store": "sod"}
-        # """
+        @url https://ec.sod.co.jp/prime/videos/?id=STARS-449
+        @cb_kwargs {"censored_id": "STARS-449", "store": "sod"}
+        @meta {"store": "sod"}
+        """
         if response.status != 200:
             self.logger.debug('%s is not a valid movie page', response.url)
             return
@@ -91,12 +91,12 @@ class MovieDetailSpider(Spider):
         self.successed.add(censored_id)
         self.logger.info('%s has been crawled', censored_id)
         self.logger.debug("movie info: %s", res)
-        high_res_cover, low_res_cover = extractor.extract_cover()
+        high_res_cover, low_res_cover = extractor.extract_cover(response)
         self.logger.debug("high_res_cover: %s", high_res_cover)
         self.logger.debug("low_res_cover: %s", low_res_cover)
         yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
         yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
-        for low_res_url, high_res_url, num in extractor.extract_preview():
+        for low_res_url, high_res_url, num in extractor.extract_preview(response):
             self.logger.debug("low_res_preview: %s", low_res_url)
             self.logger.debug("high_res_preview: %s", high_res_url)
             low_res_preview_name = f'{censored_id}-{num:02d}'

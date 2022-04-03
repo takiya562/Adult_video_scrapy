@@ -212,6 +212,9 @@ fanza:
       -
         key: GAS
         prefix: 71
+      -
+        key: WZEN
+        prefix: 2
   -
     url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
     url_replacement: '0'

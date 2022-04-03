@@ -104,8 +104,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     # 'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    'fanza.pipelines.AvbookImagePipeline': 302,
-    'fanza.pipelines.SuccessResponsePipeline': 303,
+    # 'fanza.pipelines.AvbookImagePipeline': 302,
+    # 'fanza.pipelines.SuccessResponsePipeline': 303,
     # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 
