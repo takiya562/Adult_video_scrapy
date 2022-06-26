@@ -1,4 +1,3 @@
-import imp
 from typing import Dict
 from scrapy import Spider
 from scrapy.http import HtmlResponse
@@ -61,11 +60,10 @@ class MoiveImageSpider(Spider):
         extractor = self.extractors.get(store, None)
         if extractor is None:
             return
-        extractor.response = response
-        high_res_cover, low_res_cover = extractor.extract_cover()
+        high_res_cover, low_res_cover = extractor.extract_cover(response)
         yield MovieImageItem(url=high_res_cover, subDir=censored_id, imageName=censored_id + "pl", isCover=1)
         yield MovieImageItem(url=low_res_cover, subDir=censored_id, imageName=censored_id + "ps", isCover=1)
-        for low_res_url, high_res_url, num in extractor.extract_preview():
+        for low_res_url, high_res_url, num in extractor.extract_preview(response):
             low_res_preview_name = f'{censored_id}-{num:02d}'
             high_res_preview_name = f'{censored_id}jp-{num:02d}'
             yield MovieImageItem(url=low_res_url, subDir=censored_id, imageName=low_res_preview_name, isCover=0)

@@ -211,10 +211,44 @@ fanza:
         prefix: h_237
       -
         key: GAS
-        prefix: 71
+        prefix: '71'
       -
         key: WZEN
-        prefix: 2
+        prefix: '2'
+      -
+        key: LBDD
+        prefix: '162'
+      -
+        key: BEAF
+        prefix: h_1615
+      -
+        key: ID
+        prefix: '5530'
+      -
+        key: YSN
+        prefix: h_127
+      -
+        key: KAMEF
+        prefix: h_1350
+      -
+        key: DKD
+        prefix: '24'
+      -
+        key: AOZ
+        prefix: h_308
+        suffix: z
+      -
+        key: HMLG
+        prefix: h_1612
+      -
+        key: BUBB
+        prefix: '436'
+      -
+        key: EROV
+        prefix: 'h_1472'
+      -
+        key: EMOT
+        prefix: 'h_237'
   -
     url_formatter: https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=%s/
     url_replacement: '0'
@@ -235,6 +269,9 @@ fanza:
       -
         key: T
         prefix: '55'
+      -
+        key: BDSR
+        prefix: '57'
 mgstage:
   -
     url_formatter: https://www.mgstage.com/product/product_detail/%s/
@@ -437,6 +474,54 @@ mgstage:
       -
         key: PPZ
         prefix: '563'
+      -
+        key: GZAP
+        prefix: '278'
+      -
+        key: ENE
+        prefix: '550'
+      -
+        key: PAK
+        prefix: '483'
+      -
+        key: ICHK
+        prefix: '368'
+      -
+        key: FCT
+        prefix: '476'
+      -
+        key: ERKR
+        prefix: '583'
+      -
+        key: SIKA
+        prefix: '494'
+      -
+        key: GFRB
+        prefix: '572'
+      -
+        key: MONA
+        prefix: '383'
+      -
+        key: PAIS
+        prefix: '298'
+      -
+        key: SKJK
+        prefix: '368'
+      -
+        key: GHAP
+        prefix: '298'
+      -
+        key: NNNC
+        prefix: '201'
+      -
+        key: TKPR
+        prefix: '383'
+      -
+        key: GMBM
+        prefix: '298'
+      -
+        key: DDHP
+        prefix: '498'
 fanza_amateur:
   -
     url_formatter: https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=%s/
@@ -456,6 +541,15 @@ fanza_dvd:
       -
         key: HONB
         prefix: h_1133
+      -
+        key: GONE
+        prefix: h_1133
+      -
+        key: MBDD
+        prefix: n_707
+      -
+        key: DORI
+        prefix: h_491
 sod:
   -
     url_formatter: https://ec.sod.co.jp/prime/videos/?id=%s

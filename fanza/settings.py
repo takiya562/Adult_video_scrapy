@@ -21,7 +21,7 @@ LOG_LEVEL = 'INFO'
 LOG_FILE = 'logfile.log'
 FAIL_FILE = r'resources/failed.txt'
 IMAGE_FAIL_FILE = 'img-failed.txt'
-MOVIE_DIR = r'L:/Finished'
+MOVIE_DIR = r'K:/Finished'
 CRAWLED_FILE = r'resources/crawled.txt'
 EXT_WHITE_LIST = ['.mp4', '.mkv']
 HTTPERROR_ALLOWED_CODES = [404, 302, 301]
@@ -104,8 +104,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     # 'fanza.pipelines.FanzaPipeline': 300,
     # 'fanza.pipelines.FanzaImagePipeline': 301,
-    # 'fanza.pipelines.AvbookImagePipeline': 302,
-    # 'fanza.pipelines.SuccessResponsePipeline': 303,
+    'fanza.pipelines.AvbookImagePipeline': 302,
+    'fanza.pipelines.SuccessResponsePipeline': 303,
     # 'fanza.pipelines.RequestStatusPipline': 303,
 }
 
